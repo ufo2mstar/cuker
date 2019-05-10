@@ -69,15 +69,6 @@ end
 
 RSpec.describe GherkinParser do
   describe "GP init" do
-    let(:test_loc) {'spec/cuker_spec/testdata'}
-
-    context "plain id files" do
-      let(:gp) {GherkinParser.new(test_loc)}
-      it 'should pick up all the features' do
-        ans = gp.features.size
-        expect(ans).to eq 45
-      end
-    end
 
     context 'sample parser above' do
       it 'should parse out the feature like this' do

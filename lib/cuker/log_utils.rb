@@ -2,11 +2,12 @@
 require 'logging'
 
 # Logger params
-Logging.init :debug, :info, :warn, :error, :fatal
+Logging.init :trace, :debug, :info, :warn, :error, :fatal
 
 # Custom colour set
 Logging.color_scheme('my_bright',
                      :levels => {
+                         :trace => :white,
                          :debug => :blue,
                          :info => :green,
                          :warn => :yellow,

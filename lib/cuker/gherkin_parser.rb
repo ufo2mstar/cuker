@@ -7,26 +7,15 @@ require_relative 'log_utils'
 class GherkinParser
   include LoggerSetup
 
-  attr_accessor :location
-  # attr_reader :features
-  attr_accessor :features
+  attr_accessor :lex_ary
 
-  def initialize loc = '*'
+  def initialize lex = []
     init_logger
-    @location = loc
-    @features = get_features @location
-    @log.info "Parsed '.feature' files = #{@features.size}"
+    @lex_ary = lex
+    @log.trace "init parser for lexer with items: "
   end
 
-  private
+  def parse
 
-  # if you need to ignore any pattern of files, change this regex to match those patterns
-  IGNORE_EXP = /^$/
-
-  # dir glob for all feature files
-  # @param location dir location of all the feature files
-  def get_features(loc)
-    FileHelper.get_files(loc, '.feature', IGNORE_EXP)
   end
-
 end

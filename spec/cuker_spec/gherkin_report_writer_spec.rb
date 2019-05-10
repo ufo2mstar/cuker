@@ -45,7 +45,7 @@ RSpec.describe GherkinReportWriter do
     context "file populate check" do
       let(:gpo) {
         # gherkin parsed objs
-        gpo = GherkinParser.new
+        gpo = GherkinRipper.new
         gpo.features = [Feature.new("Feature: kod")]
         gpo
       }
