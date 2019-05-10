@@ -1,6 +1,7 @@
 require 'thor'
 
 require 'require_all'
+require_all 'lib/cuker/**/*.rb'
 require_all 'lib/cuker/*.rb'
 
 module GPHelper

@@ -29,6 +29,8 @@ RSpec.configure do |config|
   config.formatter = :documentation # :progress, :html,
   # :json, CustomFormatterClass
   #
+  # Alternative to prefacing describe as RSpec.describe
+  config.expose_dsl_globally = true
 
   # https://relishapp.com/rspec/rspec-core/v/2-2/docs/hooks/before-and-after-hooks#define-before-and-after-blocks-in-configuration
   config.before(:all) do
