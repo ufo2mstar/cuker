@@ -1,6 +1,7 @@
 require "cuker/version"
+require 'cuker/gp'
 
 module Cuker
-  class Error < StandardError; end
-  # Your code goes here...
+  CukerError = Class.new StandardError
+
 end

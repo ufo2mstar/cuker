@@ -25,7 +25,7 @@ class GherkinReportWriter
   end
 
   def add_feature_row(feature)
-    puts "add_feature_row => #{feature}"
+    @log.debug "add_feature_row => #{feature}"
   end
 
   private

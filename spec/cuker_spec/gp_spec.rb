@@ -15,17 +15,17 @@ RSpec.describe "GherkinParserCmd" do
       it 'does simple gp' do
         # one arg
         res = gpc.gp 'loc'
-        exp = nil
+        exp = true
         expect(res).to eq exp
 
         # no arg default
         res = gpc.gp
-        exp = nil
+        exp = true
         expect(res).to eq exp
       end
       it 'does preset gp' do
         res = gpc.gpp
-        exp = nil
+        exp = true
         expect(res).to eq exp
       end
     end
@@ -34,7 +34,7 @@ RSpec.describe "GherkinParserCmd" do
     context "gp cmd to report usage" do
       it 'does simple gpr' do
         res = gpc.gpr 'loc', 'report'
-        exp = nil
+        exp = true
         expect(res).to eq exp
       end
     end
