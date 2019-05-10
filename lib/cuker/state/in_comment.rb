@@ -1,0 +1,3 @@
+class InComment < State
+
+end
