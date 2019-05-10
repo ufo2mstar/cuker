@@ -15,11 +15,13 @@ class GherkinReportWriter
     extension = '.xls'
     # extension = '.csv' # bad formats
 
+    FileUtils.mkdir_p(loc) unless Dir.exist? loc
+
     @file_name = File.join(loc, (file_name + extension))
     @workbook = setup_report_file @file_name
     @exc_no = 1
     @log.info "Creating report file => #{@file_name}"
-    # @workbook.close
+    @workbook.close
   end
 
   def add_feature_row(feature)
@@ -36,6 +38,7 @@ class GherkinReportWriter
     # output_file = name
     title_hai = ["Sl.No;4", "Type;4", "Title;60", states.map {|a| a + ";2"}, col_list.map {|a| "#{a};10"}, "Feature;10", "S.no;3", "File"].flatten
 
+    File.open(output_file_name,'wb')
     # workbook = WriteExcel.new(output_file_name)
     # worksheet = workbook.add_worksheet
     #

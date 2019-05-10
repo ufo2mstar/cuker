@@ -7,7 +7,7 @@ RSpec.describe GherkinReportWriter do
   include LoggerSetup
 
   describe "GRW init" do
-    REPORT_FILE_LOC = './../reports'
+    REPORT_FILE_LOC = 'reports'
     REPORT_FILE_NAME = 'demo_file'
 
     let(:glob_str) {File.join(REPORT_FILE_LOC, '**', REPORT_FILE_NAME + '*')}
