@@ -1,0 +1,5 @@
+require 'gherkin/parser'
+require 'gherkin/token_scanner'
+require 'gherkin/token_matcher'
+require 'gherkin/ast_builder'
+require 'gherkin/errors'
