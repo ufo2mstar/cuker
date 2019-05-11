@@ -2,40 +2,42 @@
 # require_relative '../gp'
 require_relative 'spec_helper'
 
-RSpec.describe "GherkinParserCmd" do
-  context "object validation" do
-    let(:gpc) {GherkinParserCmd.new}
-    it 'should contain the following preset locations' do
-      res = GherkinParserCmd::PRESET_LOCS
-      exp = ['*', './*']
-      expect(res).to eq exp
-    end
-
-    context "gp cmd usage" do
-      it 'does simple gp' do
-        # one arg
-        res = gpc.gp 'loc'
-        exp = true
-        expect(res).to eq exp
-
-        # no arg default
-        res = gpc.gp
-        exp = true
+module Cuker
+  RSpec.describe "GherkinParserCmd" do
+    context "object validation" do
+      let(:gpc) {GherkinParserCmd.new}
+      it 'should contain the following preset locations' do
+        res = GherkinParserCmd::PRESET_LOCS
+        exp = ['*', './*']
         expect(res).to eq exp
       end
-      it 'does preset gp' do
-        res = gpc.gpp
-        exp = true
-        expect(res).to eq exp
+
+      context "gp cmd usage" do
+        it 'does simple gp' do
+          # one arg
+          res = gpc.gp 'loc'
+          exp = true
+          expect(res).to eq exp
+
+          # no arg default
+          res = gpc.gp
+          exp = true
+          expect(res).to eq exp
+        end
+        it 'does preset gp' do
+          res = gpc.gpp
+          exp = true
+          expect(res).to eq exp
+        end
       end
-    end
 
 
-    context "gp cmd to report usage" do
-      it 'does simple gpr' do
-        res = gpc.gpr 'loc', 'report'
-        exp = true
-        expect(res).to eq exp
+      context "gp cmd to report usage" do
+        it 'does simple gpr' do
+          res = gpc.gpr 'loc', 'report'
+          exp = true
+          expect(res).to eq exp
+        end
       end
     end
   end

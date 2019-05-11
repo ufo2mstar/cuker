@@ -4,18 +4,20 @@ require_relative 'log_utils'
 #
 # Init Parser and get to action on a given location
 # @
-class GherkinParser
-  include LoggerSetup
+module Cuker
+  class GherkinParser
+    include LoggerSetup
 
-  attr_accessor :lex_ary
+    attr_accessor :lex_ary
 
-  def initialize lex = []
-    init_logger
-    @lex_ary = lex
-    @log.trace "init parser for lexer with items: "
-  end
+    def initialize lex = []
+      init_logger
+      @lex_ary = lex
+      @log.trace "init parser for lexer with items: "
+    end
 
-  def parse
+    def parse
 
+    end
   end
 end

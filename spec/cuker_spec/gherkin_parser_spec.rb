@@ -1,8 +1,13 @@
 require_relative 'spec_helper'
 # require 'awesome_print'
 
+module Cuker
 
-SIMPLE_FEATURE = <<-EOF
+
+  RSpec.describe GherkinParser do
+    describe "GP init" do
+      
+      SIMPLE_FEATURE = <<-EOF
 # comment above feat
 @feat_tag
 Feature: feat desc
@@ -25,58 +30,55 @@ Feature: feat desc
       | case 1 | 1     | one   |
       | case 2 | 2     | two   |
 
-EOF
+      EOF
 
-def simple_sample_feature_obj scen_str
-  file_lines = scen_str.split "\n"
-  feat_comment = Comment.new file_lines.shift
-  feat_tags = Tags.new file_lines.shift
-  feat = Feature.new file_lines.shift
-  feat.comments = feat_comment
-  feat.tags = feat_tags
-  skip = file_lines.shift
-  back = Background.new file_lines.shift
-  bg_step = Step.new file_lines.shift
-  back.items << bg_step
-  skip = file_lines.shift
-  scen_tags = Tags.new file_lines.shift
-  scen = Scenario.new file_lines.shift
-  scen.tags = scen_tags
-  scen_step_1 = Step.new file_lines.shift
-  scen_step_2 = Step.new file_lines.shift
-  scen_step_3 = Step.new file_lines.shift
-  scen.steps << [scen_step_1, scen_step_2, scen_step_3]
-  feat.items << scen
-  skip = file_lines.shift
-  scen_out_tags = Tags.new file_lines.shift
-  scen_out = ScenarioOutline.new file_lines.shift
-  scen_out.tags = scen_out_tags
-  scen_out_step_1 = Step.new file_lines.shift
-  scen_out_step_2 = Step.new file_lines.shift
-  scen_out.steps << [scen_out_step_1, scen_out_step_2]
-  examples = Examples.new file_lines.shift
-  row_1 = TableRow.new file_lines.shift
-  row_2 = TableRow.new file_lines.shift
-  row_3 = TableRow.new file_lines.shift
-  examples.items << row_1
-  examples.items << row_2
-  examples.items << row_3
-  scen_out.examples = examples
-  feat.items << scen_out
+      def simple_sample_feature_obj scen_str
+        file_lines = scen_str.split "\n"
+        feat_comment = Comment.new file_lines.shift
+        feat_tags = Tags.new file_lines.shift
+        feat = Feature.new file_lines.shift
+        feat.comments = feat_comment
+        feat.tags = feat_tags
+        skip = file_lines.shift
+        back = Background.new file_lines.shift
+        bg_step = Step.new file_lines.shift
+        back.items << bg_step
+        skip = file_lines.shift
+        scen_tags = Tags.new file_lines.shift
+        scen = Scenario.new file_lines.shift
+        scen.tags = scen_tags
+        scen_step_1 = Step.new file_lines.shift
+        scen_step_2 = Step.new file_lines.shift
+        scen_step_3 = Step.new file_lines.shift
+        scen.steps << [scen_step_1, scen_step_2, scen_step_3]
+        feat.items << scen
+        skip = file_lines.shift
+        scen_out_tags = Tags.new file_lines.shift
+        scen_out = ScenarioOutline.new file_lines.shift
+        scen_out.tags = scen_out_tags
+        scen_out_step_1 = Step.new file_lines.shift
+        scen_out_step_2 = Step.new file_lines.shift
+        scen_out.steps << [scen_out_step_1, scen_out_step_2]
+        examples = Examples.new file_lines.shift
+        row_1 = TableRow.new file_lines.shift
+        row_2 = TableRow.new file_lines.shift
+        row_3 = TableRow.new file_lines.shift
+        examples.items << row_1
+        examples.items << row_2
+        examples.items << row_3
+        scen_out.examples = examples
+        feat.items << scen_out
 
-  feat
-end
+        feat
+      end
 
-RSpec.describe GherkinParser do
-  describe "GP init" do
-
-    context 'sample parser above' do
-      it 'should parse out the feature like this' do
-        res = simple_sample_feature_obj SIMPLE_FEATURE
-        # puts res
-        # ap res.to_s
-        out = res.ai(plain: true, raw: true)
-        str = <<-EOS.strip
+      context 'sample parser above' do
+        it 'should parse out the feature like this' do
+          res = simple_sample_feature_obj SIMPLE_FEATURE
+          # puts res
+          # ap res.to_s
+          out = res.ai(plain: true, raw: true)
+          str = <<-EOS.strip
 #<Feature:placeholder_id
     attr_accessor :comments = #<Comment:placeholder_id
         attr_accessor :content = "# comment above feat"
@@ -158,11 +160,12 @@ RSpec.describe GherkinParser do
     attr_reader :keyword = "Feature:"
 >
 
-        EOS
-        # puts out
-        expect(out).to be_similar_to(str)
-        # expect(out).to eq(str)
-        # expect(out).to match(str)
+          EOS
+          # puts out
+          expect(out).to be_similar_to(str)
+          # expect(out).to eq(str)
+          # expect(out).to match(str)
+        end
       end
     end
   end
