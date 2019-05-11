@@ -1,22 +1,12 @@
 require 'rspec'
 require 'ap'
 require 'require_all'
-# require_all '../lib/*'
+
 require_all 'lib/**/*.rb'
 
 
 OUTPUT_DIR = "../../reports/#{LOG_TIME_TODAY}"
-# Dir.mkdir(OUTPUT_DIR) unless Dir.exist? OUTPUT_DIR
 FileUtils.mkdir_p(OUTPUT_DIR) unless Dir.exist? OUTPUT_DIR
-
-# describe 'fixture setup' do
-#   after(:all) do
-#     puts "Running Cleanup!!"
-#   end
-# end
-
-reset_appender_log_levels :warn
-
 
 RSpec.configure do |config|
   # Use color in STDOUT
@@ -35,9 +25,13 @@ RSpec.configure do |config|
   # https://relishapp.com/rspec/rspec-core/v/2-2/docs/hooks/before-and-after-hooks#define-before-and-after-blocks-in-configuration
   config.before(:all) do
     # puts "beforea all"
+    # LoggerSetup.reset_appender_log_levels :warn
+    # LoggerSetup.reset_appender_log_levels :error
+    LoggerSetup.reset_appender_log_levels :fatal
   end
   config.after(:all) do
     # puts "after all"
+    # LoggerSetup.reset_appender_log_levels :warn
   end
 end
 

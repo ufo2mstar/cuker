@@ -1,10 +1,4 @@
 require_relative './helper/gherkin_helper'
-# require 'gherkin/parser'
-# require 'gherkin/token_scanner'
-# require 'gherkin/token_matcher'
-# require 'gherkin/ast_builder'
-# require 'gherkin/errors'
-
 
 # == Gherkin Ripper
 # does lexing and parsing (building a simple ParseTree for Cucumber Gherkins)
@@ -13,12 +7,12 @@ require_relative './helper/gherkin_helper'
 module Cuker
 
   class GherkinRipper
-    include Gherkin
+    include GherkinHelper
     include LoggerSetup
 
     attr_accessor :location
-    # attr_reader :features
-    attr_accessor :features, :ast_map
+    attr_accessor :features
+    # attr_reader :ast_map
 
     def initialize path = '*'
       init_logger
@@ -27,9 +21,14 @@ module Cuker
       @log.trace "Gherkin ripper running at #{path}"
 
       @parser = Gherkin::Parser.new
-      @ast_map = parse_all
+      @ast_map = {}
 
-      @log.info "Parsed '.feature' files = #{@features.size}"
+      @log.info "Parsed '.feature' files @ #{Dir.pwd} = #{@features.size} files"
+    end
+
+    def ast_map
+      @ast_map = parse_all if @ast_map.empty?
+      @ast_map
     end
 
     private
@@ -48,8 +47,10 @@ module Cuker
       @features.each do |feat|
         feature_text = File.read(feat)
         scanner = TokenScanner.new(feature_text)
-        ast = @parser.parse(scanner)
-        parse_hsh[feat] = ast
+        parse_handle(feat) {
+          ast = @parser.parse(scanner)
+          parse_hsh[feat] = ast
+        }
       end
       parse_hsh
     end
