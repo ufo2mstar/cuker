@@ -18,6 +18,7 @@ module Cuker
       @log.info "Parsed '.feature' files = #{@features.size}"
     end
 
+    
     private
 
     # if you need to ignore any pattern of files, change this regex to match those patterns

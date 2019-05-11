@@ -8,3 +8,5 @@ gem 'rspec'
 gem 'logging'
 gem 'require_all'
 gem 'awesome_print'
+
+gem 'gherkin', '~> 5.1'
