@@ -15,8 +15,8 @@ RSpec.describe CsvWriter do
     end
     it 'should throw errors if writes are invoked before making new sheet first' do
       # todo: raise better errors, than nil errors
-      expect {w.write_title ['kod']}.to raise_error
-      expect {w.write_new_row ['kod']}.to raise_error
+      expect {w.write_title ['kod']}.to raise_error AbstractWriter::NoNewFileMadeError
+      expect {w.write_new_row ['kod']}.to raise_error AbstractWriter::NoNewFileMadeError
     end
 
     it 'should write a title increment counts' do

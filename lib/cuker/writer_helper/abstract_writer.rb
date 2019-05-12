@@ -11,11 +11,16 @@ module IWriter
   method :initialize
   method :write_title
   method :write_new_row
+
+  method :make_file
+  method :write_new_sheet
 end
 
 class AbstractWriter
   include IWriter
   include LoggerSetup
+
+  NoNewFileMadeError = Class.new IOError
 
   attr_accessor :ext
   attr_accessor :sheets, :active_sheet
@@ -28,6 +33,18 @@ class AbstractWriter
     @log.debug "initing AbstractWriter"
     @active_sheet = nil
     @sheets = {}
+  end
+
+  def write_title data
+    raise_unless_active_loc data
+  end
+
+  def write_new_row data
+    raise_unless_active_loc data
+  end
+
+  def raise_unless_active_loc data
+    raise NoNewFileMadeError.new "Please run 'make_file' before trying to write: '#{data}'" if @active_sheet.nil?
   end
 
   def make_new_sheet name = nil

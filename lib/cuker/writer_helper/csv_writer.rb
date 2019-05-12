@@ -8,11 +8,13 @@ class CsvWriter < AbstractWriter
   end
 
   def write_title title_ary
+    super title_ary
     @log.debug "csv write title"
     @active_sheet.add_row title_ary
   end
 
   def write_new_row row_ary
+    super row_ary
     @log.debug "csv write row"
     @active_sheet.add_row row_ary
   end
