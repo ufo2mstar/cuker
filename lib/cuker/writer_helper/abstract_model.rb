@@ -1,3 +1,16 @@
+
+
+module IModel
+  extend Interface
+  method :initialize
+  method :write_title
+  method :write_new_row
+
+  method :make_file
+  method :write_new_sheet
+end
+
+
 class AbstractModel
   include LoggerSetup
 

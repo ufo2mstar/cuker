@@ -4,8 +4,6 @@ module Cuker
   class CsvModel < AbstractModel
     include LoggerSetup
 
-    # attr_accessor :title, :data
-
     def initialize ast_map
       super
       @log.trace "initing #{self.class}"
@@ -112,9 +110,9 @@ module Cuker
 
     def name_merge hsh
       str = ""
-      @log.warn hsh
+      @log.warn "name merge for #{hsh}"
       str += hsh[:name].strip.force_encoding("UTF-8") if hsh[:name]
-      str += hsh[:description].strip.force_encoding("UTF-8") if hsh[:description]
+      str += " - #{hsh[:description].strip.force_encoding("UTF-8")}" if hsh[:description]
       str
     end
 

@@ -19,6 +19,31 @@ Logging.color_scheme('my_bright',
                      :message => :white
 )
 
+# COLOR_ALIAS_TABLE =
+#     Human name aliases for directives - used for colorization of tokens
+
+# {
+#     'c' => :logger,
+#     'd' => :date,
+#     'm' => :message,
+#     'h' => :hostname,
+#     'p' => :pid,
+#     'r' => :time,
+#     'T' => :thread,
+#     't' => :thread_id,
+#     'F' => :file,
+#     'L' => :line,
+#     'M' => :method,
+#     'X' => :mdc,
+#     'x' => :ndc
+# }.freeze
+
+LOG_PATTERN_SIMPLE = "[%d] %-5l %m\n"
+LOG_PATTERN_WITH_CLASS = "[%d] %-5l %c: %m\n"
+LOG_PATTERN_WITH_METHODS = "[%d] %-5l %c: %M: %m\n" # need to get this to work
+LOG_PATTERN_WITH_ALL = "[%d] %-5l %c: %M: %h: %p: %r: %T: %t: %F: %L: %M: %x\n"
+
+
 TIMESTAMP_PATTERN = "%Y-%m-%d %H:%M:%S.%L"
 LOG_TIME_TODAY = Time.now.strftime("%Y-%m-%d")
 LOG_TIME_NOW = Time.now.strftime("%Y-%m-%d_%H-%M-%S")
@@ -37,7 +62,7 @@ module LoggerSetup
                              # level: :info, # a different log level to your file appender
                              level: stdout_level, # a different log level to your file appender
                              layout: Logging.layouts.pattern(
-                                 pattern: "[%d] %-5l %c: %m\n",
+                                 pattern: LOG_PATTERN_WITH_CLASS,
                                  color_scheme: 'my_bright', # best not to use color_schemes on file loggers
                                  date_pattern: TIMESTAMP_PATTERN))
 
@@ -46,7 +71,7 @@ module LoggerSetup
                            # level: :debug, # or your custom lowest level init-ed
                            level: file_level, # or your custom lowest level init-ed
                            layout: Logging.layouts.pattern(
-                               pattern: "[%d] %-5l %c: %m\n",
+                               pattern: LOG_PATTERN_WITH_CLASS,
                                # color_scheme: 'my_bright', # best not to use color_schemes on file loggers
                                date_pattern: TIMESTAMP_PATTERN),
                            # truncate: true, # if you want to clear old log information
