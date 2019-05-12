@@ -21,7 +21,7 @@ module GherkinHelper
     # todo: maybe give friendly error promots?
     e.errors.map do |err|
       err.message
-          .gsub(/^\((\d+):(\d+)\):/, '( line \1 : char \2 ) :')
+          .gsub(/^\((\d+):(\d+)\):/, '    ( line \1 : char \2 ) :')
           # .gsub(' : ', "\t:\t") # not so pretty, but if needed
     end.join "\n"
   end

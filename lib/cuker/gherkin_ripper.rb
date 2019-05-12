@@ -23,7 +23,7 @@ module Cuker
       @parser = Gherkin::Parser.new
       @ast_map = {}
 
-      @log.info "Parsed '.feature' files @ #{Dir.pwd} = #{@features.size} files"
+      @log.info "Parsed '.feature' files @ #{path} = #{@features.size} files"
     end
 
     def ast_map

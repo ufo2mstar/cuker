@@ -30,7 +30,7 @@ LOG_FILE_PATH = File.join(LOG_LOC, LOG_FILE)
 Dir.mkdir(LOG_LOC) unless Dir.exists? LOG_LOC
 
 module LoggerSetup
-  def self.reset_appender_log_levels stdout_level = :info, file_level = :debug
+  def self.reset_appender_log_levels stdout_level = :info, file_level = :trace
 
 # Stdout appender
     Logging.appenders.stdout('stdout',
@@ -59,6 +59,7 @@ end
 
 # to restore defaults, run
 LoggerSetup.reset_appender_log_levels # stdout_level = :info, file_level = :debug
+# LoggerSetup.reset_appender_log_levels :info, :info
 
 
 # sample logger setup module

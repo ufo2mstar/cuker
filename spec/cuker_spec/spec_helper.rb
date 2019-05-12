@@ -47,7 +47,7 @@ RSpec.configure do |config|
     # puts "beforea all"
     # LoggerSetup.reset_appender_log_levels :warn
     # LoggerSetup.reset_appender_log_levels :error
-    LoggerSetup.reset_appender_log_levels :fatal
+    LoggerSetup.reset_appender_log_levels :fatal,:trace
   end
   config.after(:all) do
     # puts "after all"
