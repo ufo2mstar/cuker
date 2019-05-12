@@ -62,7 +62,8 @@ module Cuker
     describe "write out" do
 
       it "with a sample feature model" do
-        title = ["num", "text"]
+        title = {kod: "num",
+                 sar: "text"}
         data = [
             ["1", "one"],
             ["2", "two"],
@@ -76,6 +77,25 @@ module Cuker
 
         # feat_path = "spec/cuker_spec/testdata/sample"
         csv_model = model
+
+        path = "reports/#{LOG_TIME_TODAY}"
+        csv_writer = CsvWriter.new path
+        file_name = "demo"
+
+        gr = GherkinReporter.new csv_writer, csv_model, path, file_name
+        gr.write
+
+      end
+
+      it "with all test feature models" do
+
+        # puts Dir.pwd
+
+        feat_path = "spec/cuker_spec/testdata/sample"
+        gr = GherkinRipper.new feat_path
+        ast_map = gr.ast_map
+
+        csv_model = CsvModel.new ast_map
 
         path = "reports/#{LOG_TIME_TODAY}"
         csv_writer = CsvWriter.new path

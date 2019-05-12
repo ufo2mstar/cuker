@@ -27,7 +27,7 @@ class GherkinReporter
 
   def write
     @writer.make_file @file_path
-    @writer.write_title @model.title
+    @writer.write_title @model.title.values
     @model.data.each {|row| @writer.write_new_row row}
   end
 

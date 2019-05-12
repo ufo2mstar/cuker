@@ -97,6 +97,7 @@ module Cuker
         hsh[:tags].map {|tag| tag[:name]}
       else
         @log.warn "No Features found in file @ #{@file_path}"
+        []
       end
     end
 
