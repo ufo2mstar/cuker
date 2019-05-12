@@ -32,7 +32,7 @@ module Cuker
         # end
         # 
         it 'should read and write the good test data loc' do
-          res = gpc.gp
+          res = gpc.gpr
         end
       end
 

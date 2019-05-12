@@ -35,7 +35,7 @@ module Cuker
     desc "gpr FEATURE_PATH REPORT_PATH [REPORT_FILE_NAME]",
          "reports parsed results into REPORT_FILE_NAME for all *.feature files in the given LOCATION"
 
-    def gpr feat_path = "../jira*/**/*", report_path = "../jira*/**/*", report_file_name = 'report'
+    def gpr feat_path = "spec/cuker_spec/testdata", report_path = "reports/#{LOG_TIME_TODAY}", report_file_name = 'sample_report'
       init
       @log.warn "running GPTOOL @ '#{feat_path}' @ '#{report_path}' '#{report_file_name}.csv'   "
 
@@ -45,7 +45,8 @@ module Cuker
       ast_map = gr.ast_map
       csv_model = CsvModel.new ast_map
       csv_writer = CsvWriter.new report_path
-      GherkinReporter.new csv_writer, csv_model, feat_path, report_file_name
+      grr = GherkinReporter.new csv_writer, csv_model, report_path, report_file_name
+      grr.write
     end
 
 

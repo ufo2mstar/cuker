@@ -17,7 +17,7 @@ module Cuker
       @data = make_rows
     end
 
-    # private
+    private
 
     def make_title
       {
@@ -64,20 +64,6 @@ module Cuker
       res
     end
 
-    def in_item(item)
-      item_title = name_merge item
-      tags = get_tags item
-      if item[:type] == :Background
-        @log.debug "Skipping BG"
-      elsif item[:type] == :Scenario
-        yield tags, item_title, "S"
-      elsif item[:type] == :ScenarioOutline
-        yield tags, item_title, "SO"
-      else
-        @log.warn "Unknown type '#{item[:type]}' found in file @ #{@file_path}"
-      end
-    end
-
     def in_feature(hsh)
       if hsh[:feature]
         feat = hsh[:feature]
@@ -92,11 +78,25 @@ module Cuker
       end
     end
 
+    def in_item(item)
+      item_title = name_merge item
+      tags = get_tags item
+      if item[:type] == :Background
+        @log.debug "Skipping BG"
+      elsif item[:type] == :Scenario
+        yield tags, item_title, "S"
+      elsif item[:type] == :ScenarioOutline
+        yield tags, item_title, "SO"
+      else
+        @log.warn "Unknown type '#{item[:type]}' found in file @ #{@file_path}"
+      end
+    end
+
     def get_tags(hsh)
       if hsh[:tags] and hsh[:tags].any?
         hsh[:tags].map {|tag| tag[:name]}
       else
-        @log.warn "No Features found in file @ #{@file_path}"
+        @log.warn "No Tags found in #{hsh[:keyword]} @ #{@file_path}"
         []
       end
     end
@@ -104,8 +104,8 @@ module Cuker
     def name_merge hsh
       str = ""
       @log.warn hsh
-      str += hsh[:name].strip if hsh[:name]
-      str += hsh[:description].strip if hsh[:description]
+      str += hsh[:name].strip.force_encoding("UTF-8") if hsh[:name]
+      str += hsh[:description].strip.force_encoding("UTF-8") if hsh[:description]
       str
     end
 
