@@ -19,7 +19,7 @@ module Cuker
 
     desc "gp LOCATION", "parse all *.feature files in the given LOCATION"
 
-    def gp loc = "../jira*/**/*"
+    def gp loc = "../jira*/**/*", file_name = nil
       init
       @log.warn "running GPTOOL @ #{loc}"
     end
@@ -32,12 +32,20 @@ module Cuker
     end
 
 
-    desc "gpr LOCATION REPORT_FILE_NAME",
+    desc "gpr FEATURE_PATH REPORT_PATH [REPORT_FILE_NAME]",
          "reports parsed results into REPORT_FILE_NAME for all *.feature files in the given LOCATION"
 
-    def gpr loc = "../jira*/**/*", report_file_name = 'report'
+    def gpr feat_path = "../jira*/**/*", report_path = "../jira*/**/*", report_file_name = 'report'
       init
-      @log.warn "running GPTOOL @ '#{loc}' '#{report_file_name}.xlsx'"
+      @log.warn "running GPTOOL @ '#{feat_path}' @ '#{report_path}' '#{report_file_name}.csv'   "
+
+      @log.info Dir.pwd
+
+      gr = GherkinRipper.new feat_path
+      ast_map = gr.ast_map
+      csv_model = CsvModel.new ast_map
+      csv_writer = CsvWriter.new report_path
+      GherkinReporter.new csv_writer, csv_model, feat_path, report_file_name
     end
 
 

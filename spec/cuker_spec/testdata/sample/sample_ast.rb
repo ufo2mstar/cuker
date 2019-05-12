@@ -1,5 +1,5 @@
 module Cuker
-  AST =
+  FULL_AST =
       {
           feature: {type: :Feature,
                     tags: [{type: :Tag,
@@ -84,4 +84,18 @@ module Cuker
                       text: "                # Random file comment"}],
           type: :GherkinDocument
       }
+
+  BLANK_AST = {
+      feature: {
+          type: :Feature,
+          tags: [],
+          location: {line: 1, column: 1},
+          language: "en",
+          keyword: "Feature",
+          name: "test",
+          children: []
+      },
+      comments: [],
+      type: :GherkinDocument
+  }
 end

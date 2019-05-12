@@ -4,9 +4,27 @@ require 'require_all'
 
 require_all 'lib/**/*.rb'
 
-
-OUTPUT_DIR = "../../reports/#{LOG_TIME_TODAY}"
+# puts Dir.pwd+ "*"*80
+OUTPUT_DIR = "reports/#{LOG_TIME_TODAY}"
 FileUtils.mkdir_p(OUTPUT_DIR) unless Dir.exist? OUTPUT_DIR
+
+REPORT_FILE_LOC = 'reports'
+REPORT_FILE_NAME = 'demo'
+
+def after_cleanup
+  glob_str = File.join(REPORT_FILE_LOC, '**', "*#{REPORT_FILE_NAME}*")
+  ans = Dir.glob(glob_str)
+  old_count = ans.size
+  return if old_count == 0
+  FileUtils.rm_f Dir.glob(glob_str)
+  # ans.each {|x| FileUtils.rm x if File.exist? x}
+  ans = Dir.glob(glob_str)
+  new_count = ans.size
+  unless new_count < old_count
+    puts "#{old_count} -> #{new_count}"
+    raise FileNotRemoved.new("please see why the file #{ans} is not removed yet")
+  end
+end
 
 RSpec.configure do |config|
   # Use color in STDOUT
@@ -32,6 +50,7 @@ RSpec.configure do |config|
   config.after(:all) do
     # puts "after all"
     # LoggerSetup.reset_appender_log_levels :warn
+    after_cleanup
   end
 end
 

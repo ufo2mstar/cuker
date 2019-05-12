@@ -20,9 +20,10 @@ class AbstractWriter
   attr_accessor :sheets, :active_sheet
   attr_reader :out_dir
 
-  def initialize output_loc = OUTPUT_DIR
+  def initialize output_path = OUTPUT_DIR
     init_logger
-    @out_dir = output_loc
+    @out_dir = output_path
+    FileUtils.mkdir_p(output_path) unless Dir.exist? output_path
     @log.debug "initing AbstractWriter @ #{@out_dir}"
     @sheets = {}
   end

@@ -7,19 +7,17 @@ module Cuker
       let(:test_file) {'spec/cuker_spec/testdata/sample/sample_ast.rb'}
 
       it 'can recognize a feature asts, and parse out the data' do
-        csvm = CsvModel.new [AST, AST], test_file
+        ast_map = {"blank.feature" => BLANK_AST,
+                   "spec/cuker_spec/testdata/sample/sample_ast.rb" => FULL_AST,
+                   "spec/cuker_spec/testdata/sample/sample_ast_dup.rb" => FULL_AST,
+        }
+        csvm = CsvModel.new ast_map
         title = csvm.title
         expect(title.count).to eq 7
-        ap title
+        # ap title
         rows = csvm.data
         expect(rows.size).to eq 4
-        ap rows
-      end
-
-      it do
-        csvm = CsvModel.new [AST], test_file
-        # res = csvm.file
-        # expect(res.empty?).to eq false
+        # ap rows
       end
 
     end

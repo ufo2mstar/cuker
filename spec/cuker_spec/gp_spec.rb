@@ -13,31 +13,36 @@ module Cuker
       end
 
       context "gp cmd usage" do
-        it 'does simple gp' do
-          # one arg
-          res = gpc.gp 'loc'
-          exp = true
-          expect(res).to eq exp
-
-          # no arg default
+        # it 'does simple gp' do
+        #   # one arg
+        #   res = gpc.gp 'loc'
+        #   exp = true
+        #   expect(res).to eq exp
+        # 
+        #   # no arg default
+        #   res = gpc.gp
+        #   exp = true
+        #   expect(res).to eq exp
+        # end
+        # 
+        # it 'does preset gp' do
+        #   res = gpc.gpp
+        #   exp = true
+        #   expect(res).to eq exp
+        # end
+        # 
+        it 'should read and write the good test data loc' do
           res = gpc.gp
-          exp = true
-          expect(res).to eq exp
-        end
-        it 'does preset gp' do
-          res = gpc.gpp
-          exp = true
-          expect(res).to eq exp
         end
       end
 
 
       context "gp cmd to report usage" do
-        it 'does simple gpr' do
-          res = gpc.gpr 'loc', 'report'
-          exp = true
-          expect(res).to eq exp
-        end
+        # it 'does simple gpr' do
+        #   res = gpc.gpr 'loc', 'reports'
+        #   exp = true
+        #   expect(res).to eq exp
+        # end
       end
     end
   end

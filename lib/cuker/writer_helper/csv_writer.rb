@@ -1,27 +1,32 @@
 require_relative 'abstract_writer'
 
 class CsvWriter < AbstractWriter
-  def initialize output_loc = OUTPUT_DIR
+  def initialize output_loc
     super output_loc
     @log.debug "initing #{self.class}"
-    @active_sheet = make_new_sheet
+    @active_sheet = nil
   end
 
   def write_title title_ary
-    @log.debug "write title"
+    @log.debug "csv write title"
     @active_sheet.add_row title_ary
   end
 
   def write_new_row row_ary
-    @log.debug "write row"
+    @log.debug "csv write row"
     @active_sheet.add_row row_ary
   end
 
   def make_new_sheet name = nil
-    @log.debug "make new sheet"
+    @log.debug "csv make new sheet"
     name = super name
-    path = File.join(@out_dir, name)
-    @sheets[name] = CsvSheet.new path
+    # path = File.join(@out_dir, name)
+    @sheets[name] = CsvSheet.new name
+    @active_sheet = @sheets[name]
+  end
+
+  def make_file name
+    make_new_sheet name
   end
 end
 

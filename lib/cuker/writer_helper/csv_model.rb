@@ -6,13 +6,12 @@ module Cuker
 
     attr_accessor :title, :data
 
-    def initialize asts, file_path
+    def initialize ast_map
       init_logger
       @log.trace "initing #{self.class}"
-      @log.debug "has #{asts.size} items"
+      @log.debug "has #{ast_map.size} items"
 
-      @asts = asts
-      @file_path = file_path
+      @asts = ast_map
 
       @title = make_title
       @data = make_rows
@@ -34,10 +33,15 @@ module Cuker
     end
 
     def make_rows
-      return if @asts.nil? or @asts.empty?
+      if @asts.nil? or @asts.empty?
+        @log.warn "No asts to parse!"
+        return []
+      end
+
       total_counter = 0
       res = []
-      @asts.each do |ast|
+      @asts.each do |file_path, ast|
+        @file_path = file_path
         in_feat_counter = 0
         if ast[:type] == :GherkinDocument
           in_feature(ast) do |feat_tags, feat_title, feat_item|
@@ -56,6 +60,7 @@ module Cuker
           end
         end
       end
+      @file_path = nil
       res
     end
 
