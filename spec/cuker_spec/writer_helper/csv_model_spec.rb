@@ -13,11 +13,20 @@ module Cuker
         }
         csvm = CsvModel.new ast_map
         title = csvm.title
+        exp_title = ["Sl.No", "Type", "Title", "Feature", "S.no", "File", "Tags"]
         expect(title.count).to eq 7
-        # ap title
+        expect(title).to eq exp_title
+
         rows = csvm.data
+        exp_rows = [
+            [1, "S", "scenario namescenario description", "feature namefeature description", 1, "spec/cuker_spec/testdata/sample/sample_ast.rb", ["@feature_tag1", "@feature_tag2", "@feat_tag3", "@scenario_tag"]],
+            [2, "SO", "outline nameoutline description", "feature namefeature description", 2, "spec/cuker_spec/testdata/sample/sample_ast.rb", ["@feature_tag1", "@feature_tag2", "@feat_tag3", "@outline_tag"]],
+            [3, "S", "scenario namescenario description", "feature namefeature description", 1, "spec/cuker_spec/testdata/sample/sample_ast_dup.rb", ["@feature_tag1", "@feature_tag2", "@feat_tag3", "@scenario_tag"]],
+            [4, "SO", "outline nameoutline description", "feature namefeature description", 2, "spec/cuker_spec/testdata/sample/sample_ast_dup.rb", ["@feature_tag1", "@feature_tag2", "@feat_tag3", "@outline_tag"]]
+        ]
+
         expect(rows.size).to eq 4
-        # ap rows
+        expect(rows).to eq exp_rows
       end
 
     end

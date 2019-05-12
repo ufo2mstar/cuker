@@ -1,35 +1,41 @@
 require_relative 'abstract_writer'
 
 module Cuker
-  class CsvModel
+  class CsvModel < AbstractModel
     include LoggerSetup
 
-    attr_accessor :title, :data
+    # attr_accessor :title, :data
 
     def initialize ast_map
-      init_logger
+      super
       @log.trace "initing #{self.class}"
       @log.debug "has #{ast_map.size} items"
 
       @asts = ast_map
 
-      @title = make_title
+      @order = make_order
+      @title = make_title @order
       @data = make_rows
     end
 
     private
 
-    def make_title
-      {
-          :counter => "Sl.No",
-          :s_type => "Type",
-          :s_title => "Title",
-          :feature_title => "Feature",
-          :file_s_num => "S.no",
-          :file_name => "File",
-          :other_tags => "Tags",
-      }
+    def make_order
+      [
+          {:counter => "Sl.No"},
+          {:s_type => "Type"},
+          {:s_title => "Title"},
+          {:feature_title => "Feature"},
+          {:file_s_num => "S.no"},
+          {:file_name => "File"},
+          {:other_tags => "Tags"},
+      ]
+# todo: make title order reorderable
+# todo: tag based reordering
+    end
 
+    def make_title order
+      get_values_ary order
     end
 
     def make_rows
@@ -47,15 +53,18 @@ module Cuker
           in_feature(ast) do |feat_tags, feat_title, feat_item|
             in_item(feat_item) do |tags, title, type|
               all_tags = (feat_tags.to_set | tags.to_set).to_a # union
-              res << [
-                  total_counter += 1,
-                  type,
-                  title,
-                  feat_title,
-                  in_feat_counter += 1,
-                  @file_path,
-                  all_tags,
-              ]
+              row_hsh = {
+                  :counter => total_counter += 1,
+                  :s_type => type,
+                  :s_title => title,
+                  :feature_title => feat_title,
+                  :file_s_num => in_feat_counter += 1,
+                  :file_name => @file_path,
+                  :other_tags => all_tags,
+              }
+              row_ary = []
+              get_keys_ary(@order).each {|k| row_ary << row_hsh[k]}
+              res << row_ary
             end
           end
         end

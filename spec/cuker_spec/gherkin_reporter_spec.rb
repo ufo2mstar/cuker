@@ -1,11 +1,11 @@
 require_relative 'spec_helper'
 
 module Cuker
-  FileNotRemoved = Class.new StandardError
 
   RSpec.describe GherkinReporter do
-    include LoggerSetup
-
+    # FileNotRemoved = Class.new StandardError
+    # include LoggerSetup
+    #
     # describe "GRW init" do
     #   REPORT_FILE_LOC = 'reports'
     #   REPORT_FILE_NAME = 'demo_file'
@@ -62,20 +62,17 @@ module Cuker
     describe "write out" do
 
       it "with a sample feature model" do
-        title = {kod: "num",
-                 sar: "text"}
+        title = [
+            {kod: "num"},
+            {sar: "text"},
+        ]
         data = [
             ["1", "one"],
             ["2", "two"],
         ]
-        model = double("model double", :title => title, :data => data)
+        am = AbstractModel.new
 
-        # puts Dir.pwd
-
-        # gr = GherkinRipper.new feat_path
-        # ast_map = gr.ast_map
-
-        # feat_path = "spec/cuker_spec/testdata/sample"
+        model = double("model double", :title => am.get_values_ary(title), :data => data)
         csv_model = model
 
         path = "reports/#{LOG_TIME_TODAY}"
@@ -88,9 +85,6 @@ module Cuker
       end
 
       it "with all test feature models" do
-
-        # puts Dir.pwd
-
         feat_path = "spec/cuker_spec/testdata/sample"
         gr = GherkinRipper.new feat_path
         ast_map = gr.ast_map

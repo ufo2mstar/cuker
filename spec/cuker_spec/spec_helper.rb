@@ -11,6 +11,8 @@ FileUtils.mkdir_p(OUTPUT_DIR) unless Dir.exist? OUTPUT_DIR
 REPORT_FILE_LOC = 'reports'
 REPORT_FILE_NAME = 'demo'
 
+FileNotRemoved = Class.new StandardError
+
 def after_cleanup
   glob_str = File.join(REPORT_FILE_LOC, '**', "*#{REPORT_FILE_NAME}*")
   ans = Dir.glob(glob_str)
@@ -20,10 +22,10 @@ def after_cleanup
   # ans.each {|x| FileUtils.rm x if File.exist? x}
   ans = Dir.glob(glob_str)
   new_count = ans.size
-  unless new_count < old_count
-    puts "#{old_count} -> #{new_count}"
-    raise FileNotRemoved.new("please see why the file #{ans} is not removed yet")
-  end
+  # unless new_count < old_count
+  #   puts "#{old_count} -> #{new_count}"
+  #   raise FileNotRemoved.new("please see why the file #{ans} is not removed yet")
+  # end
 end
 
 RSpec.configure do |config|

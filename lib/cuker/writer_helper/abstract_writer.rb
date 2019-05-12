@@ -37,9 +37,11 @@ class AbstractWriter
 end
 
 class AbstractSheet
+  include LoggerSetup
   attr_accessor :name, :rows
 
   def initialize name
+    init_logger
     @name = name
     @rows = []
   end
@@ -49,6 +51,7 @@ class AbstractSheet
   end
 
   def add_row ary
+    @log.error "argument not an array.. instead is a '#{ary.class}' -> '#{ary}'" unless ary.is_a? Array
     @rows << ary
   end
 
