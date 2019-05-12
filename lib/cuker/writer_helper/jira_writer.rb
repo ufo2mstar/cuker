@@ -2,6 +2,7 @@ require_relative 'abstract_writer'
 
 class JiraWriter < AbstractWriter
   def initialize
+    @extension = '.txt'
     super
     @log.debug "initing #{self.class}"
     @active_sheet = make_new_sheet

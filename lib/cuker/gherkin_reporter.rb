@@ -16,13 +16,8 @@ class GherkinReporter
     @writer = writer
     @model = model
 
-    FileUtils.mkdir_p(loc) unless Dir.exist? loc
-    @file_path = File.join(loc, "#{LOG_TIME_NOW}_#{file_name}")
-
-    # @workbook = setup_report_file @file_name
-    # @item_number = 1
-    # @log.info "Creating report file => #{@file_name}"
-    # @workbook.close
+    @file_path = FileHelper.file_path(loc, "#{LOG_TIME_NOW}_#{file_name}")
+    @log.info "Report file => #{@file_name}#{@writer.ext}"
   end
 
   def write

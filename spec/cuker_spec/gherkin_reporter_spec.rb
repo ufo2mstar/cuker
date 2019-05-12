@@ -76,7 +76,7 @@ module Cuker
         csv_model = model
 
         path = "reports/#{LOG_TIME_TODAY}"
-        csv_writer = CsvWriter.new path
+        csv_writer = CsvWriter.new
         file_name = "demo"
 
         gr = GherkinReporter.new csv_writer, csv_model, path, file_name
@@ -92,7 +92,7 @@ module Cuker
         csv_model = CsvModel.new ast_map
 
         path = "reports/#{LOG_TIME_TODAY}"
-        csv_writer = CsvWriter.new path
+        csv_writer = CsvWriter.new
         file_name = "demo"
 
         gr = GherkinReporter.new csv_writer, csv_model, path, file_name

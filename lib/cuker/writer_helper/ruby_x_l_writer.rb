@@ -4,24 +4,26 @@ class RubyXLWriter < AbstractWriter
   def initialize
     super
     @log.debug "initing #{self.class}"
-    @active_sheet = make_new_sheet
   end
 
   def write_title title_ary
-    @log.debug "write title"
+    @log.debug "Rxl write title"
     @active_sheet.add_row title_ary
   end
 
   def write_new_row row_ary
-    @log.debug "write row"
+    @log.debug "Rxl write row"
     @active_sheet.add_row row_ary
   end
 
   def make_new_sheet name = nil
-    @log.debug "make new sheet"
-    name = super name
-    path = File.join(@out_dir, name)
+    @log.debug "Rxl make new sheet"
+    path = super name
     @sheets[name] = RubyXLSheet.new path
+  end
+
+  def make_file name
+    super name
   end
 
   class RubyXLSheet < AbstractSheet

@@ -1,10 +1,10 @@
 require_relative 'abstract_writer'
 
 class CsvWriter < AbstractWriter
-  def initialize output_loc
-    super output_loc
+  def initialize
+    @ext = '.csv'
+    super
     @log.debug "initing #{self.class}"
-    @active_sheet = nil
   end
 
   def write_title title_ary
@@ -17,15 +17,15 @@ class CsvWriter < AbstractWriter
     @active_sheet.add_row row_ary
   end
 
-  def make_new_sheet name = nil
+  def make_new_sheet name
     @log.debug "csv make new sheet"
-    name = super name
-    # path = File.join(@out_dir, name)
-    @sheets[name] = CsvSheet.new name
-    @active_sheet = @sheets[name]
+    path = super name
+    @sheets[path] = CsvSheet.new path, @ext
+    @active_sheet = @sheets[path]
   end
 
   def make_file name
+    super name
     make_new_sheet name
   end
 end
@@ -36,8 +36,8 @@ require 'csv'
 # {file:https://docs.ruby-lang.org/en/2.1.0/CSV.html CSV usage documentation}
 
 class CsvSheet < AbstractSheet
-  def initialize path
-    file_name = "#{path}.csv"
+  def initialize path, ext
+    file_name = "#{path}#{ext}"
     super file_name
     @csv_sheet = CSV.open(file_name, "wb")
   end

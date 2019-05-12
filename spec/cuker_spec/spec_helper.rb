@@ -18,8 +18,10 @@ def after_cleanup
   ans = Dir.glob(glob_str)
   old_count = ans.size
   return if old_count == 0
-  FileUtils.rm_f Dir.glob(glob_str)
-  # ans.each {|x| FileUtils.rm x if File.exist? x}
+
+  # sleep 1
+  FileUtils.rm_rf Dir.glob(glob_str)
+  ans.each {|x| FileUtils.rm_rf x if File.exist? x}
   ans = Dir.glob(glob_str)
   new_count = ans.size
   # unless new_count < old_count
@@ -52,6 +54,7 @@ RSpec.configure do |config|
   config.after(:all) do
     # puts "after all"
     # LoggerSetup.reset_appender_log_levels :warn
+    # todo: figure this mess out!! :( works when debugged, else not
     after_cleanup
   end
 end

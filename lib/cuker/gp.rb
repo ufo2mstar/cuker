@@ -44,7 +44,7 @@ module Cuker
       gr = GherkinRipper.new feat_path
       ast_map = gr.ast_map
       csv_model = CsvModel.new ast_map
-      csv_writer = CsvWriter.new report_path
+      csv_writer = CsvWriter.new
       grr = GherkinReporter.new csv_writer, csv_model, report_path, report_file_name
       grr.write
     end

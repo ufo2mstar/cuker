@@ -17,22 +17,28 @@ class AbstractWriter
   include IWriter
   include LoggerSetup
 
+  attr_accessor :ext
   attr_accessor :sheets, :active_sheet
   attr_reader :out_dir
 
-  def initialize output_path = OUTPUT_DIR
+  def initialize
     init_logger
-    @out_dir = output_path
-    FileUtils.mkdir_p(output_path) unless Dir.exist? output_path
-    @log.debug "initing AbstractWriter @ #{@out_dir}"
+    # @out_dir = output_path
+    # FileUtils.mkdir_p(output_path) unless Dir.exist? output_path
+    @log.debug "initing AbstractWriter"
+    @active_sheet = nil
     @sheets = {}
   end
 
   def make_new_sheet name = nil
-    @log.debug "make new abstract sheet"
-    name.nil? ? "Sheet_#{@sheets.size + 1}" : name
-    # @sheets[name] = Sheet.new name
+    file_name = name.nil? ? "Sheet_#{@sheets.size + 1}" : name
+    @log.debug "make a new abstract sheet: #{file_name}"
+    file_name
     # todo: file name collision handle
+  end
+
+  def make_file name
+    @log.debug "make a new abstract file: #{name}"
   end
 end
 
