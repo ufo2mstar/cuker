@@ -36,7 +36,7 @@ class AbstractWriter
 end
 
 class AbstractSheet
-  attr_accessor :name, :rows, :current_row
+  attr_accessor :name, :rows
 
   def initialize name
     @name = name

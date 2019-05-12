@@ -12,14 +12,14 @@ class GherkinReportWriter
 
   def initialize(loc, file_name = LOG_TIME_NOW)
     init_logger
-    extension = '.xls'
-    # extension = '.csv' # bad formats
+    # extension = '.xls'
+    extension = '.csv' # bad formats
 
     FileUtils.mkdir_p(loc) unless Dir.exist? loc
 
     @file_name = File.join(loc, (file_name + extension))
     @workbook = setup_report_file @file_name
-    @exc_no = 1
+    @item_number = 1
     @log.info "Creating report file => #{@file_name}"
     @workbook.close
   end
@@ -65,21 +65,21 @@ class GherkinReportWriter
       scen_info = each_scen_tag[0]
       ($feat_tags = scen_info; itr += 1; next) if itr == 0
 
-      worksheet.write(@exc_no, 0, @exc_no, @format)
-      worksheet.write(@exc_no, 1, scen_info[:S_type][0].gsub(/cenario|utline/, ""))
-      worksheet.write(@exc_no, 2, scen_info[:S_title][0].to_s.force_encoding("UTF-8"))
+      worksheet.write(@item_number, 0, @item_number, @format)
+      worksheet.write(@item_number, 1, scen_info[:S_type][0].gsub(/cenario|utline/, ""))
+      worksheet.write(@item_number, 2, scen_info[:S_title][0].to_s.force_encoding("UTF-8"))
 
       scen_info[:state].each do |st|
-        worksheet.write(@exc_no, col_recog.index(st.downcase), st, @state_f)
+        worksheet.write(@item_number, col_recog.index(st.downcase), st, @state_f)
         #worksheet.write(@exc_no, 3+state_list[st].to_i, st, @state_f)
         #worksheet.write(@exc_no, 3+state_list[st].to_i, "X",@state_f)
       end
-      col_list.each {|key| worksheet.write(@exc_no, col_recog.index(key.to_s), scen_info[key].join(","))}
-      worksheet.write(@exc_no, title_hai.size - 3, $feat_tags[:S_title])
-      worksheet.write(@exc_no, title_hai.size - 2, itr, workbook.add_format(:size => 8, :align => "center"))
-      worksheet.write(@exc_no, title_hai.size - 1, file.gsub("features/scenarios", ""))
+      col_list.each {|key| worksheet.write(@item_number, col_recog.index(key.to_s), scen_info[key].join(","))}
+      worksheet.write(@item_number, title_hai.size - 3, $feat_tags[:S_title])
+      worksheet.write(@item_number, title_hai.size - 2, itr, workbook.add_format(:size => 8, :align => "center"))
+      worksheet.write(@item_number, title_hai.size - 1, file.gsub("features/scenarios", ""))
 
-      @exc_no += 1; itr += 1
+      @item_number += 1; itr += 1
     }
   end
 
