@@ -11,18 +11,22 @@ module Cuker
                    "spec/cuker_spec/testdata/sample/sample_ast.rb" => FULL_AST,
                    "spec/cuker_spec/testdata/sample/sample_ast_dup.rb" => FULL_AST,
         }
-        csvm = CsvModel.new ast_map
+
+        csvm = JiraModel.new ast_map
         title = csvm.title
-        exp_title = ["Sl.No", "Type", "Title", "Feature", "S.no", "File", "Tags"]
-        expect(title.count).to eq 7
+        exp_title = ["||Scen ID||Scenario||Result||"]
+        expect(title.count).to eq 1
         expect(title).to eq exp_title
 
         rows = csvm.data
+        p rows
+        puts rows.join "\n"
         exp_rows = [
-            [1, "S", "scenario namescenario description", "feature namefeature description", 1, "spec/cuker_spec/testdata/sample/sample_ast.rb", ["@feature_tag1", "@feature_tag2", "@feat_tag3", "@scenario_tag"]],
-            [2, "SO", "outline nameoutline description", "feature namefeature description", 2, "spec/cuker_spec/testdata/sample/sample_ast.rb", ["@feature_tag1", "@feature_tag2", "@feat_tag3", "@outline_tag"]],
-            [3, "S", "scenario namescenario description", "feature namefeature description", 1, "spec/cuker_spec/testdata/sample/sample_ast_dup.rb", ["@feature_tag1", "@feature_tag2", "@feat_tag3", "@scenario_tag"]],
-            [4, "SO", "outline nameoutline description", "feature namefeature description", 2, "spec/cuker_spec/testdata/sample/sample_ast_dup.rb", ["@feature_tag1", "@feature_tag2", "@feat_tag3", "@outline_tag"]]
+            "|2.1|*  a step with a table|(/)|",
+            "|2.2|*  a step with a doc string|(/)|",
+            "|3.1|*  a step with a table|(/)|",
+            "|3.2|*  a step with a doc string|(/)|",
+
         ]
 
         expect(rows.size).to eq 4

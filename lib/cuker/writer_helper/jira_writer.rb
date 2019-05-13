@@ -43,7 +43,7 @@ class JiraFile < AbstractSheet
     super row_ary
     # @csv_sheet << ary
     File.open(@name, "ab") do |file|
-      file << row_ary
+      file << "#{row_ary}\n"
     end
   end
 

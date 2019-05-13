@@ -11,24 +11,24 @@ module Cuker
       @asts = ast_map
 
       @order = make_order
-      @title = make_title @order
-      @data = make_rows
+      title = make_title @order
+      data = make_rows
+
+      @title = [surround(title, '||')]
+      @data = data.join("\n").split("\n")
     end
 
     private
 
     def make_order
       [
-          {:counter => "Sl.No"},
-          {:s_type => "Type"},
-          {:s_title => "Title"},
-          {:feature_title => "Feature"},
-          {:file_s_num => "S.no"},
-          {:file_name => "File"},
-          {:other_tags => "Tags"},
+          # {:counter => "Sl.No"},
+          {:s_num => "Scen ID"},
+          {:s_content => "Scenario"},
+          {:item => "Result"},
       ]
-# todo: make title order reorderable
-# todo: tag based reordering
+# # todo: make title order reorderable
+# # todo: tag based reordering
     end
 
     def make_title order
@@ -41,30 +41,26 @@ module Cuker
         return []
       end
 
-      total_counter = 0
+      feat_counter = 1
       res = []
       @asts.each do |file_path, ast|
         @file_path = file_path
         in_feat_counter = 0
         if ast[:type] == :GherkinDocument
           in_feature(ast) do |feat_tags, feat_title, feat_item|
-            in_item(feat_item) do |tags, title, type|
-              all_tags = (feat_tags.to_set | tags.to_set).to_a # union
+            in_item(feat_item) do |tags, title, content|
               row_hsh = {
-                  :counter => total_counter += 1,
-                  :s_type => type,
-                  :s_title => title,
-                  :feature_title => feat_title,
-                  :file_s_num => in_feat_counter += 1,
-                  :file_name => @file_path,
-                  :other_tags => all_tags,
+                  :s_num => "#{feat_counter}.#{in_feat_counter += 1}",
+                  :s_content => content.join("\n"),
+                  :item => "(/)",
               }
               row_ary = []
               get_keys_ary(@order).each {|k| row_ary << row_hsh[k]}
-              res << row_ary
+              res << surround(row_ary, '|')
             end
           end
         end
+        feat_counter += 1
       end
       @file_path = nil
       res
@@ -88,13 +84,61 @@ module Cuker
       item_title = name_merge item
       tags = get_tags item
       if item[:type] == :Background
-        @log.debug "Skipping BG"
+        # get_steps(hsh)
+        # todo: think about handling this
       elsif item[:type] == :Scenario
-        yield tags, item_title, "S"
+        yield tags, item_title, get_steps(item)
       elsif item[:type] == :ScenarioOutline
-        yield tags, item_title, "SO"
+        yield tags, item_title, get_steps(item)
       else
         @log.warn "Unknown type '#{item[:type]}' found in file @ #{@file_path}"
+      end
+    end
+
+    def get_steps(hsh)
+      if hsh[:steps] and hsh[:steps].any?
+        content = []
+        steps = hsh[:steps]
+        in_step(steps) do |step|
+          content << step
+        end
+        content
+      else
+        @log.warn "No Tags found in #{hsh[:keyword]} @ #{@file_path}"
+        []
+      end
+    end
+
+    def in_step(steps)
+      # todo: table
+      steps.each do |step|
+        if step[:type] == :Step
+          step_str = [
+              step[:keyword],
+              step[:text]
+          ]
+          step_str << in_step_args(step[:argument]) if step[:argument]
+          # todo: padding as needed
+          yield step_str.join " "
+        else
+          @log.warn "Unknown type '#{item[:type]}' found in file @ #{@file_path}"
+        end
+      end
+    end
+
+    def in_step_args arg
+      if arg[:type] == :DataTable
+        arg[:rows].each_with_index do |row, i|
+          if i == 0
+            surround row[:cells], "||"
+          else
+            surround row[:cells], "|"
+          end
+        end.map
+      elsif arg[:type] == :DocString
+        nil # todo: handle if needed
+      else
+        @log.warn "Unknown type '#{arg[:type]}' found in file @ #{@file_path}"
       end
     end
 
@@ -105,6 +149,14 @@ module Cuker
         @log.warn "No Tags found in #{hsh[:keyword]} @ #{@file_path}"
         []
       end
+    end
+
+    def union feat_tags, tags
+      (feat_tags.to_set | tags.to_set).to_a # union
+    end
+
+    def surround ary, sep
+      "#{sep}#{ary.join(sep)}#{sep}"
     end
 
     def name_merge hsh

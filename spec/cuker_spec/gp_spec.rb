@@ -31,8 +31,12 @@ module Cuker
         #   expect(res).to eq exp
         # end
         # 
-        it 'should read and write the good test data loc' do
+        it 'should read and write the good test data loc: csv' do
           # res = gpc.gpr
+        end
+
+        it 'should read and write the good test data loc: jira' do
+          res = gpc.gpj
         end
       end
 
