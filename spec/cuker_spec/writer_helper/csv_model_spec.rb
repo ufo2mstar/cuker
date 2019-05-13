@@ -19,10 +19,10 @@ module Cuker
 
         rows = csvm.data
         exp_rows = [
-            [1, "S", "scenario name - scenario description", "feature name - feature description", 1, "spec/cuker_spec/testdata/sample/sample_ast.rb", "@feature_tag1,@feature_tag2,@feat_tag3,@scenario_tag"],
-            [2, "SO", "outline name - outline description", "feature name - feature description", 2, "spec/cuker_spec/testdata/sample/sample_ast.rb", "@feature_tag1,@feature_tag2,@feat_tag3,@outline_tag"],
-            [3, "S", "scenario name - scenario description", "feature name - feature description", 1, "spec/cuker_spec/testdata/sample/sample_ast_dup.rb", "@feature_tag1,@feature_tag2,@feat_tag3,@scenario_tag"],
-            [4, "SO", "outline name - outline description", "feature name - feature description", 2, "spec/cuker_spec/testdata/sample/sample_ast_dup.rb", "@feature_tag1,@feature_tag2,@feat_tag3,@outline_tag"]
+            [1, "S", "scenario name - scenario description", "feature name - feature description", 1, "spec/cuker_spec/testdata/sample/sample_ast.rb", "@feature_tag1, @feature_tag2, @feat_tag3, @scenario_tag"],
+            [2, "SO", "outline name - outline description", "feature name - feature description", 2, "spec/cuker_spec/testdata/sample/sample_ast.rb", "@feature_tag1, @feature_tag2, @feat_tag3, @outline_tag"],
+            [3, "S", "scenario name - scenario description", "feature name - feature description", 1, "spec/cuker_spec/testdata/sample/sample_ast_dup.rb", "@feature_tag1, @feature_tag2, @feat_tag3, @scenario_tag"],
+            [4, "SO", "outline name - outline description", "feature name - feature description", 2, "spec/cuker_spec/testdata/sample/sample_ast_dup.rb", "@feature_tag1, @feature_tag2, @feat_tag3, @outline_tag"]
         ]
 
         expect(rows.size).to eq 4

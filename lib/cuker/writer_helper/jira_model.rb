@@ -52,7 +52,7 @@ module Cuker
               row_hsh = {
                   :s_num => "#{feat_counter}.#{in_feat_counter += 1}",
                   :s_content => content.join("\n"),
-                  :item => "(/)",
+                  :item => "|(/)|",
               }
               row_ary = []
               get_keys_ary(@order).each {|k| row_ary << row_hsh[k]}
@@ -83,13 +83,16 @@ module Cuker
     def in_item(item)
       item_title = name_merge item
       tags = get_tags item
+      @bg_steps ||= []
       if item[:type] == :Background
-        # get_steps(hsh)
+        yield tags, item_title, get_steps(item)
         # todo: think about handling this
       elsif item[:type] == :Scenario
         yield tags, item_title, get_steps(item)
+        @bg_steps = nil
       elsif item[:type] == :ScenarioOutline
         yield tags, item_title, get_steps(item)
+        @bg_steps = nil
       else
         @log.warn "Unknown type '#{item[:type]}' found in file @ #{@file_path}"
       end

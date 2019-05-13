@@ -1,8 +1,11 @@
 require 'thor'
 
 require 'require_all'
-require_all 'lib/cuker/**/*.rb'
-require_all 'lib/cuker/*.rb'
+# require_all 'lib/cuker/**/*.rb'
+# require_all 'lib/cuker/*.rb'
+require_rel '**/*.rb'
+require_rel '*.rb'
+
 
 module Cuker
   module GPHelper
@@ -35,10 +38,11 @@ module Cuker
     desc "gpr FEATURE_PATH REPORT_PATH [REPORT_FILE_NAME]",
          "reports parsed results into REPORT_FILE_NAME for all *.feature files in the given LOCATION"
 
-    def gpr feat_path = "spec/cuker_spec/testdata", report_path = "reports/#{LOG_TIME_TODAY}", report_file_name = 'sample_report'
+    def gpr report_file_name = 'sample_report', feat_path = "../", report_path = "reports"
       init
       @log.warn "running GPTOOL @ '#{feat_path}' => '#{report_path}' '#{report_file_name}.csv'   "
 
+      report_path = File.join report_path, LOG_TIME_TODAY
       @log.info Dir.pwd
 
       gr = GherkinRipper.new feat_path

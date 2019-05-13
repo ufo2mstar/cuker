@@ -10,14 +10,19 @@ module Cuker
     include GherkinHelper
     include LoggerSetup
 
+    NoFilesFoundError = Class.new IOError
+
     attr_accessor :location
     attr_accessor :features
     # attr_reader :ast_map
 
     def initialize path = '*'
       init_logger
-      @location = path
+
+      @location = path.strip
+      @location = '.' if @location.empty? # handle blank path searching all features
       @features = get_features @location
+
       @log.trace "Gherkin ripper running at #{path}"
 
       @parser = Gherkin::Parser.new
@@ -38,8 +43,12 @@ module Cuker
 
     # dir glob for all feature files
     # @param location dir location of all the feature files
-    def get_features(loc)
-      FileHelper.get_files(loc, '.feature', IGNORE_EXP)
+    def get_features(path_or_file)
+      ext = '.feature'
+      files = FileHelper.get_files(path_or_file, ext, IGNORE_EXP)
+      files = FileHelper.get_file(path_or_file, ext, IGNORE_EXP) if files.empty?
+      raise NoFilesFoundError.new "No '#{ext}' files found @ path '#{path_or_file}'.." if files.empty?
+      files
     end
 
     def parse_all
