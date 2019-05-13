@@ -37,7 +37,7 @@ module Cuker
 
     def gpr feat_path = "spec/cuker_spec/testdata", report_path = "reports/#{LOG_TIME_TODAY}", report_file_name = 'sample_report'
       init
-      @log.warn "running GPTOOL @ '#{feat_path}' @ '#{report_path}' '#{report_file_name}.csv'   "
+      @log.warn "running GPTOOL @ '#{feat_path}' => '#{report_path}' '#{report_file_name}.csv'   "
 
       @log.info Dir.pwd
 
@@ -54,7 +54,7 @@ module Cuker
 
     def gpj feat_path = "spec/cuker_spec/testdata", report_path = "reports/#{LOG_TIME_TODAY}", report_file_name = 'sample_report'
       init
-      @log.warn "running GPTOOL @ '#{feat_path}' @ '#{report_path}' '#{report_file_name}.csv'   "
+      @log.warn "running GPTOOL @ '#{feat_path}' => '#{report_path}' '#{report_file_name}.csv'   "
 
       @log.info Dir.pwd
 

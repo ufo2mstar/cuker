@@ -19,16 +19,32 @@ module Cuker
 
         rows = csvm.data
         exp_rows = [
-            [1, "S", "scenario name - scenario description", "feature name - feature description", 1, "spec/cuker_spec/testdata/sample/sample_ast.rb", ["@feature_tag1", "@feature_tag2", "@feat_tag3", "@scenario_tag"]],
-            [2, "SO", "outline name - outline description", "feature name - feature description", 2, "spec/cuker_spec/testdata/sample/sample_ast.rb", ["@feature_tag1", "@feature_tag2", "@feat_tag3", "@outline_tag"]],
-            [3, "S", "scenario name - scenario description", "feature name - feature description", 1, "spec/cuker_spec/testdata/sample/sample_ast_dup.rb", ["@feature_tag1", "@feature_tag2", "@feat_tag3", "@scenario_tag"]],
-            [4, "SO", "outline name - outline description", "feature name - feature description", 2, "spec/cuker_spec/testdata/sample/sample_ast_dup.rb", ["@feature_tag1", "@feature_tag2", "@feat_tag3", "@outline_tag"]]
+            [1, "S", "scenario name - scenario description", "feature name - feature description", 1, "spec/cuker_spec/testdata/sample/sample_ast.rb", "@feature_tag1,@feature_tag2,@feat_tag3,@scenario_tag"],
+            [2, "SO", "outline name - outline description", "feature name - feature description", 2, "spec/cuker_spec/testdata/sample/sample_ast.rb", "@feature_tag1,@feature_tag2,@feat_tag3,@outline_tag"],
+            [3, "S", "scenario name - scenario description", "feature name - feature description", 1, "spec/cuker_spec/testdata/sample/sample_ast_dup.rb", "@feature_tag1,@feature_tag2,@feat_tag3,@scenario_tag"],
+            [4, "SO", "outline name - outline description", "feature name - feature description", 2, "spec/cuker_spec/testdata/sample/sample_ast_dup.rb", "@feature_tag1,@feature_tag2,@feat_tag3,@outline_tag"]
         ]
 
         expect(rows.size).to eq 4
         expect(rows).to eq exp_rows
       end
 
+    end
+
+    context 'util methods' do
+      it 'should filter special_tag_list ' do
+        csvm = CsvModel.new({})
+        csvm.special_tag_list = [
+            {'spl' => "SecialTag"},
+            {'spl_tag_2' => "Special Tag 2"},
+        ]
+        special_tag_id = ["spl", "spl_tag_2"]
+        all_tags = ["tag_1", "tag2", "spl", "kod"]
+        select_list, ignore_list = csvm.send(:filter_special_tags, all_tags)
+
+        expect(select_list).to eq ["spl"]
+        expect(ignore_list).to eq ["tag_1", "tag2", "kod"]
+      end
     end
   end
 end

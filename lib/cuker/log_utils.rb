@@ -19,24 +19,7 @@ Logging.color_scheme('my_bright',
                      :message => :white
 )
 
-# COLOR_ALIAS_TABLE =
-#     Human name aliases for directives - used for colorization of tokens
-
-# {
-#     'c' => :logger,
-#     'd' => :date,
-#     'm' => :message,
-#     'h' => :hostname,
-#     'p' => :pid,
-#     'r' => :time,
-#     'T' => :thread,
-#     't' => :thread_id,
-#     'F' => :file,
-#     'L' => :line,
-#     'M' => :method,
-#     'X' => :mdc,
-#     'x' => :ndc
-# }.freeze
+# https://www.rubydoc.info/gems/logging/Logging/Layouts/Pattern/FormatMethodBuilder
 
 LOG_PATTERN_SIMPLE = "[%d] %-5l %m\n"
 LOG_PATTERN_WITH_CLASS = "[%d] %-5l %c: %m\n"
@@ -52,13 +35,15 @@ LOG_LOC = "./logs"
 LOG_FILE = "log_#{LOG_TIME_TODAY}.log"
 LOG_FILE_PATH = File.join(LOG_LOC, LOG_FILE)
 
+LOG_STDOUT = 'stdout'
+
 Dir.mkdir(LOG_LOC) unless Dir.exists? LOG_LOC
 
 module LoggerSetup
   def self.reset_appender_log_levels stdout_level = :info, file_level = :trace
 
 # Stdout appender
-    Logging.appenders.stdout('stdout',
+    Logging.appenders.stdout(LOG_STDOUT,
                              # level: :info, # a different log level to your file appender
                              level: stdout_level, # a different log level to your file appender
                              layout: Logging.layouts.pattern(
@@ -95,7 +80,7 @@ module LoggerSetup
     @log = Logging.logger[self]
     @log.level = level || :debug # your lowest level
     @log.add_appenders(
-        'stdout',
+        LOG_STDOUT,
         LOG_FILE_PATH
     )
     @log

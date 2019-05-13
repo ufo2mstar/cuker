@@ -4,6 +4,8 @@ module Cuker
   class CsvModel < AbstractModel
     include LoggerSetup
 
+    attr_accessor :special_tag_list
+
     def initialize ast_map
       super
       @log.trace "initing #{self.class}"
@@ -23,6 +25,7 @@ module Cuker
           {:counter => "Sl.No"},
           {:s_type => "Type"},
           {:s_title => "Title"},
+          # {:tags => special_tag_titles},
           {:feature_title => "Feature"},
           {:file_s_num => "S.no"},
           {:file_name => "File"},
@@ -30,6 +33,14 @@ module Cuker
       ]
 # todo: make title order reorderable
 # todo: tag based reordering
+    end
+
+    def special_tag_titles
+      @special_tag_titles ||= get_values_ary @special_tag_list if @special_tag_list
+    end
+
+    def special_tag_lookup
+      @special_tag_lookup ||= get_keys_ary @special_tag_list if @special_tag_list
     end
 
     def make_title order
@@ -51,6 +62,7 @@ module Cuker
           in_feature(ast) do |feat_tags, feat_title, feat_item|
             in_item(feat_item) do |tags, title, type|
               all_tags = (feat_tags.to_set | tags.to_set).to_a # union
+              special_tags, other_tags = filter_special_tags all_tags
               row_hsh = {
                   :counter => total_counter += 1,
                   :s_type => type,
@@ -58,10 +70,13 @@ module Cuker
                   :feature_title => feat_title,
                   :file_s_num => in_feat_counter += 1,
                   :file_name => @file_path,
-                  :other_tags => all_tags,
+                  :other_tags => other_tags.join(', '),
+
+                  :tags => special_tags
               }
               row_ary = []
               get_keys_ary(@order).each {|k| row_ary << row_hsh[k]}
+              # todo: a lot of flattening?
               res << row_ary
             end
           end
@@ -69,6 +84,13 @@ module Cuker
       end
       @file_path = nil
       res
+    end
+
+    def filter_special_tags(all_tags)
+      return [[],all_tags] unless special_tag_lookup
+      ignore_list = all_tags - special_tag_lookup
+      select_list = all_tags - ignore_list
+      [select_list, ignore_list]
     end
 
     def in_feature(hsh)

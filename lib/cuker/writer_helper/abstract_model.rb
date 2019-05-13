@@ -1,5 +1,3 @@
-
-
 module IModel
   extend Interface
   method :initialize
@@ -29,11 +27,11 @@ class AbstractModel
   end
 
   def get_values_ary ary_of_hshs
-    ary_of_hshs.map {|hsh| hsh.values.first}
+    ary_of_hshs.map {|hsh| hsh.values}.flatten
   end
 
   def get_keys_ary ary_of_hshs
-    ary_of_hshs.map {|hsh| hsh.keys.first}
+    ary_of_hshs.map {|hsh| hsh.keys}.flatten
   end
 
 end
