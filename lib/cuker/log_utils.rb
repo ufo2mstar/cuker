@@ -68,8 +68,8 @@ module LoggerSetup
 end
 
 # to restore defaults, run
-LoggerSetup.reset_appender_log_levels # stdout_level = :info, file_level = :debug
-# LoggerSetup.reset_appender_log_levels :info, :info
+# LoggerSetup.reset_appender_log_levels # stdout_level = :info, file_level = :debug
+LoggerSetup.reset_appender_log_levels :error, :trace
 
 
 # sample logger setup module

@@ -24,6 +24,7 @@ class GherkinReporter
     @writer.make_file @file_path
     @writer.write_title @model.title
     @model.data.each {|row| @writer.write_new_row row}
+    @file_path
   end
 
   private

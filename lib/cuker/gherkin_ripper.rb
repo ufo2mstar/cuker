@@ -47,7 +47,7 @@ module Cuker
       ext = '.feature'
       files = FileHelper.get_files(path_or_file, ext, IGNORE_EXP)
       files = FileHelper.get_file(path_or_file, ext, IGNORE_EXP) if files.empty?
-      raise NoFilesFoundError.new "No '#{ext}' files found @ path '#{path_or_file}'.." if files.empty?
+      raise NoFilesFoundError.new "No '#{ext}' files found @ path '#{path_or_file}'... " if files.empty?
       files
     end
 

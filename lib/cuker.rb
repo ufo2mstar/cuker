@@ -1,4 +1,4 @@
-require "cuker/version"
+require 'cuker/version'
 require 'cuker/gp'
 
 module Cuker

@@ -15,7 +15,7 @@ class CsvWriter < AbstractWriter
 
   def write_new_row row_ary
     super row_ary
-    @log.debug "csv write row"
+    @log.debug "csv write row: #{row_ary}"
     @active_sheet.add_row row_ary
   end
 
