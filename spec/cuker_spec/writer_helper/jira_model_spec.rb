@@ -22,14 +22,15 @@ module Cuker
         p rows
         puts rows.join "\n"
         exp_rows = [
-            "|2.1|*  a step with a table|(/)|",
-            "|2.2|*  a step with a doc string|(/)|",
-            "|3.1|*  a step with a table|(/)|",
-            "|3.2|*  a step with a doc string|(/)|",
-
+            "|2.1|* a step with a table",
+            "||a table|||(/)|",
+            "|2.2|* a step with a doc string|(/)|",
+            "|3.1|* a step with a table",
+            "||a table|||(/)|",
+            "|3.2|* a step with a doc string|(/)|"
         ]
 
-        expect(rows.size).to eq 4
+        expect(rows.size).to eq 6
         expect(rows).to eq exp_rows
       end
 

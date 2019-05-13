@@ -100,7 +100,7 @@ module Cuker
         content = []
         steps = hsh[:steps]
         in_step(steps) do |step|
-          content << step
+          content += step
         end
         content
       else
@@ -113,13 +113,14 @@ module Cuker
       # todo: table
       steps.each do |step|
         if step[:type] == :Step
-          step_str = [
-              step[:keyword],
-              step[:text]
-          ]
-          step_str << in_step_args(step[:argument]) if step[:argument]
+          step_ary = []
+          step_ary << [
+              step[:keyword].strip,
+              step[:text].strip
+          ].join(" ")
+          step_ary += in_step_args(step[:argument]) if step[:argument]
           # todo: padding as needed
-          yield step_str.join " "
+          yield step_ary
         else
           @log.warn "Unknown type '#{item[:type]}' found in file @ #{@file_path}"
         end
@@ -128,18 +129,18 @@ module Cuker
 
     def in_step_args arg
       if arg[:type] == :DataTable
+        res = []
         arg[:rows].each_with_index do |row, i|
-          if i == 0
-            surround row[:cells], "||"
-          else
-            surround row[:cells], "|"
-          end
-        end.map
+          sep = i == 0 ? '||' : '|'
+          res << surround(row[:cells].map {|hsh| hsh[:value]}, sep)
+        end
+        return res
       elsif arg[:type] == :DocString
-        nil # todo: handle if needed
+        # todo: handle if needed
       else
         @log.warn "Unknown type '#{arg[:type]}' found in file @ #{@file_path}"
       end
+      []
     end
 
     def get_tags(hsh)

@@ -36,7 +36,7 @@ module Cuker
         end
 
         it 'should read and write the good test data loc: jira' do
-          res = gpc.gpj
+          # res = gpc.gpj
         end
       end
 
