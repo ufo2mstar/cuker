@@ -14,23 +14,15 @@ module Cuker
 
         csvm = JiraModel.new ast_map
         title = csvm.title
-        exp_title = ["||Scen ID||Scenario||Result||"]
-        expect(title.count).to eq 1
+        exp_title = "||Scen ID||Steps||Result||"
+        # expect(title.count).to eq 1
         expect(title).to eq exp_title
 
         rows = csvm.data
         p rows
         puts rows.join "\n"
-        exp_rows = [
-            "|2.1|* a step||(/)||",
-            "|2.2|* a step with a table",
-            "||a table||||(/)||",
-            "|2.3|* a step with a doc string||(/)||",
-            "|3.1|* a step||(/)||",
-            "|3.2|* a step with a table",
-            "||a table||||(/)||",
-            "|3.3|* a step with a doc string||(/)||",
-        ]
+        exp_rows = ["|2|{panel} * a step {panel}||(/)||", "|2.1|{panel} * a step with a table", "||a table|| {panel}||(/)||", "|2.2|{panel} * a step with a doc string {panel}||(/)||", "|3|{panel} * a step {panel}||(/)||", "|3.1|{panel} * a step with a table", "||a table|| {panel}||(/)||", "|3.2|{panel} * a step with a doc string {panel}||(/)||"]
+
 
         expect(rows.size).to eq 8
         expect(rows).to eq exp_rows
@@ -44,9 +36,9 @@ module Cuker
         ast_map = gr.ast_map
         csvm = JiraModel.new ast_map
         title = csvm.title
-        # exp_title = ["||Scen ID||Scenario||Result||"]
-        expect(title.count).to eq 1
-        # expect(title).to eq exp_title
+        exp_title = "||Scen ID||Steps||Result||"
+        # expect(title.count).to eq 1
+        expect(title).to eq exp_title
 
         rows = csvm.data
         p

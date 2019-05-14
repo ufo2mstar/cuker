@@ -7,16 +7,16 @@ class JiraWriter < AbstractWriter
     @log.debug "initing #{self.class}"
   end
 
-  def write_title title_ary
-    super title_ary
+  def write_title title_line
+    super title_line
     @log.debug "JW write title"
-    @active_sheet.add_row title_ary
+    @active_sheet.add_line title_line
   end
 
-  def write_new_row row_ary
-    super row_ary
+  def write_new_row row_line
+    super row_line
     @log.debug "JW write row"
-    @active_sheet.add_row row_ary
+    @active_sheet.add_line row_line
   end
 
   def make_new_sheet name = nil
@@ -39,11 +39,11 @@ class JiraFile < AbstractSheet
     @csv_sheet = File.open(file_name, "wb")
   end
 
-  def add_row row_ary
-    super row_ary
-    # @csv_sheet << ary
+  def add_line line
+    super line
+    @log.warn "argument not a String.. instead is a '#{line.class}' -> '#{line}'" unless line.is_a? String
     File.open(@name, "ab") do |file|
-      file << "#{row_ary}\n"
+      file << "#{line}\n"
     end
   end
 

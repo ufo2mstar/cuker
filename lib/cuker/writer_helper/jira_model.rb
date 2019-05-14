@@ -14,7 +14,7 @@ module Cuker
       title = make_title @order
       data = make_rows
 
-      @title = [surround(title, '||')]
+      @title = surround(title, '||')
       @data = data.join("\n").split("\n")
     end
 
@@ -24,7 +24,8 @@ module Cuker
       [
           # {:counter => "Sl.No"},
           {:s_num => "Scen ID"},
-          {:s_content => "Scenario"},
+          # {:s_title => "Feature/Scenario"},
+          {:s_content => "Steps"},
           {:item => "Result"},
       ]
 # # todo: make title order reorderable
@@ -48,12 +49,23 @@ module Cuker
         in_feat_counter = 0
         if ast[:type] == :GherkinDocument
           in_feature(ast) do |feat_tags, feat_title, feat_item|
-            in_item(feat_item) do |tags, title, content|
-              row_hsh = {
-                  :s_num => "#{feat_counter}.#{in_feat_counter += 1}",
-                  :s_content => content.join("\n"),
-                  :item => "|(/)|",
-              }
+            in_item(feat_item) do |tags, title, type, content|
+              row_hsh = {}
+              if type == :Background
+                row_hsh = {
+                    :s_num => "#{feat_counter}",
+                    :s_title => feat_title,
+                    :s_content => surround_panel(content.join("\n")),
+                    :item => "|(/)|",
+                }
+              elsif type == :Scenario or type == :ScenarioOutline
+                row_hsh = {
+                    :s_num => "#{feat_counter}.#{in_feat_counter += 1}",
+                    :s_title => title,
+                    :s_content => surround_panel(content.join("\n")),
+                    :item => "|(/)|",
+                }
+              end
               row_ary = []
               get_keys_ary(@order).each {|k| row_ary << row_hsh[k]}
               res << surround(row_ary, '|')
@@ -85,13 +97,12 @@ module Cuker
       tags = get_tags item
       @bg_steps ||= []
       if item[:type] == :Background
-        yield tags, item_title, get_steps(item)
-        # todo: think about handling this
+        yield tags, item_title, item[:type], get_steps(item)
       elsif item[:type] == :Scenario
-        yield tags, item_title, get_steps(item)
+        yield tags, item_title, item[:type], get_steps(item)
         @bg_steps = nil
       elsif item[:type] == :ScenarioOutline
-        yield tags, item_title, get_steps(item)
+        yield tags, item_title, item[:type], get_steps(item)
         @bg_steps = nil
       else
         @log.warn "Unknown type '#{item[:type]}' found in file @ #{@file_path}"
@@ -161,6 +172,14 @@ module Cuker
 
     def surround ary, sep
       "#{sep}#{ary.join(sep)}#{sep}"
+    end
+
+    def surround_panel str, title = nil
+      if title
+        "{panel:title = #{title}} #{str} {panel}"
+      else
+        "{panel} #{str} {panel}"
+      end
     end
 
     def name_merge hsh

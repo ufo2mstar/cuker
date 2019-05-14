@@ -66,9 +66,9 @@ class AbstractSheet
   end
 
   def add_row ary
-    @log.error "argument not an array.. instead is a '#{ary.class}' -> '#{ary}'" unless ary.is_a? Array
     @rows << ary
   end
+  alias :add_line :add_row
 
   # @return ary of rows
   def read_rows

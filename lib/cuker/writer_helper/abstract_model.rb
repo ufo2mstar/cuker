@@ -27,11 +27,11 @@ class AbstractModel
   end
 
   def get_values_ary ary_of_hshs
-    ary_of_hshs.map {|hsh| hsh.values}.flatten
+    ary_of_hshs.map(&:values).flatten
   end
 
   def get_keys_ary ary_of_hshs
-    ary_of_hshs.map {|hsh| hsh.keys}.flatten
+    ary_of_hshs.map(&:keys).flatten
   end
 
 end

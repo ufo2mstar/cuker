@@ -46,7 +46,7 @@ class CsvSheet < AbstractSheet
 
   def add_row row_ary
     super row_ary
-    # @csv_sheet << ary
+    @log.warn "argument not an array.. instead is a '#{row_ary.class}' -> '#{row_ary}'" unless row_ary.is_a? Array
     CSV.open(@name, "ab") do |csv|
       csv << row_ary
     end

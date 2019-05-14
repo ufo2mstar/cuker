@@ -1,57 +1,71 @@
+# require 'cuker'
 # require 'highline'
 #
-# # Basic usage
-#
+# gpc = Cuker::CukerCmd.new
 # cli = HighLine.new
-# answer = cli.ask "What do you think?"
-# puts "You have answered: #{answer}"
 #
+# DEFAULT_REPORT_FILE_NAME = 'kod'
+# DEFAULT_FEATURES_PATH = "../../features/uat/gcm/jira_stories/"
+# DEFAULT_REPORT_PATH = './reports'
 #
-# # Default answer
+# def ask_for_input_location
+#   loc = cli.ask "\nWant is your JIRA id:\n"
+#   feat_path = File.join DEFAULT_FEATURES_PATH, loc
+# end
 #
-# cli.ask("Company?  ") { |q| q.default = "none" }
+# def ask_for_output_file_name
+#   loc = cli.ask "\nWhere do you want to store thisid:\n"
+#   feat_path = File.join DEFAULT_FEATURES_PATH, loc
+# end
 #
+# def handle_call args
+#   begin
+#     feat_path = ask_for_input_location
+#     yield feat_path, out_file
+#   rescue Exception
+#     puts "An Error occured\nplease contact v675166 for more details\n"
+#   end
+# end
 #
-# # Validation
-#
-# cli.ask("Age?  ", Integer) { |q| q.in = 0..105 }
-# cli.ask("Name?  (last, first)  ") { |q| q.validate = /\A\w+, ?\w+\Z/ }
-#
-#
-# # Type conversion for answers:
-#
-# cli.ask("Birthday?  ", Date)
-# cli.ask("Interests?  (comma sep list)  ", lambda { |str| str.split(/,\s*/) })
-#
-#
-# # Reading passwords:
-#
-# cli.ask("Enter your password:  ") { |q| q.echo = false }
-# cli.ask("Enter your password:  ") { |q| q.echo = "x" }
-#
-#
-# # ERb based output (with HighLine's ANSI color tools):
-#
-# cli.say("This should be <%= color('bold', BOLD) %>!")
-#
-#
+# loop do
 # # Menus:
 #
-# cli.choose do |menu|
-#   menu.prompt = "Please choose your favorite programming language?  "
-#   menu.choice(:ruby) { cli.say("Good choice!") }
-#   menu.choices(:python, :perl) { cli.say("Not from around here, are you?") }
-#   menu.default = :ruby
+#   cli.choose do |menu|
+#     menu.prompt = "\n\nWhat report do you want to generate?\n"
+#
+#     menu.choice(:print_jira_text) {
+#       feat_path = ask_for_input_location
+#       file_name = "gpc.gpj feat_path, '.', DEFAULT_REPORT_FILE_NAME"
+#       cli.say("Created Jira Text file @ #{file_name}") if file_name
+#     }
+#
+#     menu.choice(:generate_csv_report) {
+#       jira_id = cli.ask "\nWant is your JIRA id:\n"
+#       feat_path = File.join DEFAULT_FEATURES_PATH, jira_id
+#       file_name = "gpc.gpr DEFAULT_REPORT_FILE_NAME, feat_path, DEFAULT_REPORT_PATH"
+#       cli.say("Created CSV file @ #{file_name}") if file_name
+#     }
+#
+#     menu.choice(:generate_xlsx_report) {cli.say("Creating Jira Text @ {gpc.gpr}")}
+#
+#     menu.choice(:quit) {cli.say("Thank you for using Cuker!\nnow quitting"); exit}
+#     menu.default = :quit
+#   end
+#
+#   answer = cli.ask "\nWant to rerun? [or just hit enter to quit program]\n"
+#   break if answer.empty?
+#   puts "\n... rebooting ...\n\n"
 # end
 #
-# ## Using colored indices on Menus
 #
-# HighLine::Menu.index_color   = :rgb_77bbff # set default index color
-#
-# cli.choose do |menu|
-#   menu.index_color  = :rgb_999999      # override default color of index
-#   # you can also use constants like :blue
-#   menu.prompt = "Please choose your favorite programming language?  "
-#   menu.choice(:ruby) { cli.say("Good choice!") }
-#   menu.choices(:python, :perl) { cli.say("Not from around here, are you?") }
-# end
+# # cli = HighLine.new
+# # cli.choose do |menu|
+# #   menu.shell = true
+# #
+# #   menu.choice(:load, text: 'Load a file',
+# #               help: "Load a file using your favourite editor.")
+# #   menu.choice(:save, help: "Save data in file.")
+# #   menu.choice(:quit, help: "Exit program.")
+# #
+# #   menu.help("rules", "The rules of this system are as follows...")
+# # end
