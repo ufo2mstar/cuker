@@ -26,13 +26,13 @@
 #     file_name = CCC.report preset, report_name, feat_path
 #     CLI.say("\n\nCreated '#{preset}' @ '#{file_name}' ... Enjoy!\n") if file_name
 #   rescue Exception
-#     puts "An Error occured\nplease contact v675166 for more details\n"
+#     puts "An Error occured\nplease contact NarenSS (v675166) for more details\n"
 #     puts e
 #   end
 # end
 #
 # def exit_message
-#   CLI.say("v675166 says: Thank you for using Cuker :)\nHave a very good day!")
+#   CLI.say("Thank you for using Cuker :)\nFeel free to reach out to NarenSS (v675166) for any feature request\nHave a very good day!")
 #   exit
 # end
 #
