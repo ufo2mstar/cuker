@@ -22,7 +22,7 @@ class RubyXLWriter < AbstractWriter
     @sheets[name] = RubyXLSheet.new path
   end
 
-  def make_file name
+  def make_new_file name
     super name
   end
 

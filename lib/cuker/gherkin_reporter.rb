@@ -21,10 +21,10 @@ class GherkinReporter
   end
 
   def write
-    @writer.make_file @file_path
+    file_name = @writer.make_new_file @file_path
     @writer.write_title @model.title
     @model.data.each {|row| @writer.write_new_row row}
-    @file_path
+    file_name
   end
 
   private

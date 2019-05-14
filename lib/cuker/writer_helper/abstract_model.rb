@@ -4,7 +4,7 @@ module IModel
   method :write_title
   method :write_new_row
 
-  method :make_file
+  method :make_new_file
   method :write_new_sheet
 end
 

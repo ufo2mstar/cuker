@@ -43,7 +43,7 @@ module Cuker
       preset_model = model.new ast_map
       preset_writer = writer.new
       grr = GherkinReporter.new preset_writer, preset_model, report_path, report_file_name
-      grr.write
+      File.expand_path grr.write
     end
 
     private

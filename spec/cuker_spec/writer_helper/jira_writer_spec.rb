@@ -8,9 +8,10 @@ RSpec.describe JiraWriter do
       expect(w.sheets.size).to eq 0
     end
 
-    it 'should make a new sheet from path and filename given' do
-      w.make_file "reports/#{LOG_TIME_TODAY}/demo_file"
+    it 'should make a new sheet from path and filename given and return the name' do
+      file_path = w.make_new_file "reports/#{LOG_TIME_TODAY}/demo_file"
       expect(w.sheets.size).to eq 1
+      expect(file_path).to eq "reports/#{LOG_TIME_TODAY}/demo_file#{w.ext}"
     #   todo: unknown path test, etc
     end
 
@@ -20,7 +21,7 @@ RSpec.describe JiraWriter do
     end
 
     it 'should write a title increment counts' do
-      w.make_file "reports/#{LOG_TIME_TODAY}/demo_file"
+      w.make_new_file "reports/#{LOG_TIME_TODAY}/demo_file"
       expect(w.sheets.size).to eq 1
       expect(w.active_sheet.current_row).to eq 1
       w.write_title ['#','num','name']
@@ -29,7 +30,7 @@ RSpec.describe JiraWriter do
     end
 
     it 'should write a title and a few rows' do
-      w.make_file "reports/#{LOG_TIME_TODAY}/demo_file"
+      w.make_new_file "reports/#{LOG_TIME_TODAY}/demo_file"
       w.write_title ['#','num','name']
       w.write_new_row %w[1 1 one]
       w.write_new_row %w[2 2 two]
@@ -39,13 +40,13 @@ RSpec.describe JiraWriter do
     end
 
     it 'should add new named sheets' do
-      w.make_file "reports/#{LOG_TIME_TODAY}/demo_file"
+      w.make_new_file "reports/#{LOG_TIME_TODAY}/demo_file"
       expect(w.sheets.size).to eq 1
       # overwrite test
-      w.make_file "reports/#{LOG_TIME_TODAY}/demo_file"
+      w.make_new_file "reports/#{LOG_TIME_TODAY}/demo_file"
       expect(w.sheets.size).to eq 1
       # new file
-      w.make_file "reports/#{LOG_TIME_TODAY}/demo_file_2"
+      w.make_new_file "reports/#{LOG_TIME_TODAY}/demo_file_2"
       expect(w.sheets.size).to eq 2
     end
   end

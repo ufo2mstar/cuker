@@ -80,7 +80,9 @@ module Cuker
         file_name = "demo"
 
         gr = GherkinReporter.new csv_writer, csv_model, path, file_name
-        gr.write
+        out_file_name = gr.write
+        exp_name = "reports.*#{file_name}.csv"
+        expect(out_file_name).to match(exp_name)
 
       end
 
@@ -89,15 +91,16 @@ module Cuker
         gr = GherkinRipper.new feat_path
         ast_map = gr.ast_map
 
-        csv_model = CsvModel.new ast_map
+        csv_model = JiraModel.new ast_map
+        csv_writer = JiraWriter.new
 
         path = "reports/#{LOG_TIME_TODAY}"
-        csv_writer = CsvWriter.new
         file_name = "demo"
 
         gr = GherkinReporter.new csv_writer, csv_model, path, file_name
-        gr.write
-
+        out_file_name = gr.write
+        exp_name = "reports.*#{file_name}.txt"
+        expect(out_file_name).to match(exp_name)
       end
     end
 

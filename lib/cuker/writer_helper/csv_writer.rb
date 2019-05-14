@@ -21,13 +21,15 @@ class CsvWriter < AbstractWriter
 
   def make_new_sheet name
     @log.debug "csv make new sheet"
-    path = super name
-    @sheets[path] = CsvSheet.new path, @ext
-    @active_sheet = @sheets[path]
+    #todo: dangit! handling this path naming properly
+    file_name = "#{name.nil? ? super(name) : name}#{ext}"
+    @sheets[file_name] = CsvSheet.new file_name
+    @active_sheet = @sheets[file_name]
+    file_name
   end
 
-  def make_file name
-    super name
+  def make_new_file name
+    path = super name
     make_new_sheet name
   end
 end
@@ -38,8 +40,7 @@ require 'csv'
 # {file:https://docs.ruby-lang.org/en/2.1.0/CSV.html CSV usage documentation}
 
 class CsvSheet < AbstractSheet
-  def initialize path, ext
-    file_name = "#{path}#{ext}"
+  def initialize file_name
     super file_name
     @csv_sheet = CSV.open(file_name, "wb")
   end

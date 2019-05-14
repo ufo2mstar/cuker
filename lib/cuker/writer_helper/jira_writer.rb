@@ -22,26 +22,26 @@ class JiraWriter < AbstractWriter
   def make_new_sheet name = nil
     @log.debug "JW make new sheet"
     path = super name
-    @sheets[path] = JiraFile.new path, @ext
-    @active_sheet = @sheets[path]
+    path
   end
 
-  def make_file name
-    super name
-    make_new_sheet name
+  def make_new_file name
+    path = super name
+    @sheets[path] = JiraFile.new path
+    @active_sheet = @sheets[path]
+    path
   end
 end
 
 class JiraFile < AbstractSheet
-  def initialize path, ext
-    file_name = "#{path}#{ext}"
+  def initialize file_name
     super file_name
-    @csv_sheet = File.open(file_name, "wb")
+    @jira_file = File.open(file_name, "wb")
   end
 
   def add_line line
     super line
-    @log.warn "argument not a String.. instead is a '#{line.class}' -> '#{line}'" unless line.is_a? String
+    @log.error "argument not a String.. instead is a '#{line.class}' -> '#{line}'" unless line.is_a? String
     File.open(@name, "ab") do |file|
       file << "#{line}\n"
     end
