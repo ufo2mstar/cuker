@@ -3,6 +3,14 @@ module Cuker
   class JiraModel < AbstractModel
     include LoggerSetup
 
+    JIRA_ICONS = {
+        info: "(i)",
+        pass: "(/)",
+        fail: "(x)",
+        exclam: "(!)",
+        question: "(?)",
+    }
+
     def initialize ast_map
       super
       @log.trace "initing #{self.class}"
@@ -24,7 +32,7 @@ module Cuker
       [
           # {:counter => "Sl.No"},
           {:s_num => "Scen ID"},
-          # {:s_title => "Feature/Scenario"},
+          {:s_title => "Feature/Scenario"},
           {:s_content => "Steps"},
           {:item => "Result"},
       ]
@@ -48,22 +56,29 @@ module Cuker
         @file_path = file_path
         in_feat_counter = 0
         if ast[:type] == :GherkinDocument
-          in_feature(ast) do |feat_tags, feat_title, feat_item|
-            in_item(feat_item) do |tags, title, type, content|
+          in_feature(ast) do |feat_tags_ary, feat_title, feat_item|
+            in_item(feat_item) do |tags_ary, title, type, content_ary|
               row_hsh = {}
               if type == :Background
                 row_hsh = {
                     :s_num => "#{feat_counter}",
-                    :s_title => feat_title,
-                    :s_content => surround_panel(content.join("\n")),
-                    :item => "|(/)|",
+                    :s_title => "Feature: #{feat_title}\nBackground: #{title}",
+                    :s_content => surround_panel(content_ary.join("\n")),
+                    :item => simple_surround(JIRA_ICONS[:empty], '|'),
                 }
               elsif type == :Scenario or type == :ScenarioOutline
                 row_hsh = {
                     :s_num => "#{feat_counter}.#{in_feat_counter += 1}",
                     :s_title => title,
-                    :s_content => surround_panel(content.join("\n")),
-                    :item => "|(/)|",
+                    :s_content => surround_panel(content_ary.join("\n")),
+                    :item => simple_surround(JIRA_ICONS[type == :ScenarioOutline ? :info : :exclam], '|'),
+                }
+              elsif type == :Examples
+                row_hsh = {
+                    :s_num => "#{feat_counter}.#{in_feat_counter}.x",
+                    :s_title => title, # example title
+                    :s_content => surround_panel(content_ary.join("\n")),
+                    :item => simple_surround(JIRA_ICONS[:info], '|'),
                 }
               end
               row_ary = []
@@ -84,28 +99,26 @@ module Cuker
         feat_tags = get_tags feat
         feat_title = name_merge feat
         children = feat[:children]
-        children.each do |item|
-          yield feat_tags, feat_title, item
+        children.each do |child|
+          yield feat_tags, feat_title, child
         end
       else
         @log.warn "No Features found in file @ #{@file_path}"
       end
     end
 
-    def in_item(item)
-      item_title = name_merge item
-      tags = get_tags item
-      @bg_steps ||= []
-      if item[:type] == :Background
-        yield tags, item_title, item[:type], get_steps(item)
-      elsif item[:type] == :Scenario
-        yield tags, item_title, item[:type], get_steps(item)
-        @bg_steps = nil
-      elsif item[:type] == :ScenarioOutline
-        yield tags, item_title, item[:type], get_steps(item)
-        @bg_steps = nil
+    def in_item(child)
+      item_title = name_merge child
+      tags = get_tags child
+      if child[:type] == :Background
+        yield tags, item_title, child[:type], get_steps(child)
+      elsif child[:type] == :Scenario
+        yield tags, item_title, child[:type], get_steps(child)
+      elsif child[:type] == :ScenarioOutline
+        yield tags, item_title, child[:type], get_steps(child)
+        #   todo: think about new examples in new lines
       else
-        @log.warn "Unknown type '#{item[:type]}' found in file @ #{@file_path}"
+        @log.warn "Unknown type '#{child[:type]}' found in file @ #{@file_path}"
       end
     end
 
@@ -116,6 +129,7 @@ module Cuker
         in_step(steps) do |step|
           content += step
         end
+        content += in_example(hsh[:examples]) if hsh[:examples]
         content
       else
         @log.warn "No Tags found in #{hsh[:keyword]} @ #{@file_path}"
@@ -123,13 +137,51 @@ module Cuker
       end
     end
 
+    def in_example(examples)
+      res = []
+      examples.each do |example|
+        if example[:type] == :Examples
+          res << " "
+
+          eg_title = "Examples: #{name_merge(example)}"
+          res << eg_title
+
+          eg_header = surround(in_table_row(example[:tableHeader]), '||')
+          res << eg_header
+
+          eg_rows = example[:tableBody]
+          eg_rows.map {|row_hsh| res << surround(in_table_row(row_hsh), '|')}
+
+        else
+          @log.warn "Unknown type '#{item[:type]}' found in file @ #{@file_path}"
+        end
+      end
+      res
+    end
+
+    def in_table_row row_hsh
+      if row_hsh[:type] == :TableRow
+        row_hsh[:cells].map(&method(:in_table_cell))
+      else
+        @log.warn "Expected :TableRow in #{row_hsh} @ #{@file_path}"
+        []
+      end
+    end
+
+    def in_table_cell cell_hsh
+      if cell_hsh[:type] == :TableCell
+        cell_hsh[:value]
+      else
+        @log.warn "Expected :TableCell in #{cell_hsh} @ #{@file_path}"
+      end
+    end
+
     def in_step(steps)
-      # todo: table
       steps.each do |step|
         if step[:type] == :Step
           step_ary = []
           step_ary << [
-              step[:keyword].strip,
+              "*#{step[:keyword].strip}*", # bolding the keywords
               step[:text].strip
           ].join(" ")
           step_ary += in_step_args(step[:argument]) if step[:argument]
@@ -151,27 +203,11 @@ module Cuker
         return res
       elsif arg[:type] == :DocString
         # todo: handle if needed
+        @log.warn "Docstrings found in '#{arg}' found in file @ #{@file_path}"
       else
         @log.warn "Unknown type '#{arg[:type]}' found in file @ #{@file_path}"
       end
       []
-    end
-
-    def get_tags(hsh)
-      if hsh[:tags] and hsh[:tags].any?
-        hsh[:tags].map {|tag| tag[:name]}
-      else
-        @log.warn "No Tags found in #{hsh[:keyword]} @ #{@file_path}"
-        []
-      end
-    end
-
-    def union feat_tags, tags
-      (feat_tags.to_set | tags.to_set).to_a # union
-    end
-
-    def surround ary, sep
-      "#{sep}#{ary.join(sep)}#{sep}"
     end
 
     def surround_panel str, title = nil
@@ -182,12 +218,5 @@ module Cuker
       end
     end
 
-    def name_merge hsh
-      str = ""
-      @log.warn hsh
-      str += hsh[:name].strip.force_encoding("UTF-8") if hsh[:name]
-      str += hsh[:description].strip.force_encoding("UTF-8") if hsh[:description]
-      str
-    end
   end
 end

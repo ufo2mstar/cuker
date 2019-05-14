@@ -14,7 +14,8 @@ module Cuker
   #   end
   # end
 
-  class CukerCmd < Thor
+  # class CukerCmd < Thor
+  class CukerCmd
     include LoggerSetup
 
     CONSTS = []
@@ -23,14 +24,17 @@ module Cuker
         :simple_jira => [JiraModel, JiraWriter],
     }
 
-    desc "report PRESET_KEY [FEATURE_PATH [REPORT_PATH [REPORT_FILE_NAME [LOG_LEVEL]]]]",
-         "reports parsed results into \nREPORT_PATH/REPORT_FILE_NAME \nfor all '*.feature' files in the given FEATURE_PATH\n STDIO LOG_LEVEL adjustable\n"
+    # desc "report PRESET_KEY [FEATURE_PATH [REPORT_PATH [REPORT_FILE_NAME [LOG_LEVEL]]]]",
+    #      "reports parsed results into \nREPORT_PATH/REPORT_FILE_NAME \nfor all '*.feature' files in the given FEATURE_PATH\nSTDIO LOG_LEVEL adjustable\n"
 
     def report preset_key, report_file_name = 'sample_report', feat_path = "../", report_path = ".", log_level = :error
       init_logger log_level
       report_path = File.join report_path, 'reports', LOG_TIME_TODAY
 
-      @log.fatal "running '#{preset_key.to_s.upcase}' reporter @\n Feature Path: '#{feat_path}' \n Report Path => '#{report_path}' - '#{report_file_name}'\n"
+      msg = "running '#{preset_key.to_s.upcase}' reporter @\n Feature Path: '#{feat_path}' \n Report Path => '#{report_path}' - '#{report_file_name}'\n"
+
+      @log.info msg
+      puts msg
 
       model, writer = PRESETS[preset_key]
 
@@ -49,5 +53,5 @@ module Cuker
     end
   end
 
-# GherkinParserCmd.start(ARGV)
+  # GherkinParserCmd.start(ARGV)
 end

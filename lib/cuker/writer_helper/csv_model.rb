@@ -121,23 +121,6 @@ module Cuker
       end
     end
 
-    def get_tags(hsh)
-      if hsh[:tags] and hsh[:tags].any?
-        hsh[:tags].map {|tag| tag[:name]}
-      else
-        @log.warn "No Tags found in #{hsh[:keyword]} @ #{@file_path}"
-        []
-      end
-    end
-
-    def name_merge hsh
-      str = ""
-      @log.warn "name merge for #{hsh}"
-      str += hsh[:name].strip.force_encoding("UTF-8") if hsh[:name]
-      str += " - #{hsh[:description].strip.force_encoding("UTF-8")}" if hsh[:description]
-      str
-    end
-
   end
 
   class Identifier

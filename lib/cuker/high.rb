@@ -1,71 +1,62 @@
 # require 'cuker'
 # require 'highline'
 #
-# gpc = Cuker::CukerCmd.new
-# cli = HighLine.new
+# CCC = Cuker::CukerCmd.new
+# CLI = HighLine.new
 #
-# DEFAULT_REPORT_FILE_NAME = 'kod'
-# DEFAULT_FEATURES_PATH = "../../features/uat/gcm/jira_stories/"
-# DEFAULT_REPORT_PATH = './reports'
+# DEFAULT_REPORT_FILE_NAME = 'DEFAULT_REPORT_NAME'
+# # DEFAULT_FEATURES_PATH = "../../features/uat/gcm/jira_stories/"
+# DEFAULT_FEATURES_PATH = "."
+# # DEFAULT_REPORT_PATH = './reports'
 #
 # def ask_for_input_location
-#   loc = cli.ask "\nWant is your JIRA id:\n"
-#   feat_path = File.join DEFAULT_FEATURES_PATH, loc
+#   loc = CLI.ask "\nType your JIRA number:\n"
+#   File.join DEFAULT_FEATURES_PATH, '**', loc
 # end
 #
 # def ask_for_output_file_name
-#   loc = cli.ask "\nWhere do you want to store thisid:\n"
-#   feat_path = File.join DEFAULT_FEATURES_PATH, loc
+#   name = CLI.ask "\nType your report file name: \n[hit enter to use default name => '#{DEFAULT_REPORT_FILE_NAME}']\n"
+#   name.empty? ? DEFAULT_REPORT_FILE_NAME : name
 # end
 #
-# def handle_call args
+# def handle_call preset
 #   begin
 #     feat_path = ask_for_input_location
-#     yield feat_path, out_file
+#     report_name = ask_for_output_file_name
+#     file_name = CCC.report preset, report_name, feat_path
+#     CLI.say("\n\nCreated '#{preset}' @ '#{file_name}' ... Enjoy!\n") if file_name
 #   rescue Exception
 #     puts "An Error occured\nplease contact v675166 for more details\n"
+#     puts e
 #   end
+# end
+#
+# def exit_message
+#   CLI.say("v675166 says: Thank you for using Cuker :)\nHave a very good day!")
+#   exit
 # end
 #
 # loop do
 # # Menus:
+#   CLI.say("\nREPORT_NUMBERS:\n")
+#   CLI.choose do |menu|
+#     menu.prompt = "\n\nType the REPORT_NUMBER you want to generate?\n"
 #
-#   cli.choose do |menu|
-#     menu.prompt = "\n\nWhat report do you want to generate?\n"
+#     presets = Cuker::CukerCmd::PRESETS
 #
-#     menu.choice(:print_jira_text) {
-#       feat_path = ask_for_input_location
-#       file_name = "gpc.gpj feat_path, '.', DEFAULT_REPORT_FILE_NAME"
-#       cli.say("Created Jira Text file @ #{file_name}") if file_name
-#     }
+#     presets.keys.each do |option|
+#       menu.choice(option) do
+#         handle_call option
+#       end
+#     end
 #
-#     menu.choice(:generate_csv_report) {
-#       jira_id = cli.ask "\nWant is your JIRA id:\n"
-#       feat_path = File.join DEFAULT_FEATURES_PATH, jira_id
-#       file_name = "gpc.gpr DEFAULT_REPORT_FILE_NAME, feat_path, DEFAULT_REPORT_PATH"
-#       cli.say("Created CSV file @ #{file_name}") if file_name
-#     }
-#
-#     menu.choice(:generate_xlsx_report) {cli.say("Creating Jira Text @ {gpc.gpr}")}
-#
-#     menu.choice(:quit) {cli.say("Thank you for using Cuker!\nnow quitting"); exit}
+#     menu.choice(:quit) {exit_message}
 #     menu.default = :quit
 #   end
 #
-#   answer = cli.ask "\nWant to rerun? [or just hit enter to quit program]\n"
+#   answer = CLI.ask "\nWant to rerun? \n[ type anything and hit enter to rerun\nor just hit enter to quit this program ]\n"
 #   break if answer.empty?
 #   puts "\n... rebooting ...\n\n"
 # end
 #
-#
-# # cli = HighLine.new
-# # cli.choose do |menu|
-# #   menu.shell = true
-# #
-# #   menu.choice(:load, text: 'Load a file',
-# #               help: "Load a file using your favourite editor.")
-# #   menu.choice(:save, help: "Save data in file.")
-# #   menu.choice(:quit, help: "Exit program.")
-# #
-# #   menu.help("rules", "The rules of this system are as follows...")
-# # end
+# exit_message
