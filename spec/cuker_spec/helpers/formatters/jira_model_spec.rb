@@ -1,5 +1,5 @@
-require_relative '../spec_helper'
-require_relative '../../../spec/cuker_spec/testdata/sample/sample_ast'
+require_relative '../../spec_helper'
+require_relative '../../../../spec/cuker_spec/testdata/sample/sample_ast'
 
 module Cuker
   RSpec.describe JiraModel do

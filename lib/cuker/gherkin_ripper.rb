@@ -1,4 +1,4 @@
-require_relative './helper/gherkin_helper'
+require_relative './helpers/gherkin_helper'
 
 # == Gherkin Ripper
 # does lexing and parsing (building a simple ParseTree for Cucumber Gherkins)

@@ -1,4 +1,4 @@
-require_relative '../writer/abstract_writer'
+require_relative '../writers/abstract_writer'
 module Cuker
   class JiraModel < AbstractModel
     include LoggerSetup
