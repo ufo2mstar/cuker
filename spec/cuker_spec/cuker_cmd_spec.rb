@@ -7,7 +7,7 @@ module Cuker
     context "Constants validation" do
       it 'should contain the following preset locations' do
         res = CukerCmd::PRESETS.keys
-        exp = [:simple_csv, :simple_jira,:mono_spaced_jira]
+        exp = [:simple_csv, :simple_jira,:monospaced_jira]
         expect(res).to eq exp
       end
     end
@@ -30,8 +30,8 @@ module Cuker
       end
 
       it 'should monospaced jira' do
-        local_file_name = 'mono_spaced_jira'
-        res = cc.report :mono_spaced_jira, feat_path, local_file_name
+        local_file_name = 'monospaced_jira'
+        res = cc.report :monospaced_jira, feat_path, local_file_name
         exp_name = "^.*:.*reports.*#{local_file_name }.txt"
         expect(res).to match(exp_name)
       end

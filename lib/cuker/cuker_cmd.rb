@@ -22,7 +22,7 @@ module Cuker
     PRESETS = {
         :simple_csv => [CsvModel, CsvWriter],
         :simple_jira => [JiraModel, JiraWriter],
-        :mono_spaced_jira => [JiraMonoModel, JiraWriter],
+        :monospaced_jira => [JiraMonoModel, JiraWriter],
     }
 
     # desc "report PRESET_KEY [FEATURE_PATH [REPORT_PATH [REPORT_FILE_NAME [LOG_LEVEL]]]]",

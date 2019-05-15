@@ -3,28 +3,6 @@ module Cuker
   class JiraMonoModel < JiraModel
     include LoggerSetup
 
-    def in_example(examples)
-      res = []
-      examples.each do |example|
-        if example[:type] == :Examples
-          res << JIRA_HORIZ_RULER
-
-          eg_title = jira_title 'Examples', name_merge(example)
-          res << (eg_title)
-
-          eg_header = surround(in_table_row(example[:tableHeader]), '||')
-          res << (eg_header)
-
-          eg_rows = example[:tableBody]
-          eg_rows.map {|row_hsh| res << surround(in_table_row(row_hsh), '|')}
-
-        else
-          @log.warn "Unknown type '#{item[:type]}' found in file @ #{@file_path}"
-        end
-      end
-      res
-    end
-
     def in_table_cell cell_hsh
       if cell_hsh[:type] == :TableCell
         val = cell_hsh[:value].strip
