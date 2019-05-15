@@ -24,7 +24,7 @@
 #   begin
 #     feat_path, default_file_name = ask_for_input_location
 #     report_name = ask_for_output_file_name("#{preset}_#{default_file_name.empty? ? DEFAULT_REPORT_FILE_NAME : default_file_name}")
-#     file_name = CCC.report preset, report_name, feat_path
+#     file_name = CCC.report preset, feat_path, report_name
 #     CLI.say("\n\nCreated '#{preset}' @ \n'#{file_name}' ... Enjoy!\n") if file_name
 #   rescue Exception
 #     puts "An Error occured while \nplease contact NarenSS (v675166) for more details\n"

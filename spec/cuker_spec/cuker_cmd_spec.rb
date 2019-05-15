@@ -12,14 +12,20 @@ module Cuker
       end
     end
 
-    xcontext "ccmd usage" do
+    context "ccmd usage" do
       # skip "gp cmd usage" do
+      let(:file_name) {"sample_report"}
+      let(:feat_path) {"spec/cuker_spec/testdata/sample/05*"}
       it 'should read and write the good test data loc: simple_csv' do
-        res = cc.report :simple_csv
+        res = cc.report :simple_csv, feat_path
+        exp_name = "^.*:.*reports.*#{file_name}.csv"
+        expect(res).to match(exp_name)
       end
 
       it 'should read and write the good test data loc: jira' do
-        res = cc.report :simple_jira
+        res = cc.report :simple_jira, feat_path
+        exp_name = "^.*:.*reports.*#{file_name}.txt"
+        expect(res).to match(exp_name)
       end
     end
   end
