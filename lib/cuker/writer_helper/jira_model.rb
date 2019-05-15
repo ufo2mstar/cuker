@@ -3,13 +3,19 @@ module Cuker
   class JiraModel < AbstractModel
     include LoggerSetup
 
+    JIRA_BLANK = ' '
+    JIRA_TITLE_SEP = '||'
+    JIRA_ROW_SEP = '|'
+
     JIRA_ICONS = {
         info: "(i)",
         pass: "(/)",
         fail: "(x)",
         exclam: "(!)",
         question: "(?)",
+        empty: JIRA_BLANK
     }
+
 
     def initialize ast_map
       super
@@ -55,28 +61,34 @@ module Cuker
       @asts.each do |file_path, ast|
         @file_path = file_path
         in_feat_counter = 0
+        @feat_printed = false
         if ast[:type] == :GherkinDocument
           in_feature(ast) do |feat_tags_ary, feat_title, feat_item|
             in_item(feat_item) do |tags_ary, title, type, content_ary|
               row_hsh = {}
-              if type == :Background
+              if type == :Background or type == :Feature
+                @feat_printed = true
+                title_str = ''
+                # feat handle
+                title_str += jira_title 'Feature', feat_title
+                title_str += jira_title('Background', title) if title
                 row_hsh = {
                     :s_num => "#{feat_counter}",
-                    :s_title => "Feature: #{feat_title}\nBackground: #{title}",
+                    :s_title => title_str,
                     :s_content => surround_panel(content_ary.join("\n")),
                     :item => simple_surround(JIRA_ICONS[:empty], '|'),
                 }
               elsif type == :Scenario or type == :ScenarioOutline
                 row_hsh = {
                     :s_num => "#{feat_counter}.#{in_feat_counter += 1}",
-                    :s_title => title,
+                    :s_title => jira_title(type, title),
                     :s_content => surround_panel(content_ary.join("\n")),
                     :item => simple_surround(JIRA_ICONS[type == :ScenarioOutline ? :info : :exclam], '|'),
                 }
               elsif type == :Examples
                 row_hsh = {
                     :s_num => "#{feat_counter}.#{in_feat_counter}.x",
-                    :s_title => title, # example title
+                    :s_title => jira_title(type, title), # example title
                     :s_content => surround_panel(content_ary.join("\n")),
                     :item => simple_surround(JIRA_ICONS[:info], '|'),
                 }
@@ -112,6 +124,9 @@ module Cuker
       tags = get_tags child
       if child[:type] == :Background
         yield tags, item_title, child[:type], get_steps(child)
+      elsif !@feat_printed
+        yield [], JIRA_BLANK, :Feature, [JIRA_BLANK]
+        yield tags, item_title, child[:type], get_steps(child)
       elsif child[:type] == :Scenario
         yield tags, item_title, child[:type], get_steps(child)
       elsif child[:type] == :ScenarioOutline
@@ -143,7 +158,7 @@ module Cuker
         if example[:type] == :Examples
           res << " "
 
-          eg_title = "Examples: #{name_merge(example)}"
+          eg_title = jira_title 'Examples', name_merge(example)
           res << eg_title
 
           eg_header = surround(in_table_row(example[:tableHeader]), '||')
@@ -170,9 +185,11 @@ module Cuker
 
     def in_table_cell cell_hsh
       if cell_hsh[:type] == :TableCell
-        cell_hsh[:value]
+        val = cell_hsh[:value].strip
+        val.empty? ? JIRA_BLANK : val
       else
         @log.warn "Expected :TableCell in #{cell_hsh} @ #{@file_path}"
+        JIRA_BLANK
       end
     end
 
@@ -181,9 +198,9 @@ module Cuker
         if step[:type] == :Step
           step_ary = []
           step_ary << [
-              "*#{step[:keyword].strip}*", # bolding the keywords
+              jira_bold(step[:keyword].strip), # bolding the keywords
               step[:text].strip
-          ].join(" ")
+          ].join(' ')
           step_ary += in_step_args(step[:argument]) if step[:argument]
           # todo: padding as needed
           yield step_ary
@@ -193,6 +210,7 @@ module Cuker
       end
     end
 
+    # helps handle tables for now
     def in_step_args arg
       if arg[:type] == :DataTable
         res = []
@@ -218,5 +236,13 @@ module Cuker
       end
     end
 
+
+    def jira_bold str
+      simple_surround str, '*'
+    end
+
+    def jira_title keyword, title
+      "#{jira_bold "#{keyword}:"} #{title}\n"
+    end
   end
 end

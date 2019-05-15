@@ -34,17 +34,16 @@ class AbstractModel
     ary_of_hshs.map(&:keys).flatten
   end
 
-#   utility methods
-# used by any model
+  # utility methods
+  # used by any model
 
   def name_merge hsh
     str = ""
     @log.warn "name merge for #{hsh}"
     str += hsh[:name].strip.force_encoding("UTF-8") if hsh[:name]
-    str += " - #{hsh[:description].strip.force_encoding("UTF-8")}" if hsh[:description]
+    str += "\n#{hsh[:description].strip.force_encoding("UTF-8")}" if hsh[:description]
     str
   end
-
 
   def union feat_tags, tags
     (feat_tags.to_set | tags.to_set).to_a # union

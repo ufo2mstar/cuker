@@ -5,7 +5,12 @@ Feature: feat name
 
   Background: bg name
   bg desc
-    Given some setup
+    Given bg step 1
+    When bg step 2
+    Then bg step 3
+#    in bg comment
+    And bg step 4
+    But bg step 5
 
     #rand BG comment
 
@@ -15,16 +20,21 @@ Feature: feat name
   scen desc line 1
   scen desc line 2
 
-    Given this
-    When that:
+    Given bg step 1
+    When bg step 2
+    Then bg step 3
+    And bg step 4
+    But bg step 5
+    When table
       | tab |
       | 1   |
       | two |
-    Then kod
-    And kod
+    Then kod 1
+    And kod2
 #rand inbetween S comment
-    But kod
-    * kod
+    But kod3
+    * kod4
+
 #rand after S comment
 
   @s_tag1
@@ -32,6 +42,11 @@ Feature: feat name
     #rand after so tag comment
   Scenario Outline: scen outline name <title>
   scen outline desc
+    Given bg step 1
+    When bg step 2
+    Then bg step 3
+    And bg step 4
+    But bg step 5
     When this <thing>
     #rand in SO comment
     And this <thing>
@@ -46,7 +61,10 @@ Feature: feat name
   @s_tag3 @so_ex_tag2
     Examples: example name
     example desc
-      | title  | thing | thang |
-      | case 1 | 1     | one   |
-      | case 2 | 2     | two   |
+      | title        | thing | thang |
+      | case 1       | 1     | one   |
+      | case 2       | 1     | one   |
+      |              |       |       |
+      | blank case 3 |       |       |
+      |              |       |       |
 #rand after SO examples comment|
