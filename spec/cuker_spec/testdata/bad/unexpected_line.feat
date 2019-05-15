@@ -1,0 +1,11 @@
+Feature: Unexpected end of file
+
+# supposed to fail, but lets see
+  Scenario: minimalistic
+    Given
+    And a valid line
+
+    Scenario Outline: minimalistic
+        Given something
+        And
+      # the above fails

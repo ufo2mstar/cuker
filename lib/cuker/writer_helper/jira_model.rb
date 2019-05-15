@@ -6,6 +6,9 @@ module Cuker
     JIRA_BLANK = ' '
     JIRA_TITLE_SEP = '||'
     JIRA_ROW_SEP = '|'
+    JIRA_EMPTY_LINE = '(empty line)'
+    JIRA_NEW_LINE = '\\\\'
+    JIRA_HORIZ_RULER = '----'
 
     JIRA_ICONS = {
         info: "(i)",
@@ -74,27 +77,28 @@ module Cuker
                 title_str += jira_title('Background', title) if title
                 row_hsh = {
                     :s_num => "#{feat_counter}",
-                    :s_title => title_str,
+                    :s_title => surround_panel(title_str),
                     :s_content => surround_panel(content_ary.join("\n")),
                     :item => simple_surround(JIRA_ICONS[:empty], '|'),
                 }
               elsif type == :Scenario or type == :ScenarioOutline
                 row_hsh = {
                     :s_num => "#{feat_counter}.#{in_feat_counter += 1}",
-                    :s_title => jira_title(type, title),
+                    :s_title => surround_panel(jira_title(type, title)),
                     :s_content => surround_panel(content_ary.join("\n")),
-                    :item => simple_surround(JIRA_ICONS[type == :ScenarioOutline ? :info : :exclam], '|'),
+                    # :item => simple_surround(JIRA_ICONS[type == :ScenarioOutline ? :info : :exclam], '|'),
+                    :item => simple_surround(JIRA_ICONS[:info], '|'),
                 }
               elsif type == :Examples
                 row_hsh = {
                     :s_num => "#{feat_counter}.#{in_feat_counter}.x",
-                    :s_title => jira_title(type, title), # example title
+                    :s_title => surround_panel(jira_title(type, title)), # example title
                     :s_content => surround_panel(content_ary.join("\n")),
                     :item => simple_surround(JIRA_ICONS[:info], '|'),
                 }
               end
               row_ary = []
-              get_keys_ary(@order).each {|k| row_ary << row_hsh[k]}
+              get_keys_ary(@order).each {|k| row_ary << jira_arg_hilight(row_hsh[k])}
               res << surround(row_ary, '|')
             end
           end
@@ -156,7 +160,7 @@ module Cuker
       res = []
       examples.each do |example|
         if example[:type] == :Examples
-          res << " "
+          res << JIRA_HORIZ_RULER
 
           eg_title = jira_title 'Examples', name_merge(example)
           res << eg_title
@@ -197,10 +201,14 @@ module Cuker
       steps.each do |step|
         if step[:type] == :Step
           step_ary = []
-          step_ary << [
-              jira_bold(step[:keyword].strip), # bolding the keywords
-              step[:text].strip
+          step_str = [
+              ((jira_bold(step[:keyword].strip)).rjust(7)), # bolding the keywords
+              (step[:text].strip)
           ].join(' ')
+
+          # step_ary << jira_monospace(step_str)
+          step_ary << (step_str)
+
           step_ary += in_step_args(step[:argument]) if step[:argument]
           # todo: padding as needed
           yield step_ary
@@ -236,13 +244,36 @@ module Cuker
       end
     end
 
+    def surround_color str, color = nil
+      if title
+        "{color:#{color}} #{str} {color}"
+      else
+        "{color} #{str} {color}"
+      end
+    end
+
+    def jira_title keyword, title
+      "#{jira_bold "#{keyword}:"} #{title}\n "
+    end
+
+    def jira_arg_hilight(str)
+      str.gsub(/<(.*)>/, jira_bold_italics('<\1>'))
+    end
 
     def jira_bold str
       simple_surround str, '*'
     end
 
-    def jira_title keyword, title
-      "#{jira_bold "#{keyword}:"} #{title}\n"
+    def jira_monospace str
+      simple_surround str, '{{', '}}'
+    end
+
+    def jira_bold_italics(str)
+      jira_bold(jira_italics(str))
+    end
+
+    def jira_italics(str)
+      simple_surround(str, '_')
     end
   end
 end

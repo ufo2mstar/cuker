@@ -30,6 +30,17 @@ def after_cleanup
   # end
 end
 
+def debug_show ary
+  spec_error_debug = true # use if you want to see file printouts
+  spec_error_debug = false # default
+  if spec_error_debug
+    p
+    p ary
+    p
+    puts ary.join "\n"
+  end
+end
+
 RSpec.configure do |config|
   # Use color in STDOUT
   config.color = true
@@ -52,7 +63,7 @@ RSpec.configure do |config|
     # puts "beforea all"
     # LoggerSetup.reset_appender_log_levels :warn
     # LoggerSetup.reset_appender_log_levels :error
-    LoggerSetup.reset_appender_log_levels :fatal,:trace
+    LoggerSetup.reset_appender_log_levels :fatal, :trace
   end
   config.after(:all) do
     # puts "after all"

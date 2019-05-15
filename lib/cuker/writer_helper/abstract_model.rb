@@ -55,8 +55,8 @@ class AbstractModel
     simple_surround ary.join(sep), sep
   end
 
-  def simple_surround item, sep
-    "#{sep}#{item}#{sep}"
+  def simple_surround item, sep, r_sep = nil
+    "#{sep}#{item}#{r_sep || sep}"
   end
 
   # def padded_surround item, sep, pad
