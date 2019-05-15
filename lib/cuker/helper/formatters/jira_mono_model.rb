@@ -1,4 +1,4 @@
-require_relative 'abstract_writer'
+require_relative '../writer/abstract_writer'
 module Cuker
   class JiraMonoModel < JiraModel
     include LoggerSetup

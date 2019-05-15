@@ -10,13 +10,13 @@ module Cuker
 
     def write_title title_line
       super title_line
-      @log.debug "JW write title"
+      @log.debug "JW write title: #{title_line}"
       @active_sheet.add_line title_line
     end
 
     def write_new_row row_line
       super row_line
-      @log.debug "JW write row"
+      @log.debug "JW write row: #{row_line}"
       @active_sheet.add_line row_line
     end
 
