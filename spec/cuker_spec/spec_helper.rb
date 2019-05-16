@@ -84,6 +84,19 @@ module CukerSpecHelper
     end
   end
 
+  # def report_snapshot_compare snapshot_partial
+  #   get_file(snapshot_partial,TESTDATA_LOC) do |file_name|
+  #     dump = File.read file_name
+  #     if PICKLER_TYPE == :marshall
+  #       Marshal.load dump
+  #     elsif PICKLER_TYPE == :yaml
+  #       YAML.load dump
+  #     else
+  #       raise ScriptError.new "enter one of these values :marshall, :yaml"
+  #     end
+  #   end
+  # end
+
   def snapshot_compare snapshot_partial
     get_file(snapshot_partial,File.join(TESTDATA_LOC,'result_snapshots')) do |file_name|
       dump = File.read file_name
