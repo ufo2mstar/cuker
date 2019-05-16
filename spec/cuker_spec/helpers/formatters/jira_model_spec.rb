@@ -19,7 +19,7 @@ module Cuker
         rows = csvm.data
         CukerSpecHelper.debug_show(rows)
 
-        snapshot_name = 'sample-asttest-JiraModel'
+        snapshot_name = 'JiraModel-snap-asttest'
         # CukerSpecHelper.snapshot_store(rows, snapshot_name)
 
         exp_rows = CukerSpecHelper.snapshot_compare snapshot_name
@@ -42,7 +42,7 @@ module Cuker
         rows = csvm.data
         CukerSpecHelper.debug_show(rows)
 
-        snapshot_name = 'sample-05-JiraModel'
+        snapshot_name = 'JiraModel-snap-sample05'
         # CukerSpecHelper.snapshot_store(rows, snapshot_name)
 
         exp_rows = CukerSpecHelper.snapshot_compare snapshot_name

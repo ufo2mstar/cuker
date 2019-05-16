@@ -19,7 +19,7 @@ module CukerSpecHelper
   extend self
 
   PICKLER_TYPE = :yaml
-  # PICKLER_TYPE = :marshall
+  # PICKLER_TYPE = :marshal
 
   def after_cleanup
     glob_str = File.join(REPORT_FILE_LOC, '**', "*#{REPORT_FILE_NAME}*")
@@ -52,8 +52,8 @@ module CukerSpecHelper
   def snapshot_store data, snapshot_file_name
     snapshot_file_path = File.join(TESTDATA_LOC, 'result_snapshots', "#{snapshot_file_name}.yml")
 
-    if PICKLER_TYPE == :marshall
-      # Marshall method
+    if PICKLER_TYPE == :marshal
+      # marshal method
       dump = Marshal.dump data
       File.write(snapshot_file_path, dump)
       res = Marshal.load File.read snapshot_file_path
@@ -64,7 +64,7 @@ module CukerSpecHelper
       File.write(snapshot_file_path, dump)
       res = YAML.load(File.read(snapshot_file_path))
     else
-      raise ScriptError.new "enter one of these values :marshall, :yaml"
+      raise ScriptError.new "enter one of these values :marshal, :yaml"
     end
 
     puts res
@@ -78,34 +78,28 @@ module CukerSpecHelper
     if snapshots.size < 1
       raise IOError.new "no snapshot file found: '#{glob_str}'"
     elsif snapshots.size > 1
-      raise IOError.new "too many snapshot files found: '#{snapshot_partial}'\n#{snapshots.join "\n"}"
+      raise IOError.new "too many snapshot files found: '#{snapshot_partial}' has - \n#{snapshots.join "\n"}"
     else
       yield snapshots.first
     end
   end
 
-  # def report_snapshot_compare snapshot_partial
-  #   get_file(snapshot_partial,TESTDATA_LOC) do |file_name|
-  #     dump = File.read file_name
-  #     if PICKLER_TYPE == :marshall
-  #       Marshal.load dump
-  #     elsif PICKLER_TYPE == :yaml
-  #       YAML.load dump
-  #     else
-  #       raise ScriptError.new "enter one of these values :marshall, :yaml"
-  #     end
-  #   end
-  # end
+  def report_snapshot_retrieve snapshot_partial
+    get_file(snapshot_partial, REPORT_FILE_LOC) do |file_name|
+      # File.read file_name
+      file_name
+    end
+  end
 
-  def snapshot_compare snapshot_partial
-    get_file(snapshot_partial,File.join(TESTDATA_LOC,'result_snapshots')) do |file_name|
+  def snapshot_compare snapshot_partial, type = PICKLER_TYPE # objects can be pickled with :marshal
+    get_file(snapshot_partial, File.join(TESTDATA_LOC, 'result_snapshots')) do |file_name|
       dump = File.read file_name
-      if PICKLER_TYPE == :marshall
+      if type == :marshal
         Marshal.load dump
-      elsif PICKLER_TYPE == :yaml
+      elsif type == :yaml
         YAML.load dump
       else
-        raise ScriptError.new "enter one of these values :marshall, :yaml"
+        raise ScriptError.new "enter one of these values :marshal, :yaml"
       end
     end
   end
