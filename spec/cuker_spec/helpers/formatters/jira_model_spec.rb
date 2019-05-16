@@ -17,11 +17,12 @@ module Cuker
 
         expect(title).to eq exp_title
         rows = csvm.data
-        debug_show(rows)
-        exp_rows = ["|2|{panel} *Feature:* feat name", "feat desc", " *Background:* bg name", "bg desc", "  {panel}|{panel} *Given* some setup {panel}|| ||", "|2.1|{panel} *Scenario:* scen name", "scen desc line 1", "  scen desc line 2", "  {panel}|{panel} *Given* this", " *When* that:", "||tab||", "|1|", "|two|", " *Then* kod", "  *And* kod", "  *But* kod", "    *** kod {panel}||(i)||", "|2.2|{panel} *ScenarioOutline:* scen outline name *_<title>_*", "scen outline desc", "  {panel}|{panel}  *When* this *_<thing>_*", "  *And* this *_<thing>_*", "||tab||", "|1|", "|two|", " *Then* that *_<thang>_*", "----", "*Examples:* example name", "example desc", " ", "||title||thing||thang||", "|case 1|1|one|", "|case 2|2|two| {panel}||(i)||", "|3|{panel} *Feature:* feature name", "feature description", " *Background:* background name", "background description", "  {panel}|{panel}     *** a step {panel}|| ||", "|3.1|{panel} *Scenario:* scenario name", "scenario description", "  {panel}|{panel}     *** a step with a table", "||a table|| {panel}||(i)||", "|3.2|{panel} *ScenarioOutline:* outline name", "outline description", "  {panel}|{panel}     *** a step with a doc string", "----", "*Examples:* examples name", "examples description", " ", "||param||", "|value| {panel}||(i)||"]
+        CukerSpecHelper.debug_show(rows)
 
+        snapshot_name = 'sample-asttest-JiraModel'
+        # CukerSpecHelper.snapshot_store(rows, snapshot_name)
 
-        # expect(rows.size).to eq 50
+        exp_rows = CukerSpecHelper.snapshot_compare snapshot_name
         expect(rows).to eq exp_rows
       end
     end
@@ -39,10 +40,12 @@ module Cuker
         expect(title).to eq exp_title
 
         rows = csvm.data
-        debug_show(rows)
-        exp_rows = ["|1|{panel} *Feature:* feat name", "feat desc", " *Background:* bg name", "bg desc", "  {panel}|{panel} *Given* bg step 1", " *When* bg step 2", " *Then* bg step 3", "  *And* bg step 4", "  *But* bg step 5 {panel}|| ||", "|1.1|{panel} *Scenario:* scen name", "scen desc line 1", "  scen desc line 2", "  {panel}|{panel} *Given* bg step 1", " *When* bg step 2", " *Then* bg step 3", "  *And* bg step 4", "  *But* bg step 5", " *When* table", "||tab||", "|1|", "|two|", " *Then* kod 1", "  *And* kod2", "  *But* kod3", "    *** kod4 {panel}||(i)||", "|1.2|{panel} *ScenarioOutline:* scen outline name *_<title>_*", "scen outline desc", "  {panel}|{panel} *Given* bg step 1", " *When* bg step 2", " *Then* bg step 3", "  *And* bg step 4", "  *But* bg step 5", " *When* this *_<thing>_*", "  *And* this *_<thing>_*", "||tab||", "|1|", "|two|", " *Then* that *_<thang>_*", "----", "*Examples:* example name", "example desc", " ", "||title||thing||thang||", "|case 1|1|one|", "|case 2|1|one|", "| | | |", "|blank case 3| | |", "| | | | {panel}||(i)||"]
+        CukerSpecHelper.debug_show(rows)
 
-        # expect(rows.size).to eq 48
+        snapshot_name = 'sample-05-JiraModel'
+        # CukerSpecHelper.snapshot_store(rows, snapshot_name)
+
+        exp_rows = CukerSpecHelper.snapshot_compare snapshot_name
         expect(rows).to eq exp_rows
       end
 

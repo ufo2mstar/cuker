@@ -50,6 +50,8 @@ module Cuker
       (feat_tags.to_set | tags.to_set).to_a # union
     end
 
+    # @param sep [String] seperator around the array objects
+    # @return [String] with an array surrounded by the sep
     def surround ary, sep
       # "#{sep}#{ary.is_a?(Array)? ary.join(sep) : ary}#{sep}"
       # "#{sep}#{ary.join(sep)}#{sep}"

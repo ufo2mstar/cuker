@@ -28,6 +28,7 @@ Feature: feat name
     When table
       | tab |
       | 1   |
+      |     |
       | two |
     Then kod 1
     And kod2

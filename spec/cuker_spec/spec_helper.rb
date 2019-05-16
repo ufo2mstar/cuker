@@ -1,6 +1,7 @@
 require 'rspec'
 require 'ap'
 require 'require_all'
+require 'yaml'
 
 require_all 'lib/**/*.rb'
 
@@ -9,35 +10,91 @@ OUTPUT_DIR = "reports/#{LOG_TIME_TODAY}"
 FileUtils.mkdir_p(OUTPUT_DIR) unless Dir.exist? OUTPUT_DIR
 
 REPORT_FILE_LOC = 'reports'
+TESTDATA_LOC = 'spec/cuker_spec/testdata'
 REPORT_FILE_NAME = 'demo'
 
 FileNotRemoved = Class.new StandardError
 
-def after_cleanup
-  glob_str = File.join(REPORT_FILE_LOC, '**', "*#{REPORT_FILE_NAME}*")
-  ans = Dir.glob(glob_str)
-  old_count = ans.size
-  return if old_count == 0
+module CukerSpecHelper
+  extend self
 
-  # sleep 1
-  FileUtils.rm_rf Dir.glob(glob_str)
-  ans.each {|x| FileUtils.rm_rf x if File.exist? x}
-  ans = Dir.glob(glob_str)
-  new_count = ans.size
-  # unless new_count < old_count
-  #   puts "#{old_count} -> #{new_count}"
-  #   raise FileNotRemoved.new("please see why the file #{ans} is not removed yet")
-  # end
-end
+  PICKLER_TYPE = :yaml
+  # PICKLER_TYPE = :marshall
 
-def debug_show ary
-  spec_error_debug = true # use if you want to see file printouts
-  spec_error_debug = false # default
-  if spec_error_debug
-    p
-    p ary
-    p
-    puts ary.join "\n"
+  def after_cleanup
+    glob_str = File.join(REPORT_FILE_LOC, '**', "*#{REPORT_FILE_NAME}*")
+    ans = Dir.glob(glob_str)
+    old_count = ans.size
+    return if old_count == 0
+
+    # sleep 1
+    FileUtils.rm_rf Dir.glob(glob_str)
+    ans.each {|x| FileUtils.rm_rf x if File.exist? x}
+    ans = Dir.glob(glob_str)
+    new_count = ans.size
+    # unless new_count < old_count
+    #   puts "#{old_count} -> #{new_count}"
+    #   raise FileNotRemoved.new("please see why the file #{ans} is not removed yet")
+    # end
+  end
+
+  def debug_show ary
+    spec_error_debug = true # use if you want to see file printouts
+    spec_error_debug = false # default
+    if spec_error_debug
+      p
+      p ary
+      p
+      puts ary.join "\n"
+    end
+  end
+
+  def snapshot_store data, snapshot_file_name
+    snapshot_file_path = File.join(TESTDATA_LOC, 'result_snapshots', "#{snapshot_file_name}.yml")
+
+    if PICKLER_TYPE == :marshall
+      # Marshall method
+      dump = Marshal.dump data
+      File.write(snapshot_file_path, dump)
+      res = Marshal.load File.read snapshot_file_path
+    elsif PICKLER_TYPE == :yaml
+      # YAML method
+      dump = data.to_yaml
+      # File.open(snapshot_file_path, "w") {|file| file.write(dump)}
+      File.write(snapshot_file_path, dump)
+      res = YAML.load(File.read(snapshot_file_path))
+    else
+      raise ScriptError.new "enter one of these values :marshall, :yaml"
+    end
+
+    puts res
+    puts "successfully stored in '#{snapshot_file_path}' - \n=> #{data}\n=> #{res}}"
+    exit
+  end
+
+  def get_file snapshot_partial, path
+    glob_str = File.join(path, "*#{snapshot_partial}*")
+    snapshots = Dir.glob(glob_str)
+    if snapshots.size < 1
+      raise IOError.new "no snapshot file found: '#{glob_str}'"
+    elsif snapshots.size > 1
+      raise IOError.new "too many snapshot files found: '#{snapshot_partial}'\n#{snapshots.join "\n"}"
+    else
+      yield snapshots.first
+    end
+  end
+
+  def snapshot_compare snapshot_partial
+    get_file(snapshot_partial,File.join(TESTDATA_LOC,'result_snapshots')) do |file_name|
+      dump = File.read file_name
+      if PICKLER_TYPE == :marshall
+        Marshal.load dump
+      elsif PICKLER_TYPE == :yaml
+        YAML.load dump
+      else
+        raise ScriptError.new "enter one of these values :marshall, :yaml"
+      end
+    end
   end
 end
 
@@ -69,7 +126,7 @@ RSpec.configure do |config|
     # puts "after all"
     # LoggerSetup.reset_appender_log_levels :warn
     # todo: figure this mess out!! :( works when debugged, else not
-    after_cleanup
+    CukerSpecHelper.after_cleanup
   end
 end
 

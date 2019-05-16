@@ -12,7 +12,7 @@ module Cuker
       end
     end
 
-    xcontext "ccmd usage" do
+    context "ccmd usage" do
       # skip "gp cmd usage" do
       let(:file_name) {"sample_report"}
       let(:feat_path) {"spec/cuker_spec/testdata/sample/05*"}
