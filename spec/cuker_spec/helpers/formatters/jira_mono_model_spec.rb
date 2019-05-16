@@ -21,8 +21,8 @@ module Cuker
         snapshot_name = 'JiraMonoModel-snap-asttest'
         # CukerSpecHelper.snapshot_store(rows, snapshot_name)
 
-        exp_rows = CukerSpecHelper.snapshot_compare snapshot_name
-        expect(rows).to eq exp_rows
+        exp_rows = CukerSpecHelper.snapshot_retrieve snapshot_name
+        CukerSpecHelper.compare_arys rows, exp_rows
       end
     end
 
@@ -43,8 +43,8 @@ module Cuker
         snapshot_name = 'JiraMonoModel-snap-sample05'
         # CukerSpecHelper.snapshot_store(rows, snapshot_name)
 
-        exp_rows = CukerSpecHelper.snapshot_compare snapshot_name
-        expect(rows).to eq exp_rows
+        exp_rows = CukerSpecHelper.snapshot_retrieve snapshot_name
+        CukerSpecHelper.compare_arys rows, exp_rows
       end
 
     end

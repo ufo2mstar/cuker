@@ -224,7 +224,7 @@ module Cuker
         res = []
         arg[:rows].each_with_index do |row, i|
           sep = i == 0 ? '||' : '|'
-          res << surround(row[:cells].map {|hsh| hsh[:value]}, sep)
+          res << surround(row[:cells].map {|hsh| jira_blank_pad hsh[:value]}, sep)
         end
         return res
       elsif arg[:type] == :DocString
@@ -274,6 +274,11 @@ module Cuker
 
     def jira_italics(str)
       simple_surround(str, '_')
+    end
+
+    def jira_blank_pad str
+      s = str.strip
+      s.empty? ? JIRA_BLANK : s
     end
   end
 end

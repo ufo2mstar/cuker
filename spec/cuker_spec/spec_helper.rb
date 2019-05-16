@@ -91,7 +91,7 @@ module CukerSpecHelper
     end
   end
 
-  def snapshot_compare snapshot_partial, type = PICKLER_TYPE # objects can be pickled with :marshal
+  def snapshot_retrieve snapshot_partial, type = PICKLER_TYPE # objects can be pickled with :marshal
     get_file(snapshot_partial, File.join(TESTDATA_LOC, 'result_snapshots')) do |file_name|
       dump = File.read file_name
       if type == :marshal
@@ -100,6 +100,14 @@ module CukerSpecHelper
         YAML.load dump
       else
         raise ScriptError.new "enter one of these values :marshal, :yaml"
+      end
+    end
+  end
+
+  def self.compare_arys(res_rows, exp_rows)
+    RSpec.describe do
+      it 'res_rows === exp_rows' do
+        expect(res_rows.join "\n").to be_similar_to exp_rows.join "\n"
       end
     end
   end
