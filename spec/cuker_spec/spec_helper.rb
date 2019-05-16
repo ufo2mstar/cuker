@@ -18,8 +18,8 @@ FileNotRemoved = Class.new StandardError
 module CukerSpecHelper
   extend self
 
-  PICKLER_TYPE = :yaml
-  # PICKLER_TYPE = :marshal
+  PICKLER_TYPE = :yaml # for data (arrays, hashes, etc)
+  # PICKLER_TYPE = :marshal # for objects
 
   def after_cleanup
     glob_str = File.join(REPORT_FILE_LOC, '**', "*#{REPORT_FILE_NAME}*")
@@ -32,6 +32,7 @@ module CukerSpecHelper
     ans.each {|x| FileUtils.rm_rf x if File.exist? x}
     ans = Dir.glob(glob_str)
     new_count = ans.size
+    # todo: fix this fail, which only cleans up during the subsequent run
     # unless new_count < old_count
     #   puts "#{old_count} -> #{new_count}"
     #   raise FileNotRemoved.new("please see why the file #{ans} is not removed yet")
@@ -49,15 +50,15 @@ module CukerSpecHelper
     end
   end
 
-  def snapshot_store data, snapshot_file_name
+  def snapshot_store data, snapshot_file_name, type = PICKLER_TYPE # objects can be pickled with :marshal
     snapshot_file_path = File.join(TESTDATA_LOC, 'result_snapshots', "#{snapshot_file_name}.yml")
 
-    if PICKLER_TYPE == :marshal
+    if type == :marshal
       # marshal method
       dump = Marshal.dump data
       File.write(snapshot_file_path, dump)
       res = Marshal.load File.read snapshot_file_path
-    elsif PICKLER_TYPE == :yaml
+    elsif type == :yaml
       # YAML method
       dump = data.to_yaml
       # File.open(snapshot_file_path, "w") {|file| file.write(dump)}
@@ -76,7 +77,7 @@ module CukerSpecHelper
     glob_str = File.join(path, "*#{snapshot_partial}*")
     snapshots = Dir.glob(glob_str)
     if snapshots.size < 1
-      raise IOError.new "no snapshot file found: '#{glob_str}'"
+      raise NotImplementedError.new "no snapshot file found: '#{glob_str}'"
     elsif snapshots.size > 1
       raise IOError.new "too many snapshot files found: '#{snapshot_partial}' has - \n#{snapshots.join "\n"}"
     else
@@ -111,6 +112,21 @@ module CukerSpecHelper
       end
     end
   end
+
+  def self.snapshot_compare(rows, snapshot_name)
+    CukerSpecHelper.debug_show(rows)
+    begin
+      exp_rows = CukerSpecHelper.snapshot_retrieve snapshot_name
+      CukerSpecHelper.compare_arys rows, exp_rows
+    rescue IOError => e
+      raise e
+    rescue NotImplementedError => e
+      #todo: make a better handle for snapshotting
+      warn "#{e.message}.. So creating a new snapshot => '#{snapshot_name}'"
+      CukerSpecHelper.snapshot_store(rows, snapshot_name)
+      retry
+    end
+  end
 end
 
 RSpec.configure do |config|
@@ -135,7 +151,7 @@ RSpec.configure do |config|
     # puts "beforea all"
     # LoggerSetup.reset_appender_log_levels :warn
     # LoggerSetup.reset_appender_log_levels :error
-    LoggerSetup.reset_appender_log_levels :fatal, :trace
+    LoggerSetup.reset_appender_log_levels :fatal, :info
   end
   config.after(:all) do
     # puts "after all"

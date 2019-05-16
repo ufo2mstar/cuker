@@ -17,12 +17,8 @@ module Cuker
 
         expect(title).to eq exp_title
         rows = csvm.data
-        CukerSpecHelper.debug_show(rows)
         snapshot_name = 'JiraMonoModel-snap-asttest'
-        # CukerSpecHelper.snapshot_store(rows, snapshot_name)
-
-        exp_rows = CukerSpecHelper.snapshot_retrieve snapshot_name
-        CukerSpecHelper.compare_arys rows, exp_rows
+        CukerSpecHelper.snapshot_compare rows, snapshot_name
       end
     end
 
@@ -39,12 +35,8 @@ module Cuker
         expect(title).to eq exp_title
 
         rows = csvm.data
-        CukerSpecHelper.debug_show(rows)
         snapshot_name = 'JiraMonoModel-snap-sample05'
-        # CukerSpecHelper.snapshot_store(rows, snapshot_name)
-
-        exp_rows = CukerSpecHelper.snapshot_retrieve snapshot_name
-        CukerSpecHelper.compare_arys rows, exp_rows
+        CukerSpecHelper.snapshot_compare rows, snapshot_name
       end
 
     end
