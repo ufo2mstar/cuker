@@ -3,6 +3,7 @@ require 'thor'
 require 'require_all'
 # require_all 'lib/cuker/**/*.rb'
 # require_all 'lib/cuker/*.rb'
+require_rel '**/helpers/*.rb'
 require_rel '**/*.rb'
 require_rel '*.rb'
 

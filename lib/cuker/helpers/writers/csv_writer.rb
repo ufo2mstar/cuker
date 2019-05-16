@@ -43,6 +43,7 @@ module Cuker
   class CsvSheet < AbstractSheet
     def initialize file_name
       super file_name
+      @log.info "Making new #{self.class} => #{file_name}"
       @csv_sheet = CSV.open(file_name, "wb")
     end
 

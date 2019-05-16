@@ -122,9 +122,11 @@ module CukerSpecHelper
       raise e
     rescue NotImplementedError => e
       #todo: make a better handle for snapshotting
-      warn "#{e.message}.. So creating a new snapshot => '#{snapshot_name}'"
+      warn "\n#{e.message}\n... So creating a new snapshot => '#{snapshot_name}'"
       CukerSpecHelper.snapshot_store(rows, snapshot_name)
       retry
+    else
+      # puts "\npassing for rows: #{rows.size}, snapshot_name: #{snapshot_name}"
     end
   end
 end

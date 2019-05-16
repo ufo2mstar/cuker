@@ -3,6 +3,9 @@ module Cuker
   class JiraModel < AbstractModel
     include LoggerSetup
 
+    include StringHelper
+    TITLE_MAX_LEN = 40
+
     JIRA_BLANK = ' '
     JIRA_TITLE_SEP = '||'
     JIRA_ROW_SEP = '|'
@@ -74,7 +77,7 @@ module Cuker
                 title_str = ''
                 # feat handle
                 title_str += jira_title 'Feature', feat_title
-                title_str += jira_title('Background', title) if title
+                title_str += jira_title('Background', title) if type == :Background
                 row_hsh = {
                     :s_num => "#{feat_counter}",
                     :s_title => surround_panel(title_str),
@@ -236,6 +239,14 @@ module Cuker
       []
     end
 
+    def name_merge hsh, max_len = TITLE_MAX_LEN
+      str = ""
+      @log.debug "name merge for #{hsh} with max_len (#{max_len})"
+      str += add_newlines!(hsh[:name].strip.force_encoding("UTF-8"), max_len) if hsh[:name]
+      str += add_newlines!("\n#{hsh[:description].strip.force_encoding("UTF-8")}", max_len) if hsh[:description]
+      str
+    end
+
     def surround_panel str, title = nil
       if title
         "{panel:title = #{title}} #{str} {panel}"
@@ -253,7 +264,7 @@ module Cuker
     end
 
     def jira_title keyword, title
-      "#{jira_bold "#{keyword}:"} #{title}\n "
+      "#{jira_bold "#{keyword}:"}\n #{title}\n "
     end
 
     def jira_arg_hilight(str)

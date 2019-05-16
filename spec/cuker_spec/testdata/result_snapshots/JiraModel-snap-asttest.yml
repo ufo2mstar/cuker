@@ -1,10 +1,13 @@
 ---
-- "|2|{panel} *Feature:* feat name"
+- "|2|{panel} *Feature:*"
+- " feat name"
 - feat desc
-- " *Background:* bg name"
+- " *Background:*"
+- " bg name"
 - bg desc
 - "  {panel}|{panel} *Given* some setup {panel}|| ||"
-- "|2.1|{panel} *Scenario:* scen name"
+- "|2.1|{panel} *Scenario:*"
+- " scen name"
 - scen desc line 1
 - "  scen desc line 2"
 - "  {panel}|{panel} *Given* this"
@@ -16,7 +19,8 @@
 - "  *And* kod"
 - "  *But* kod"
 - "    *** kod {panel}||(i)||"
-- "|2.2|{panel} *ScenarioOutline:* scen outline name *_<title>_*"
+- "|2.2|{panel} *ScenarioOutline:*"
+- " scen outline name *_<title>_*"
 - scen outline desc
 - "  {panel}|{panel}  *When* this *_<thing>_*"
 - "  *And* this *_<thing>_*"
@@ -25,26 +29,32 @@
 - "|two|"
 - " *Then* that *_<thang>_*"
 - "----"
-- "*Examples:* example name"
+- "*Examples:*"
+- " example name"
 - example desc
 - " "
 - "||title||thing||thang||"
 - "|case 1|1|one|"
 - "|case 2|2|two| {panel}||(i)||"
-- "|3|{panel} *Feature:* feature name"
+- "|3|{panel} *Feature:*"
+- " feature name"
 - feature description
-- " *Background:* background name"
+- " *Background:*"
+- " background name"
 - background description
 - "  {panel}|{panel}     *** a step {panel}|| ||"
-- "|3.1|{panel} *Scenario:* scenario name"
+- "|3.1|{panel} *Scenario:*"
+- " scenario name"
 - scenario description
 - "  {panel}|{panel}     *** a step with a table"
 - "||a table|| {panel}||(i)||"
-- "|3.2|{panel} *ScenarioOutline:* outline name"
+- "|3.2|{panel} *ScenarioOutline:*"
+- " outline name"
 - outline description
 - "  {panel}|{panel}     *** a step with a doc string"
 - "----"
-- "*Examples:* examples name"
+- "*Examples:*"
+- " examples name"
 - examples description
 - " "
 - "||param||"

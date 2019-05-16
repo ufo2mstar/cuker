@@ -25,17 +25,17 @@ module Cuker
         w.make_new_file "reports/#{LOG_TIME_TODAY}/demo_file"
         expect(w.sheets.size).to eq 1
         expect(w.active_sheet.current_row).to eq 1
-        w.write_title ['#', 'num', 'name']
+        w.write_title ['#', 'num', 'name'].join "|"
         expect(w.active_sheet.rows.size).to eq 1
         expect(w.active_sheet.current_row).to eq 2
       end
 
       it 'should write a title and a few rows' do
         w.make_new_file "reports/#{LOG_TIME_TODAY}/demo_file"
-        w.write_title ['#', 'num', 'name']
-        w.write_new_row %w[1 1 one]
-        w.write_new_row %w[2 2 two]
-        w.write_new_row %w[3 3 three]
+        w.write_title ['#', 'num', 'name'].join "|"
+        w.write_new_row %w[1 1 one].join "|"
+        w.write_new_row %w[2 2 two].join "|"
+        w.write_new_row %w[3 3 three].join "|"
         expect(w.active_sheet.rows.size).to eq 4
         expect(w.active_sheet.current_row).to eq 5
       end

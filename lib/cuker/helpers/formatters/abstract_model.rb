@@ -40,7 +40,7 @@ module Cuker
 
     def name_merge hsh
       str = ""
-      @log.warn "name merge for #{hsh}"
+      @log.debug "name merge for #{hsh}"
       str += hsh[:name].strip.force_encoding("UTF-8") if hsh[:name]
       str += "\n#{hsh[:description].strip.force_encoding("UTF-8")}" if hsh[:description]
       str
