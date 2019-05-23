@@ -41,13 +41,15 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.0"
 
-  spec.add_development_dependency "awesome_print"
   # spec.add_development_dependency "bundler", "~> 2.0"
-  spec.add_development_dependency "gherkin", "~> 5.1"
-  spec.add_development_dependency "highline"
-  spec.add_development_dependency "logging"
   # spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "require_all"
+  spec.add_development_dependency "awesome_print"
+  spec.add_development_dependency "logging"
+
+  spec.add_development_dependency "gherkin", "~> 5.1"
+
   spec.add_development_dependency "thor"
+  spec.add_development_dependency "highline"
 
 end
