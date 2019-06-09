@@ -39,6 +39,7 @@ module Cuker
       super file_name
       @log.info "Making new #{self.class} => #{file_name}"
       @jira_file = File.open(file_name, "wb")
+      @jira_file.close
     end
 
     def add_line line

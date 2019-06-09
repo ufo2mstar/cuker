@@ -45,6 +45,7 @@ module Cuker
       super file_name
       @log.info "Making new #{self.class} => #{file_name}"
       @csv_sheet = CSV.open(file_name, "wb")
+      @csv_sheet.close
     end
 
     def add_row row_ary

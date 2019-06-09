@@ -52,4 +52,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "thor"
   spec.add_development_dependency "highline"
 
+  spec.add_development_dependency "rubyXL"
+
 end

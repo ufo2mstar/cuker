@@ -33,10 +33,10 @@ module CukerSpecHelper
     ans = Dir.glob(glob_str)
     new_count = ans.size
     # todo: fix this fail, which only cleans up during the subsequent run
-    # unless new_count < old_count
-    #   puts "#{old_count} -> #{new_count}"
-    #   raise FileNotRemoved.new("please see why the file #{ans} is not removed yet")
-    # end
+    unless new_count < old_count
+      puts "#{old_count} -> #{new_count}"
+      raise FileNotRemoved.new("please see why the file #{ans} is not removed yet")
+    end
   end
 
   def debug_show ary
