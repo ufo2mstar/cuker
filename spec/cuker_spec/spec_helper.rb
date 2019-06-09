@@ -21,6 +21,7 @@ module CukerSpecHelper
   PICKLER_TYPE = :yaml # for data (arrays, hashes, etc)
   # PICKLER_TYPE = :marshal # for objects
 
+  # Cleanup file names with the name #{REPORT_FILE_NAME}
   def after_cleanup
     glob_str = File.join(REPORT_FILE_LOC, '**', "*#{REPORT_FILE_NAME}*")
     ans = Dir.glob(glob_str)
