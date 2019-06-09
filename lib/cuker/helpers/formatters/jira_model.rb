@@ -268,7 +268,8 @@ module Cuker
     end
 
     def jira_arg_hilight(str)
-      str.gsub(/<(.*)>/, jira_bold_italics('<\1>'))
+      # str.gsub(/<(.*)?>/, jira_bold_italics('<\1>'))
+      str.gsub(/<.*?>/, &method(:jira_bold_italics))
     end
 
     def jira_bold str
