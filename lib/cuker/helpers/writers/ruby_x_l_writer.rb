@@ -32,8 +32,24 @@ module Cuker
         super file_name
         @log.info "Making new #{self.class} => #{file_name}"
         # @jira_file = File.open(file_name, "wb")
+
+        @workbook = RubyXL::Parser.parse './sample_excel_file.xlsx'
       end
 
+      def current_row
+        @rows.size + 1
+      end
+
+      def add_row ary
+        @rows << ary
+      end
+
+      alias :add_line :add_row
+
+      # @return ary of rows
+      def read_rows
+        @rows
+      end
     end
   end
 end
