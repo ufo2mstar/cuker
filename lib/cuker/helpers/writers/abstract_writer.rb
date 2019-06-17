@@ -92,4 +92,5 @@ module Cuker
       @rows
     end
   end
+
 end
