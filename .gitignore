@@ -71,4 +71,4 @@ build-iPhoneSimulator/
 
 *.lock
 *.log
-/lib/cuker/test/
+#/lib/cuker/test/
