@@ -28,11 +28,11 @@ module Cuker
     end
 
     def get_values_ary ary_of_hshs
-      ary_of_hshs.map(&:values).flatten
+      get_item_ary ary_of_hshs, :values
     end
 
     def get_keys_ary ary_of_hshs
-      ary_of_hshs.map(&:keys).flatten
+      get_item_ary ary_of_hshs, :keys
     end
 
     # utility methods
@@ -75,5 +75,9 @@ module Cuker
       end
     end
 
+    private
+    def get_item_ary ary_of_hshs, item
+      ary_of_hshs.map(&item).flatten
+    end
   end
 end

@@ -3,8 +3,11 @@ require_relative '../writers/abstract_writer'
 module Cuker
   class RubyXLModel < AbstractModel
     include LoggerSetup
+    include StringHelper
 
     attr_accessor :special_tag_list
+
+    TITLE_MAX_LEN = 60
 
     def initialize ast_map
       super
@@ -18,7 +21,7 @@ module Cuker
       @data = make_rows
     end
 
-    private
+    # private
 
     def make_order
       [
@@ -83,32 +86,32 @@ module Cuker
                 @feat_printed = true
                 title_str = ''
                 # feat handle
-                title_str += jira_title 'Feature', feat_title
-                title_str += jira_title('Background', title) if type == :Background
+                title_str += excel_title 'Feature', feat_title
+                title_str += excel_title('Background', title) if type == :Background
                 row_hsh = {
-                    :s_num => "#{feat_counter}",
-                    :s_title => surround_panel(title_str),
-                    :s_content => surround_panel(content_ary.join("\n")),
-                    :item => simple_surround(JIRA_ICONS[:empty], '|'),
+                    # :s_num => "#{feat_counter}",
+                    # :s_title => surround_panel(title_str),
+                    # :s_content => surround_panel(content_ary.join("\n")),
+                    # :item => simple_surround(EXCEL_ICONS[:empty], '|'),
                 }
               elsif type == :Scenario or type == :ScenarioOutline
                 row_hsh = {
-                    :s_num => "#{feat_counter}.#{in_feat_counter += 1}",
-                    :s_title => surround_panel(jira_title(type, title)),
-                    :s_content => surround_panel(content_ary.join("\n")),
-                    # :item => simple_surround(JIRA_ICONS[type == :ScenarioOutline ? :info : :exclam], '|'),
-                    :item => simple_surround(JIRA_ICONS[:info], '|'),
+                    # :s_num => "#{feat_counter}.#{in_feat_counter += 1}",
+                    # :s_title => surround_panel(excel_title(type, title)),
+                    # :s_content => surround_panel(content_ary.join("\n")),
+                    # # :item => simple_surround(EXCEL_ICONS[type == :ScenarioOutline ? :info : :exclam], '|'),
+                    # :item => simple_surround(EXCEL_ICONS[:info], '|'),
                 }
               elsif type == :Examples
                 row_hsh = {
-                    :s_num => "#{feat_counter}.#{in_feat_counter}.x",
-                    :s_title => surround_panel(jira_title(type, title)), # example title
-                    :s_content => surround_panel(content_ary.join("\n")),
-                    :item => simple_surround(JIRA_ICONS[:info], '|'),
+                    # :s_num => "#{feat_counter}.#{in_feat_counter}.x",
+                    # :s_title => surround_panel(excel_title(type, title)), # example title
+                    # :s_content => surround_panel(content_ary.join("\n")),
+                    # :item => simple_surround(EXCEL_ICONS[:info], '|'),
                 }
               end
               row_ary = []
-              get_keys_ary(@order).each {|k| row_ary << jira_arg_hilight(row_hsh[k])}
+              # get_keys_ary(@order).each {|k| row_ary << excel_arg_hilight(row_hsh[k])}
               res << surround(row_ary, '|')
             end
           end
@@ -139,7 +142,7 @@ module Cuker
       if child[:type] == :Background
         yield tags, item_title, child[:type], get_steps(child)
       elsif !@feat_printed
-        yield [], JIRA_BLANK, :Feature, [JIRA_BLANK]
+        yield [], EXCEL_BLANK, :Feature, [EXCEL_BLANK]
         yield tags, item_title, child[:type], get_steps(child)
       elsif child[:type] == :Scenario
         yield tags, item_title, child[:type], get_steps(child)
@@ -170,9 +173,9 @@ module Cuker
       res = []
       examples.each do |example|
         if example[:type] == :Examples
-          res << JIRA_HORIZ_RULER
+          # res << EXCEL_HORIZ_RULER
 
-          eg_title = jira_title 'Examples', name_merge(example)
+          eg_title = excel_title 'Examples', name_merge(example)
           res << eg_title
 
           eg_header = surround(in_table_row(example[:tableHeader]), '||')
@@ -200,10 +203,10 @@ module Cuker
     def in_table_cell cell_hsh
       if cell_hsh[:type] == :TableCell
         val = cell_hsh[:value].strip
-        val.empty? ? JIRA_BLANK : val
+        val.empty? ? EXCEL_BLANK : val
       else
         @log.warn "Expected :TableCell in #{cell_hsh} @ #{@file_path}"
-        JIRA_BLANK
+        EXCEL_BLANK
       end
     end
 
@@ -212,11 +215,11 @@ module Cuker
         if step[:type] == :Step
           step_ary = []
           step_str = [
-              ((jira_bold(step[:keyword].strip)).rjust(7)), # bolding the keywords
+              ((excel_bold(step[:keyword].strip)).rjust(7)), # bolding the keywords
               (step[:text].strip)
           ].join(' ')
 
-          # step_ary << jira_monospace(step_str)
+          # step_ary << excel_monospace(step_str)
           step_ary << (step_str)
 
           step_ary += in_step_args(step[:argument]) if step[:argument]
@@ -233,8 +236,8 @@ module Cuker
       if arg[:type] == :DataTable
         res = []
         arg[:rows].each_with_index do |row, i|
-          sep = i == 0 ? JIRA_TITLE_SEP : JIRA_ROW_SEP
-          res << surround(row[:cells].map {|hsh| jira_blank_pad hsh[:value]}, sep)
+          # sep = i == 0 ? EXCEL_TITLE_SEP : EXCEL_ROW_SEP
+          # res << surround(row[:cells].map {|hsh| excel_blank_pad hsh[:value]}, sep)
         end
         return res
       elsif arg[:type] == :DocString
@@ -270,32 +273,32 @@ module Cuker
       end
     end
 
-    def jira_title keyword, title
-      "#{jira_bold "#{keyword}:"}\n #{title}\n "
+    def excel_title keyword, title
+      "#{excel_bold "#{keyword}:"}\n #{title}\n "
     end
 
-    def jira_arg_hilight(str)
-      # str.gsub(/<(.*)?>/, jira_bold_italics('<\1>'))
-      str.gsub(/<.*?>/, &method(:jira_bold_italics))
+    def excel_arg_hilight(str)
+      # str.gsub(/<(.*)?>/, excel_bold_italics('<\1>'))
+      str.gsub(/<.*?>/, &method(:excel_bold_italics))
     end
 
-    def jira_bold str
+    def excel_bold str
       simple_surround str, '*'
     end
 
-    def jira_monospace str
+    def excel_monospace str
       simple_surround str, '{{', '}}'
     end
 
-    def jira_bold_italics(str)
-      jira_bold(jira_italics(str))
+    def excel_bold_italics(str)
+      excel_bold(excel_italics(str))
     end
 
-    def jira_italics(str)
+    def excel_italics(str)
       simple_surround(str, '_')
     end
 
-    def jira_blank_pad str
+    def excel_blank_pad str
       s = str.strip
       s.empty? ? JIRA_BLANK : s
     end
