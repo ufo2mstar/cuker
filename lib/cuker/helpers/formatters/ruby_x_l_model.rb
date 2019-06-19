@@ -295,11 +295,11 @@ module Cuker
           eg_title = excel_title 'Examples', name_merge(example)
           res << eg_title
 
-          eg_header = surround(get_table_row(example[:tableHeader]), '||')
+          eg_header = surround(get_table_row(example[:tableHeader]), EXCEL_TITLE_SEP)
           res << eg_header
 
           eg_rows = example[:tableBody]
-          eg_rows.map {|row_hsh| res << surround(get_table_row(row_hsh), '|')}
+          eg_rows.map {|row_hsh| res << surround(get_table_row(row_hsh), EXCEL_ROW_SEP)}
 
         else
           @log.warn "Unknown type '#{example[:type]}' found in file @ #{@file_path}"

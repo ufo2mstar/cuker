@@ -74,8 +74,8 @@ module Cuker
                 @feat_printed = true
                 title_str = ''
                 # feat handle
-                title_str += jira_title 'Feature', feat_title
-                title_str += jira_title('Background', title) if type == :Background
+                title_str += jira_title FEATURE, feat_title
+                title_str += jira_title(BACKGROUND, title) if type == :Background
                 row_hsh = {
                     :s_num => "#{feat_counter}",
                     :s_title => surround_panel(title_str),
@@ -163,7 +163,7 @@ module Cuker
         if example[:type] == :Examples
           res << JIRA_HORIZ_RULER
 
-          eg_title = jira_title 'Examples', name_merge(example)
+          eg_title = jira_title EXAMPLES, name_merge(example)
           res << eg_title
 
           eg_header = surround(in_table_row(example[:tableHeader]), '||')

@@ -12,6 +12,7 @@ module Cuker
 
   class AbstractModel
     include LoggerSetup
+    include IModel
 
     # @return [Array] writable rows of title
     #   Defaults to []
@@ -20,6 +21,20 @@ module Cuker
     # @return [Array] writable array of rows of data
     #   Defaults to []
     attr_accessor :data
+
+    # https://cucumber.io/docs/gherkin/reference/#keywords
+    FEATURE = 'Feature'
+    BACKGROUND = 'Background'
+
+    SCENARIO = 'Scenario'
+    SCENARIO_OUTLINE = 'Scenario Outline'
+    EXAMPLES = 'Examples'
+
+    GIVEN = 'Given'
+    WHEN = 'When'
+    THEN = 'Then'
+    AND = 'And'
+    BUT = 'But'
 
     def initialize _model_input = []
       init_logger
@@ -76,6 +91,7 @@ module Cuker
     end
 
     private
+
     def get_item_ary ary_of_hshs, item
       ary_of_hshs.map(&item).flatten
     end
