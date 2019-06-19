@@ -34,7 +34,7 @@ module Cuker
       title = make_title @order
       data = make_rows
 
-      @title = surround(title, '||')
+      @title = surround(title, JIRA_TITLE_SEP)
       @data = data.join("\n").split("\n")
     end
 
@@ -48,8 +48,6 @@ module Cuker
           {:s_content => "Steps"},
           {:item => "Result"},
       ]
-# # todo: make title order reorderable
-# # todo: tag based reordering
     end
 
     def make_title order
@@ -226,7 +224,7 @@ module Cuker
       if arg[:type] == :DataTable
         res = []
         arg[:rows].each_with_index do |row, i|
-          sep = i == 0 ? '||' : '|'
+          sep = i == 0 ? JIRA_TITLE_SEP : JIRA_ROW_SEP
           res << surround(row[:cells].map {|hsh| jira_blank_pad hsh[:value]}, sep)
         end
         return res

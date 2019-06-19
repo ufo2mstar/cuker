@@ -33,7 +33,7 @@ module Cuker
         @log.info "Making new #{self.class} => #{file_name}"
         # @jira_file = File.open(file_name, "wb")
 
-        @workbook = RubyXL::Parser.parse './sample_excel_file.xlsx'
+        @workbook = RubyXL::Parser.parse './sample_template.xlsx'
       end
 
       def current_row
