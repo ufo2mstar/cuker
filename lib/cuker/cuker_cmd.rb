@@ -1,4 +1,4 @@
-require 'thor'
+# require 'thor'
 
 require 'require_all'
 # require_all 'lib/cuker/**/*.rb'
@@ -24,6 +24,7 @@ module Cuker
         :simple_csv => [CsvModel, CsvWriter],
         :simple_jira => [JiraModel, JiraWriter],
         :monospaced_jira => [JiraMonoModel, JiraWriter],
+        # :simple_excel => [RubyXLModel, RubyXLWriter],
     }
 
     # desc "report PRESET_KEY [FEATURE_PATH [REPORT_PATH [REPORT_FILE_NAME [LOG_LEVEL]]]]",

@@ -4,9 +4,12 @@ source "https://rubygems.org"
 gemspec
 
 # dev
-gem 'simplecov'
+group :test do
+  gem 'rspec'
+  gem 'simplecov'
+  gem 'sablon' # for ms office style formatting!
+end
 
 # core
 
 # ext
-gem 'sablon' # for ms office style formatting!
