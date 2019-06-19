@@ -31,7 +31,7 @@ module Cuker
         # p rows
         expect(rows.size).to eq 6
 
-        exp_rows = ["||", "||", "||", "||", "||", "||"]
+        exp_rows = [[], [], [], [], [], []]
         expect(rows).to eq exp_rows
       end
 
