@@ -72,7 +72,7 @@ module Cuker
     end
   end
 
-  class AbstractSheet
+  class AbstractFile
     include LoggerSetup
     attr_accessor :name, :rows
 

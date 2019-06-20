@@ -160,7 +160,8 @@ RSpec.configure do |config|
     # puts "after all"
     # LoggerSetup.reset_appender_log_levels :warn
     # todo: figure this mess out!! :( works when debugged, else not
-    CukerSpecHelper.after_cleanup
+
+    # CukerSpecHelper.after_cleanup
   end
 end
 

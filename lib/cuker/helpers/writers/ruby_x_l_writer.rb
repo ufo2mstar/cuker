@@ -26,22 +26,23 @@ module Cuker
       @log.debug "rxl make new sheet"
       #todo: dangit! handling this path naming properly
       file_name = "#{name.nil? ? super(name) : name}#{ext}"
-      @book[file_name] = RubyXLSheet.new file_name
+      @book[file_name] = RubyXLFile.new file_name
       @active_file = @book[file_name]
       file_name
     end
 
     def make_new_file name
       path = super name
+      finishup
       make_new_book name
     end
 
     def finishup
-      @active_file.finishup
+      @active_file.finishup if @active_file
     end
   end
 
-  class RubyXLSheet < AbstractSheet
+  class RubyXLFile < AbstractFile
     def initialize file_name
       super file_name
       @file_name = file_name
@@ -59,6 +60,7 @@ module Cuker
 
       # @active_sheet = @workbook[0]
       @active_sheet = @workbook['Acceptance Tests']
+      @rows = @active_sheet.sheet_data.rows
     end
 
     def delete_sheet sheet_name
@@ -75,7 +77,8 @@ module Cuker
     end
 
     def add_row ary
-      @rows << ary
+      super ary
+
     end
 
     alias :add_line :add_row
@@ -87,7 +90,7 @@ module Cuker
 
     def finishup
       # @workbook.write("#{@name}")
-      @workbook.write("#{@file_name}")
+      @workbook.write("#{@file_name}") if @workbook
     end
   end
 end

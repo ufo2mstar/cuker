@@ -24,7 +24,7 @@ module Cuker
       @log.debug "csv make new sheet"
       #todo: dangit! handling this path naming properly
       file_name = "#{name.nil? ? super(name) : name}#{ext}"
-      @book[file_name] = CsvSheet.new file_name
+      @book[file_name] = CsvFile.new file_name
       @active_file = @book[file_name]
       file_name
     end
@@ -40,7 +40,7 @@ module Cuker
 # extends sheet to give csv read/write-ability
 # {file:https://docs.ruby-lang.org/en/2.1.0/CSV.html CSV usage documentation}
 
-  class CsvSheet < AbstractSheet
+  class CsvFile < AbstractFile
     def initialize file_name
       super file_name
       @log.info "Making new #{self.class} => #{file_name}"

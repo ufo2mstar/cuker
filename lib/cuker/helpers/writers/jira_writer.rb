@@ -34,7 +34,7 @@ module Cuker
     end
   end
 
-  class JiraFile < AbstractSheet
+  class JiraFile < AbstractFile
     def initialize file_name
       super file_name
       @log.info "Making new #{self.class} => #{file_name}"

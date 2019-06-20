@@ -1,17 +1,6 @@
-require_relative '../../../spec_helper'
+require_relative '../../spec_helper'
 
 module Cuker
-  RSpec.describe RubyXLWriter do
-    context 'init' do
-      let(:w) {RubyXLWriter.new}
-
-      it 'should start with a default sheet' do
-        expect(w.book.size).to eq 0
-      end
-
-    end
-  end
-
   RSpec.describe RubyXLWriter do
     context 'init' do
       subject(:w) {RubyXLWriter.new}
@@ -25,10 +14,10 @@ module Cuker
       end
 
       it 'should make a new sheet from path and filename given and return the name' do
-        file_path = w.make_new_file "reports/#{LOG_TIME_TODAY}/demo_file"
+        file_path = w.make_new_file "reports/#{LOG_TIME_TODAY}/demo_file0"
         expect(w.book.size).to eq 1
         w.finishup
-        expect(file_path).to eq "reports/#{LOG_TIME_TODAY}/demo_file#{w.ext}"
+        expect(file_path).to eq "reports/#{LOG_TIME_TODAY}/demo_file0#{w.ext}"
         #   todo: unknown path test, etc
       end
       it 'should throw errors if writes are invoked before making new sheet first' do
@@ -38,22 +27,24 @@ module Cuker
       end
 
       it 'should write a title increment counts' do
-        w.make_new_file "reports/#{LOG_TIME_TODAY}/demo_file"
+        w.make_new_file "reports/#{LOG_TIME_TODAY}/demo_file1"
         expect(w.book.size).to eq 1
         expect(w.active_file.current_row).to eq 1
         w.write_title ['#', 'num', 'name']
         expect(w.active_file.rows.size).to eq 1
         expect(w.active_file.current_row).to eq 2
+        w.finishup
       end
 
       it 'should write a title and a few rows' do
-        w.make_new_file "reports/#{LOG_TIME_TODAY}/demo_file"
+        w.make_new_file "reports/#{LOG_TIME_TODAY}/demo_file2"
         w.write_title ['#', 'num', 'name']
         w.write_new_row %w[1 1 one]
         w.write_new_row %w[2 2 two]
         w.write_new_row %w[3 3 three]
         expect(w.active_file.rows.size).to eq 4
         expect(w.active_file.current_row).to eq 5
+        w.finishup
       end
 
       it 'should add new named book' do
@@ -65,6 +56,7 @@ module Cuker
         # new file
         w.make_new_file "reports/#{LOG_TIME_TODAY}/demo_file_2"
         expect(w.book.size).to eq 2
+        w.finishup
       end
     end
   end
