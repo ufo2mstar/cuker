@@ -19,8 +19,9 @@ module Cuker
       end
     end
 
-    def excel_title keyword, title
-      "#{excel_bold "#{keyword}:"}\n #{title}\n "
+    def excel_title keyword, title_ary
+      # "#{excel_bold "#{keyword}:"}\n #{title}\n "
+      [excel_bold("#{keyword}:")] + title_ary
     end
 
     def excel_arg_hilight(str)
@@ -134,68 +135,44 @@ module Cuker
       end
 
       feat_counter = 1
-
       feat_content = ''
       bg_content = ''
 
       res = []
       @asts.each do |file_path, ast|
-
         @file_path = file_path
         in_feat_counter = 0
-        # @feat_printed = false
 
         if ast[:type] == :GherkinDocument
           in_feature(ast) do |feat_tags_ary, feat_title, feat_item|
-            in_item(feat_item) do |tags_ary, title, type, content_ary, example_ary|
-
+            in_item(feat_item) do |tags_ary, type, item_title, content_ary, example_ary|
               row_hsh = {}
-
               if type == :Background or type == :Feature
+                feat_content = excel_title FEATURE, feat_title
+                bg_content = [excel_title(BACKGROUND, item_title)] + content_ary
+              else
+                if type == :Scenario or type == :ScenarioOutline
+                  row_hsh[:counter] = "#{feat_counter}.#{in_feat_counter += 1}"
+                  row_hsh[:feature] = feat_content
+                  row_hsh[:background] = bg_content
+                  row_hsh[:scenario] = [excel_title(type.to_s, item_title)] + content_ary
+                  row_hsh[:result] = EXCEL_CONSTS::RESULT::PENDING
+                  row_hsh[:tested_by] = ""
+                  row_hsh[:test_designer] = ""
 
-                # @feat_printed = true
-
-                title_str = ''
-                # feat handle
-                title_str += excel_title 'Feature', feat_title
-                # title_str += excel_title('Background', title) if type == :Background
-                row_hsh = {
-                    # :s_num => "#{feat_counter}",
-                    # :s_title => surround_panel(title_str),
-                    # :s_content => surround_panel(content_ary.join("\n")),
-                    # :item => simple_surround(EXCEL_ICONS[:empty], '|'),
-                }
-                feat_content = "Feature:\n#{title_str}"
-                bg_content = content_ary.join("\n")
-              elsif type == :Scenario or type == :ScenarioOutline
-                # row_hsh = {
-                # :s_num => "#{feat_counter}.#{in_feat_counter += 1}",
-                # :s_title => surround_panel(excel_title(type, title)),
-                # :s_content => surround_panel(content_ary.join("\n")),
-                # # :item => simple_surround(EXCEL_ICONS[type == :ScenarioOutline ? :info : :exclam], '|'),
-                # :item => simple_surround(EXCEL_ICONS[:info], '|'),
-
-                row_hsh[:counter] = "#{feat_counter}.#{in_feat_counter += 1}"
-                row_hsh[:feature] = "#{title}"
-                row_hsh[:background] = bg_content
-                row_hsh[:scenario] = content_ary.join("\n")
-
-                row_hsh[:result] = ""
-                row_hsh[:tested_by] = ""
-                row_hsh[:test_designer] = ""
-
-
-              elsif type == :Examples
-                row_hsh[:examples] = ""
+                elsif type == :ScenarioOutline
+                  row_hsh[:examples] = ""
+                end
+                row_ary = []
+                get_keys_ary(@order).each {|k| row_ary << (row_hsh[k])}
+                # get_keys_ary(@order).each {|k| row_ary << excel_arg_hilight(row_hsh[k])}
+                res << row_ary
               end
-              row_ary = []
-              # get_keys_ary(@order).each {|k| row_ary << excel_arg_hilight(row_hsh[k])}
-              res << row_ary
             end
           end
         end
         feat_counter += 1
-        feat_content = ''
+        feat_title = ''
         bg_content = ''
       end
       @file_path = nil
@@ -207,7 +184,7 @@ module Cuker
         feat = hsh[:feature]
 
         feat_tags = get_tags feat
-        feat_title = name_merge feat
+        feat_title = get_title_ary feat
 
         children = feat[:children]
         children.each {|child| yield feat_tags, feat_title, child}
@@ -217,17 +194,17 @@ module Cuker
     end
 
     def in_item(child)
-      item_title = name_merge child
+      item_title = get_title_ary child
       tags = get_tags child
       if child[:type] == :Background
-        yield tags, item_title, child[:type], get_steps(child), []
+        yield tags, child[:type], item_title, get_steps(child), []
         # elsif !@feat_printed
         #   yield [], EXCEL_BLANK, :Feature, [EXCEL_BLANK]
-        #   yield tags, item_title, child[:type], get_steps(child), []
+        #   yield tags, child[:type], item_title, get_steps(child), []
       elsif child[:type] == :Scenario
-        yield tags, item_title, child[:type], get_steps(child), []
+        yield tags, child[:type], item_title, get_steps(child), []
       elsif child[:type] == :ScenarioOutline
-        yield tags, item_title, child[:type], get_steps(child), get_examples(child[:examples])
+        yield tags, child[:type], item_title, get_steps(child), get_examples(child[:examples])
         #   todo: think about new examples in new lines
       else
         @log.warn "Unknown type '#{child[:type]}' found in file @ #{@file_path}"
@@ -239,7 +216,7 @@ module Cuker
         if step[:type] == :Step
           step_ary = []
           step_str = [
-              ((excel_bold(step[:keyword].strip)).rjust(7)), # bolding the keywords
+              ((excel_bold(step[:keyword].strip)).rjust(6)), # bolding the keywords
               (step[:text].strip)
           ].join(' ')
 
@@ -292,7 +269,7 @@ module Cuker
         if example[:type] == :Examples
           # res << EXCEL_HORIZ_RULER
 
-          eg_title = excel_title 'Examples', name_merge(example)
+          eg_title = excel_title 'Examples', get_title_ary(example)
           res << eg_title
 
           eg_header = surround(get_table_row(example[:tableHeader]), EXCEL_TITLE_SEP)
@@ -328,11 +305,14 @@ module Cuker
     end
 
     def name_merge hsh, max_len = TITLE_MAX_LEN
-      str = ''
-      @log.debug "name merge for #{hsh} with max_len (#{max_len})"
-      str += add_newlines!(hsh[:name].strip.force_encoding("UTF-8"), max_len) if hsh[:name]
-      str += add_newlines!("\n#{hsh[:description].strip.force_encoding("UTF-8")}", max_len) if hsh[:description]
-      str
+
+    end
+
+    def get_title_ary hsh, max_len = TITLE_MAX_LEN
+      title_ary = []
+      title_ary << hsh[:name].strip.force_encoding("UTF-8") if hsh[:name]
+      title_ary << hsh[:description].strip.force_encoding("UTF-8") if hsh[:description]
+      title_ary
     end
 
 
@@ -340,7 +320,7 @@ module Cuker
       attr_accessor :name, :title, :pattern
     end
 
-    module EXCEL
+    module EXCEL_CONSTS
       module RESULT
         PENDING = "Pending"
         PASS = "Pass"

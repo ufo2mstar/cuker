@@ -38,33 +38,32 @@ module Cuker
         snapshot_name = 'JiraModel-snap-sample05'
         CukerSpecHelper.snapshot_compare rows, snapshot_name
       end
+    end
 
-      context 'test util methods' do
-        let(:jm) {JiraModel.new({})}
+    context 'test util methods' do
+      let(:jm) {JiraModel.new({})}
 
-        def check method_name_sym, inp, exp
-          expect(jm.send(method_name_sym, inp)).to eq exp
+      def check method_name_sym, inp, exp
+        expect(jm.send(method_name_sym, inp)).to eq exp
+      end
+
+      context 'jira_arg_hilight' do
+        it 'should do simple strs' do
+          inp = "a <fast> fox"
+          exp = "a *_<fast>_* fox"
+          check :jira_arg_hilight, inp, exp
         end
-
-        context 'jira_arg_hilight' do
-          it 'should do simple strs' do
-            inp = "a <fast> fox"
-            exp = "a *_<fast>_* fox"
-            check :jira_arg_hilight, inp, exp
-          end
-          it 'should do simple strs' do
-            inp = "a <fast> <brown> fox is <lazy>"
-            exp = "a *_<fast>_* *_<brown>_* fox is *_<lazy>_*"
-            check :jira_arg_hilight, inp, exp
-          end
-          it 'should do simple strs' do
-            inp = "a <fast and furious><brown> fox is> <lazy"
-            exp = "a *_<fast and furious>_**_<brown>_* fox is> <lazy"
-            check :jira_arg_hilight, inp, exp
-          end
+        it 'should do simple strs' do
+          inp = "a <fast> <brown> fox is <lazy>"
+          exp = "a *_<fast>_* *_<brown>_* fox is *_<lazy>_*"
+          check :jira_arg_hilight, inp, exp
+        end
+        it 'should do simple strs' do
+          inp = "a <fast and furious><brown> fox is> <lazy"
+          exp = "a *_<fast and furious>_**_<brown>_* fox is> <lazy"
+          check :jira_arg_hilight, inp, exp
         end
       end
     end
   end
-
 end

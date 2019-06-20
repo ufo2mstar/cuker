@@ -3,6 +3,18 @@ require_relative '../../../../spec/cuker_spec/testdata/sample/sample_ast'
 
 module Cuker
   RSpec.describe RubyXLModel do
+    let(:exp_title) {
+      exp_title = [
+          "Sl.No",
+          "Feature",
+          "Background",
+          "Scenario",
+          "Examples",
+          "Result",
+          "Tested By",
+          "Test Designer",
+      ]
+    }
     context 'init' do
       let(:test_file) {'spec/cuker_spec/testdata/sample/sample_ast.rb'}
 
@@ -14,27 +26,37 @@ module Cuker
         rxlm = RubyXLModel.new ast_map
         title = rxlm.title
         expect(title.count).to eq 8
-        exp_title = [
-            "Sl.No",
-            "Feature",
-            "Background",
-            "Scenario",
-            "Examples",
-            "Result",
-            "Tested By",
-            "Test Designer",
-        ]
+
         expect(title).to eq exp_title
 
         rows = rxlm.data
+        p rows
 
-        # p rows
-        expect(rows.size).to eq 6
+        expect(rows.size).to eq 4
 
-        exp_rows = [[], [], [], [], [], []]
+        exp_rows =
+            [["2.1", ["Feature:", "feat name", "feat desc"], [["Background:", "bg name", "bg desc"], " Given some setup"], [["Scenario:", "scen name", "scen desc line 1\n  scen desc line 2"], " Given this", "  When that:", "  Then kod", "   And kod", "   But kod", "     * kod"], nil, "Pending", "", ""], ["2.2", ["Feature:", "feat name", "feat desc"], [["Background:", "bg name", "bg desc"], " Given some setup"], [["ScenarioOutline:", "scen outline name <title>", "scen outline desc"], "  When this <thing>", "   And this <thing>", "  Then that <thang>"], nil, "Pending", "", ""], ["3.1", ["Feature:", "feature name", "feature description"], [["Background:", "background name", "background description"], "     * a step"], [["Scenario:", "scenario name", "scenario description"], "     * a step with a table"], nil, "Pending", "", ""], ["3.2", ["Feature:", "feature name", "feature description"], [["Background:", "background name", "background description"], "     * a step"], [["ScenarioOutline:", "outline name", "outline description"], "     * a step with a doc string"], nil, "Pending", "", ""]]
+
         expect(rows).to eq exp_rows
       end
+    end
 
+    context 'test extract methods' do
+      it 'handles BG steps and Tables and Examples properly' do
+        # feat_path = 'spec/cuker_spec/testdata/sample'
+        feat_path = 'spec/cuker_spec/testdata/sample/05'
+        gr = GherkinRipper.new feat_path
+        ast_map = gr.ast_map
+        # ap ast_map
+        rxlm = RubyXLModel.new ast_map
+        title = rxlm.title
+
+        expect(title).to eq exp_title
+
+        rows = rxlm.data
+        snapshot_name = 'RubyXLModel-snap-sample05'
+        CukerSpecHelper.snapshot_compare rows, snapshot_name
+      end
     end
 
     context 'util methods' do
