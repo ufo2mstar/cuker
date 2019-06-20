@@ -7,6 +7,7 @@ module Cuker
 
     method :make_new_file
     method :write_new_sheet
+    method :finishup
   end
 
   class AbstractWriter
@@ -50,6 +51,10 @@ module Cuker
       @log.debug "make a new abstract sheet: #{sheet}"
       sheet
       # todo: file name collision handle!!
+    end
+
+    def finishup
+      @log.debug "closing up #{@name} file if needed"
     end
 
     def make_new_file name
