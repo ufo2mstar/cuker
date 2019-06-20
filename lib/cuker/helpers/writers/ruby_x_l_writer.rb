@@ -55,6 +55,7 @@ module Cuker
 
       @worksheets = @workbook.worksheets
 
+      # todo: delete sheet convenienve method
       # @workbook['test_id'].delete
       # delete_sheet 'null'
       delete_sheet 'test_id'
@@ -88,7 +89,7 @@ module Cuker
     end
 
     def finishup
-      @workbook.write("#{@name}")
+      # @workbook.write("#{@name}")
       @workbook.write("#{@file_name}")
     end
   end

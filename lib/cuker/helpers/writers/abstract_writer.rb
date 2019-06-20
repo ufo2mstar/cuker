@@ -96,6 +96,10 @@ module Cuker
     def read_rows
       @rows
     end
+
+    def finishup
+      @log.debug "closing up #{@name} file if needed"
+    end
   end
 
 end
