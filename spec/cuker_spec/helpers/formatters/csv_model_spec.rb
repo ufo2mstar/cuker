@@ -3,31 +3,31 @@ require_relative '../../../../spec/cuker_spec/testdata/sample/sample_ast'
 
 module Cuker
   RSpec.describe CsvModel do
-    context 'init' do
-      let(:test_file) {'spec/cuker_spec/testdata/sample/sample_ast.rb'}
-
-      it 'can recognize a feature asts, and parse out the data' do
-        ast_map = {"blank.feature" => BLANK_AST,
-                   "spec/cuker_spec/testdata/sample/sample_ast.rb" => FULL_AST,
-                   "spec/cuker_spec/testdata/sample/sample_ast_old.rb" => OLD_AST,
-        }
-        csvm = CsvModel.new ast_map
-        title = csvm.title
-        exp_title = ["Sl.No", "Type", "Title", "Feature", "S.no", "File", "Tags"]
-        expect(title.count).to eq 7
-        expect(title).to eq exp_title
-
-        rows = csvm.data
-
-        # p rows
-        exp_rows = [[1, "S", "scen name\nscen desc line 1\n  scen desc line 2", "feat name\nfeat desc", 1, "spec/cuker_spec/testdata/sample/sample_ast.rb", "@feat_tag1, @feat_tag2, @s_tag1, @s_tag2, @s_tag3"], [2, "SO", "scen outline name <title>\nscen outline desc", "feat name\nfeat desc", 2, "spec/cuker_spec/testdata/sample/sample_ast.rb", "@feat_tag1, @feat_tag2, @s_tag1, @so_tag1"], [3, "S", "scenario name\nscenario description", "feature name\nfeature description", 1, "spec/cuker_spec/testdata/sample/sample_ast_old.rb", "@feature_tag1, @feature_tag2, @feat_tag3, @scenario_tag"], [4, "SO", "outline name\noutline description", "feature name\nfeature description", 2, "spec/cuker_spec/testdata/sample/sample_ast_old.rb", "@feature_tag1, @feature_tag2, @feat_tag3, @outline_tag"]]
-
-
-        expect(rows.size).to eq 4
-        expect(rows).to eq exp_rows
-      end
-
-    end
+    # xcontext 'init' do
+    #   let(:test_file) {'spec/cuker_spec/testdata/sample/sample_ast.rb'}
+    #
+    #   it 'can recognize a feature asts, and parse out the data' do
+    #     ast_map = {"blank.feature" => BLANK_AST,
+    #                "spec/cuker_spec/testdata/sample/sample_ast.rb" => FULL_AST,
+    #                "spec/cuker_spec/testdata/sample/sample_ast_old.rb" => OLD_AST,
+    #     }
+    #     csvm = CsvModel.new ast_map
+    #     title = csvm.title
+    #     exp_title = ["Sl.No", "Type", "Title", "Feature", "S.no", "File", "Tags"]
+    #     expect(title.count).to eq 7
+    #     expect(title).to eq exp_title
+    #
+    #     rows = csvm.data
+    #
+    #     # p rows
+    #     exp_rows = [[1, "S", "scen name\nscen desc line 1\n  scen desc line 2", "feat name\nfeat desc", 1, "spec/cuker_spec/testdata/sample/sample_ast.rb", "@feat_tag1, @feat_tag2, @s_tag1, @s_tag2, @s_tag3"], [2, "SO", "scen outline name <title>\nscen outline desc", "feat name\nfeat desc", 2, "spec/cuker_spec/testdata/sample/sample_ast.rb", "@feat_tag1, @feat_tag2, @s_tag1, @so_tag1"], [3, "S", "scenario name\nscenario description", "feature name\nfeature description", 1, "spec/cuker_spec/testdata/sample/sample_ast_old.rb", "@feature_tag1, @feature_tag2, @feat_tag3, @scenario_tag"], [4, "SO", "outline name\noutline description", "feature name\nfeature description", 2, "spec/cuker_spec/testdata/sample/sample_ast_old.rb", "@feature_tag1, @feature_tag2, @feat_tag3, @outline_tag"]]
+    #
+    #
+    #     expect(rows.size).to eq 4
+    #     expect(rows).to eq exp_rows
+    #   end
+    #
+    # end
 
     context 'util methods' do
       it 'should filter special_tag_list ' do

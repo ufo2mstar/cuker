@@ -169,8 +169,8 @@ module Cuker
           eg_header = surround(in_table_row(example[:tableHeader]), '||')
           res << eg_header
 
-          eg_rows = example[:tableBody]
-          eg_rows.map {|row_hsh| res << surround(in_table_row(row_hsh), '|')}
+          eg_body = example[:tableBody]
+          eg_body.map {|row_hsh| res << surround(in_table_row(row_hsh), '|')}
 
         else
           @log.warn "Unknown type '#{item[:type]}' found in file @ #{@file_path}"

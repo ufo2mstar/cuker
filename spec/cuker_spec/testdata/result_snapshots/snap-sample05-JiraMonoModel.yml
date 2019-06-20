@@ -1,30 +1,34 @@
 ---
 - "|1|{panel} *Feature:*"
-- " feat name 123456 12345 12 123 1234 1 1234"
-- 123456 12   1 12345 123
-- feat desc 123 1 1234 123456 12345 1234
-- 12345 123 12 123456   12 1
+- " feat name ab abcde abcdefg abcdefg abc "
+- " abcde abcdef abcd ab abc abcd abcdef"
+- ab abcde abcde abcdef abcdefg abc abcd
+- abcdefg abc ab  abcd abcdef
 - " *Background:*"
-- " bg name 123456 12345 12 12 123 1  12345"
-- 123456 1234  123 1234 1
+- " bg name abcdef abcdefg abcdef  abcde abcde"
+- abcd ab abc abcd ab abcdefg  abc
 - bg desc
-- "  bg desc 12 1234 12345 123456"
-- 123 1  1 123456 123 1234  12345 12
+- "  bg desc ab abcdef  abc ab abc"
+- abcdefg  abcd abcdef abcdefg abcd abcde
+- abcde
+- "  abcd abcdef abcdefg  abcde abc "
+- abcdef abcdefg ab abcde abcd ab abc
 - "  {panel}|{panel} {{*Given*}} {{bg step 1}}"
 - " {{*When*}} {{bg step 2}}"
 - " {{*Then*}} {{bg step 3}}"
 - "  {{*And*}} {{bg step 4}}"
 - "  {{*But*}} {{bg step 5}} {panel}|| ||"
 - "|1.1|{panel} *Scenario:*"
-- " scen name 123  12 12345 12 123456 1234 12345"
-- " 1 1234 123 123456 1"
+- " scen name abcde ab ab abcdef abc abcdef"
+- abcdefg abcde abcdefg abcd abcd abc
 - scen desc line 0
 - ''
-- "  scen desc line 1 123456"
-- 1234 12345  12 123456 12  123 1234 1 1 12345
-- '123'
-- "  scen desc line 2 123 1234  12 12345"
-- 1 1234  12 123456 123456 12345 1 123
+- "  scen desc line 2 abcd"
+- abc ab abcdefg abc abcdef ab abcdef  abcd
+- abcde abcdefg  abcde
+- "  scen desc line 3"
+- abcd abcdefg ab abcdef abc abcdef abcdefg
+- abcd  ab abcde  abc abcde
 - "  {panel}|{panel} {{*Given*}} {{bg step 1}}"
 - " {{*When*}} {{bg step 2}}"
 - " {{*Then*}} {{bg step 3}}"
@@ -40,10 +44,11 @@
 - "  {{*But*}} {{kod3}}"
 - "    {{***}} {{kod4}} {panel}||(i)||"
 - "|1.2|{panel} *ScenarioOutline:*"
-- " scen outline name *_<title>_* 1 12   123 1234"
-- 12 12345 123 1 12345 123456 123456 1234
-- scen outline desc 12345 1234  1 12 1234
-- 123456 1 123456 123 12345 123 12
+- " scen outline name *_<title>_*   abcde abcdefg"
+- abc ab   abcd abcdefg abcdef abcd ab abcde
+- abcdef abc
+- scen outline desc abcde abcdef abcdefg
+- abcdef ab abc abcde abcd  abcd ab abc abcdefg
 - "  {panel}|{panel} {{*Given*}} {{bg step 1}}"
 - " {{*When*}} {{bg step 2}}"
 - " {{*Then*}} {{bg step 3}}"
@@ -58,11 +63,9 @@
 - " {{*Then*}} {{that *_<thang>_*}}"
 - "----"
 - "*Examples:*"
-- " example name 1234 123 123456 1 12345 1 12345"
-- 123456  12 1234 12  123
+- " example name 1234 123 - 123456 1 12345 ---"
+- 1 12345 123456  '12' 1234 12  123
 - example desc
-- "    123 12 12345  1234 123456"
-- 123 123456  12345 1234 12 1 1
 - " "
 - "||{{title}}||{{thing}}||{{thang}}||"
 - "|{{case 1}}|{{1}}|{{one}}|"
@@ -73,9 +76,12 @@
 - "----"
 - "*Examples:*"
 - " example name  123 123456 12 1 1234 1 12345"
-- 123 12 1234 123456  12345
-- example desc 123 1234  12 12345 1 1234
-- " 12 123456 123456 12345 1 123"
+- 123.. 12 ,1234 123456  12345
+- example desc abcd abcdefg ab abcdef abc
+- abcdef abcdefg abcd  ab abcde  abc abcde
+- ''
+- "   abcde  abcdef abcdefg abcde abcd  abc"
+- abcd ab abcdefg ab abc abcd
 - " "
 - "||{{title}}||{{thing}}|| ||{{thang}}|| ||"
 - "|{{case 1}}|{{1}}| |{{one}}| |"

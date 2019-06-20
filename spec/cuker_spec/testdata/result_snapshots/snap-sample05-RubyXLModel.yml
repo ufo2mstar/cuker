@@ -1,0 +1,59 @@
+---
+- - '1.1'
+  - &1
+    - 'Feature:'
+    - feat name ab abcde abcdefg abcdefg abc   abcde abcdef abcd ab abc abcd abcdef
+    - ab abcde abcde abcdef abcdefg abc abcd abcdefg abc ab  abcd abcdef
+  - &2
+    - - 'Background:'
+      - bg name abcdef abcdefg abcdef  abcde abcde abcd ab abc abcd ab abcdefg  abc
+      - |-
+        bg desc
+          bg desc ab abcdef  abc ab abc abcdefg  abcd abcdef abcdefg abcd abcde abcde
+          abcd abcdef abcdefg  abcde abc  abcdef abcdefg ab abcde abcd ab abc
+    - " Given bg step 1"
+    - "  When bg step 2"
+    - "  Then bg step 3"
+    - "   And bg step 4"
+    - "   But bg step 5"
+  - - - 'Scenario:'
+      - scen name abcde ab ab abcdef abc abcdef abcdefg abcde abcdefg abcd abcd abc
+      - |-
+        scen desc line 0
+
+          scen desc line 2 abcd abc ab abcdefg abc abcdef ab abcdef  abcd abcde abcdefg  abcde
+          scen desc line 3 abcd abcdefg ab abcdef abc abcdef abcdefg abcd  ab abcde  abc abcde
+    - " Given bg step 1"
+    - "  When bg step 2"
+    - "  Then bg step 3"
+    - "   And bg step 4"
+    - "   But bg step 5"
+    - "  When table"
+    - "  Then kod 1"
+    - "   And kod2"
+    - "   But kod3"
+    - "     * kod4"
+  - 
+  - Pending
+  - ''
+  - ''
+- - '1.2'
+  - *1
+  - *2
+  - - - 'ScenarioOutline:'
+      - scen outline name <title>   abcde abcdefg abc ab   abcd abcdefg abcdef abcd
+        ab abcde abcdef abc
+      - scen outline desc abcde abcdef abcdefg abcdef ab abc abcde abcd  abcd ab abc
+        abcdefg
+    - " Given bg step 1"
+    - "  When bg step 2"
+    - "  Then bg step 3"
+    - "   And bg step 4"
+    - "   But bg step 5"
+    - "  When this <thing>"
+    - "   And this <thing>"
+    - "  Then that <thang>"
+  - 
+  - Pending
+  - ''
+  - ''

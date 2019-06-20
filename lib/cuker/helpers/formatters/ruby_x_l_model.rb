@@ -269,14 +269,14 @@ module Cuker
         if example[:type] == :Examples
           # res << EXCEL_HORIZ_RULER
 
-          eg_title = excel_title 'Examples', get_title_ary(example)
+          eg_title = excel_title EXAMPLES, get_title_ary(example)
           res << eg_title
 
           eg_header = surround(get_table_row(example[:tableHeader]), EXCEL_TITLE_SEP)
           res << eg_header
 
-          eg_rows = example[:tableBody]
-          eg_rows.map {|row_hsh| res << surround(get_table_row(row_hsh), EXCEL_ROW_SEP)}
+          eg_body = example[:tableBody]
+          eg_body.map {|row_hsh| res << surround(get_table_row(row_hsh), EXCEL_ROW_SEP)}
 
         else
           @log.warn "Unknown type '#{example[:type]}' found in file @ #{@file_path}"
@@ -302,10 +302,6 @@ module Cuker
         @log.warn "Expected :TableCell in #{cell_hsh} @ #{@file_path}"
         EXCEL_BLANK
       end
-    end
-
-    def name_merge hsh, max_len = TITLE_MAX_LEN
-
     end
 
     def get_title_ary hsh, max_len = TITLE_MAX_LEN
