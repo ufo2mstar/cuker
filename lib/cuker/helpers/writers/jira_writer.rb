@@ -28,8 +28,8 @@ module Cuker
 
     def make_new_file name
       path = super name
-      @sheets[path] = JiraFile.new path
-      @active_sheet = @sheets[path]
+      @book[path] = JiraFile.new path
+      @active_sheet = @book[path]
       path
     end
   end

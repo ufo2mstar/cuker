@@ -5,13 +5,13 @@ module Cuker
     context 'init' do
       subject(:w) {JiraWriter.new}
 
-      it 'should start with no default sheets' do
-        expect(w.sheets.size).to eq 0
+      it 'should start with no default book' do
+        expect(w.book.size).to eq 0
       end
 
       it 'should make a new sheet from path and filename given and return the name' do
         file_path = w.make_new_file "reports/#{LOG_TIME_TODAY}/demo_file"
-        expect(w.sheets.size).to eq 1
+        expect(w.book.size).to eq 1
         expect(file_path).to eq "reports/#{LOG_TIME_TODAY}/demo_file#{w.ext}"
         #   todo: unknown path test, etc
       end
@@ -23,7 +23,7 @@ module Cuker
 
       it 'should write a title increment counts' do
         w.make_new_file "reports/#{LOG_TIME_TODAY}/demo_file"
-        expect(w.sheets.size).to eq 1
+        expect(w.book.size).to eq 1
         expect(w.active_sheet.current_row).to eq 1
         w.write_title ['#', 'num', 'name'].join "|"
         expect(w.active_sheet.rows.size).to eq 1
@@ -40,15 +40,15 @@ module Cuker
         expect(w.active_sheet.current_row).to eq 5
       end
 
-      it 'should add new named sheets' do
+      it 'should add new named book' do
         w.make_new_file "reports/#{LOG_TIME_TODAY}/demo_file"
-        expect(w.sheets.size).to eq 1
+        expect(w.book.size).to eq 1
         # overwrite test
         w.make_new_file "reports/#{LOG_TIME_TODAY}/demo_file"
-        expect(w.sheets.size).to eq 1
+        expect(w.book.size).to eq 1
         # new file
         w.make_new_file "reports/#{LOG_TIME_TODAY}/demo_file_2"
-        expect(w.sheets.size).to eq 2
+        expect(w.book.size).to eq 2
       end
     end
   end

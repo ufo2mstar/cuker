@@ -22,7 +22,7 @@ module Cuker
     # Active file name
     attr_accessor :active_file_name
 
-    attr_accessor :sheets, :active_sheet
+    attr_accessor :book, :active_sheet
     attr_reader :out_dir
 
     def initialize
@@ -31,7 +31,7 @@ module Cuker
       # FileUtils.mkdir_p(output_path) unless Dir.exist? output_path
       @log.debug "initing AbstractWriter"
       @active_sheet = nil
-      @sheets = {}
+      @book = {}
     end
 
     def write_title data
@@ -68,7 +68,7 @@ module Cuker
     end
 
     def new_name name
-      name.nil? ? "Sheet_#{@sheets.size + 1}" : name
+      name.nil? ? "Sheet_#{@book.size + 1}" : name
     end
   end
 

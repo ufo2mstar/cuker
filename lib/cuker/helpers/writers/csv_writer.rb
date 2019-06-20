@@ -24,8 +24,8 @@ module Cuker
       @log.debug "csv make new sheet"
       #todo: dangit! handling this path naming properly
       file_name = "#{name.nil? ? super(name) : name}#{ext}"
-      @sheets[file_name] = CsvSheet.new file_name
-      @active_sheet = @sheets[file_name]
+      @book[file_name] = CsvSheet.new file_name
+      @active_sheet = @book[file_name]
       file_name
     end
 
