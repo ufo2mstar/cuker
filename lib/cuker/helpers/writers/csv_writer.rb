@@ -11,13 +11,13 @@ module Cuker
     def write_title title_ary
       super title_ary
       @log.debug "csv write title"
-      @active_sheet.add_row title_ary
+      @active_file.add_row title_ary
     end
 
     def write_new_row row_ary
       super row_ary
       @log.debug "csv write row: #{row_ary}"
-      @active_sheet.add_row row_ary
+      @active_file.add_row row_ary
     end
 
     def make_new_sheet name
@@ -25,7 +25,7 @@ module Cuker
       #todo: dangit! handling this path naming properly
       file_name = "#{name.nil? ? super(name) : name}#{ext}"
       @book[file_name] = CsvSheet.new file_name
-      @active_sheet = @book[file_name]
+      @active_file = @book[file_name]
       file_name
     end
 

@@ -11,13 +11,13 @@ module Cuker
     def write_title title_line
       super title_line
       @log.debug "JW write title: #{title_line}"
-      @active_sheet.add_line title_line
+      @active_file.add_line title_line
     end
 
     def write_new_row row_line
       super row_line
       @log.debug "JW write row: #{row_line}"
-      @active_sheet.add_line row_line
+      @active_file.add_line row_line
     end
 
     def make_new_sheet name = nil
@@ -29,7 +29,7 @@ module Cuker
     def make_new_file name
       path = super name
       @book[path] = JiraFile.new path
-      @active_sheet = @book[path]
+      @active_file = @book[path]
       path
     end
   end

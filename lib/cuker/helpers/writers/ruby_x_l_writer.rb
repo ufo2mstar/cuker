@@ -13,13 +13,13 @@ module Cuker
     def write_title title_ary
       super title_ary
       @log.debug "rxl write title"
-      @active_sheet.add_row title_ary
+      @active_file.add_row title_ary
     end
 
     def write_new_row row_ary
       super row_ary
       @log.debug "rxl write row: #{row_ary}"
-      @active_sheet.add_row row_ary
+      @active_file.add_row row_ary
     end
 
     def make_new_book name
@@ -27,7 +27,7 @@ module Cuker
       #todo: dangit! handling this path naming properly
       file_name = "#{name.nil? ? super(name) : name}#{ext}"
       @book[file_name] = RubyXLSheet.new file_name
-      @active_sheet = @book[file_name]
+      @active_file = @book[file_name]
       file_name
     end
 
@@ -37,7 +37,7 @@ module Cuker
     end
 
     def finishup
-      @active_sheet.finishup
+      @active_file.finishup
     end
   end
 
@@ -46,11 +46,8 @@ module Cuker
       super file_name
       @file_name = file_name
       @log.info "Making new #{self.class} => #{file_name}"
-      # @jira_file = File.open(file_name, "wb")
 
-      # @workbook = RubyXL::Parser.parse 'simple_macro_template.xlsm'
       @workbook = RubyXL::Parser.parse './lib/cuker/helpers/writers/simple_macro_template.xlsm'
-
       # workbook = RubyXL::Workbook.new
 
       @worksheets = @workbook.worksheets

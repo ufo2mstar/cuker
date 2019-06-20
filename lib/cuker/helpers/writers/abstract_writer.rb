@@ -22,7 +22,7 @@ module Cuker
     # Active file name
     attr_accessor :active_file_name
 
-    attr_accessor :book, :active_sheet
+    attr_accessor :book, :active_file
     attr_reader :out_dir
 
     def initialize
@@ -30,7 +30,7 @@ module Cuker
       # @out_dir = output_path
       # FileUtils.mkdir_p(output_path) unless Dir.exist? output_path
       @log.debug "initing AbstractWriter"
-      @active_sheet = nil
+      @active_file = nil
       @book = {}
     end
 
@@ -43,7 +43,7 @@ module Cuker
     end
 
     def raise_unless_active_loc data
-      raise NoNewFileMadeError.new "Please run 'make_new_file' before trying to write: '#{data}'" if @active_sheet.nil?
+      raise NoNewFileMadeError.new "Please run 'make_new_file' before trying to write: '#{data}'" if @active_file.nil?
     end
 
     def make_new_sheet name = nil
