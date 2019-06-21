@@ -88,6 +88,14 @@ module Cuker
       table.rows << ['a2', 'b2']
 
       puts table.to_s
+
+      table = Text::Table.new :rows => [['a', 'b'], ['c', 'd']],
+          :horizontal_padding    => 1,
+          :vertical_boundary     => '-',
+          :horizontal_boundary   => '|',
+          :boundary_intersection => '+'
+
+      puts table.to_s
     end
   end
 end
