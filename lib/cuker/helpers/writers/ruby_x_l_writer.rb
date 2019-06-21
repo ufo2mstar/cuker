@@ -43,24 +43,45 @@ module Cuker
   end
 
   class RubyXLFile < AbstractFile
+    attr_accessor :workbook, :worksheets, :worksheet
+
     def initialize file_name
-      super file_name
-      @file_name = file_name
-      @log.info "Making new #{self.class} => #{file_name}"
 
-      @workbook = RubyXL::Parser.parse './lib/cuker/helpers/writers/simple_macro_template.xlsm'
-      # workbook = RubyXL::Workbook.new
+      premade = File.basename(file_name) =~ /xlsm/
+      # premade = true
+      # premade = false
+      # template_file_name = './lib/cuker/helpers/writers/simple_macro_template.xlsm'
+      #
+      template_file_name = './lib/cuker/helpers/writers/demo_file2.xlsm'
+      @file_name = premade ? template_file_name : file_name
 
+      super @file_name
+      @log.info "Making new #{self.class} => #{@file_name}"
+
+      @workbook = premade ? RubyXL::Parser.parse(@file_name) : RubyXL::Workbook.new
+      # @workbook.add_worksheet('Acceptance Tests')
+      # @workbook[0].sheet_name = 'Acceptance Tests'
+
+      # puts @workbook[0][0][2]
       @worksheets = @workbook.worksheets
 
       # todo: delete sheet convenienve method
       # @workbook['test_id'].delete
+
       # delete_sheet 'null'
       delete_sheet 'test_id'
 
-      # @active_sheet = @workbook[0]
-      @active_sheet = @workbook['Acceptance Tests']
-      @rows = @active_sheet.sheet_data.rows
+      # @worksheet = @workbook[0]
+      @worksheet = @workbook['Acceptance Tests']
+
+
+      @rows = sheet_rows.dup # starting Row
+      @offset = 0 # starting Col
+
+      # inserting a blank cell to make sure title format is not being copied
+      @worksheet.add_cell(@rows.size, @offset, ' ')
+
+      @file_name = file_name
     end
 
     def delete_sheet sheet_name
@@ -73,19 +94,30 @@ module Cuker
     end
 
     def current_row
-      @rows.size + 1
+      rows.size
+    end
+
+    def current_col
+      @offset
     end
 
     def add_row ary
       super ary
-
+      row, col = current_row, current_col
+      worksheet.insert_row(row)
+      ary.each do |val|
+        worksheet.insert_cell(row, col, val)
+        col += 1
+      end
+      @log.warn sheet_rows
+      # @log.debug worksheet.rows
     end
 
     alias :add_line :add_row
 
     # @return ary of rows
-    def read_rows
-      @rows
+    def sheet_rows
+      @worksheet.sheet_data.rows
     end
 
     def finishup
