@@ -51,5 +51,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "highline"
 
   spec.add_development_dependency "rubyXL"
-
+  # spec.add_development_dependency "table_print"
+  spec.add_development_dependency "text-table"
 end

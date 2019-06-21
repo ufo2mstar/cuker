@@ -67,7 +67,7 @@ module Cuker
       # @workbook['test_id'].delete
 
       # delete_sheet 'null'
-      delete_sheet 'test_id'
+      locate_sheet 'test_id'
 
       # @worksheet = @workbook[0]
       @worksheet = @workbook['Acceptance Tests']
@@ -82,12 +82,16 @@ module Cuker
       @file_name = file_name
     end
 
-    def delete_sheet sheet_name
+    def locate_sheet sheet_name
       sheet_index = @workbook.worksheets.index {|x| x.sheet_name == sheet_name}
+      @link_sheet = @workbook.worksheets[sheet_index]
       if sheet_index
-        @workbook.worksheets.delete_at(sheet_index)
+        @log.debug "located sheet #{sheet_name} @location #{sheet_index}"
+        # @workbook.worksheets.delete_at(sheet_index)
+        sheet_index
       else
         @log.error "no sheet named '#{sheet_name}' found.. available sheets []"
+        nil
       end
     end
 
@@ -107,7 +111,17 @@ module Cuker
         worksheet.insert_cell(row, col, val.to_s)
         col += 1
       end
-      @log.warn sheet_rows
+
+      link_sheet_name = "#{ary[0]} results"
+      workbook.add_worksheet(link_sheet_name)
+      back_link_value = @link_sheet[0][0].value
+      back_link_formula = @link_sheet[0][0].formula
+      @workbook[link_sheet_name].add_cell(0, 0, back_link_value, back_link_formula)
+      # workbook.worksheets <<
+          # (link_sheet_name)
+
+      @log.info workbook.worksheets.map(&:sheet_name)
+      @log.info sheet_rows
       # @log.debug worksheet.rows
     end
 
@@ -120,6 +134,7 @@ module Cuker
 
     def finishup
       # @workbook.write("#{@name}")
+      @workbook.worksheets.delete_at(locate_sheet 'test_id') if locate_sheet 'test_id'
       @workbook.write("#{@file_name}") if @workbook
     end
   end

@@ -13,6 +13,7 @@ module Cuker
           "Result",
           "Tested By",
           "Test Designer",
+          "Comments",
       ]
     }
     # xcontext 'init' do
@@ -73,6 +74,20 @@ module Cuker
         expect(select_list).to eq ["spl"]
         expect(ignore_list).to eq ["tag_1", "tag2", "kod"]
       end
+    end
+  end
+
+  context "text-table" do
+    it 'should print the table correctly' do
+      require 'text-table'
+
+      table = Text::Table.new
+      table.head = ['A', 'B']
+      table.rows = [['a1', 'b1'], ['a1', 'b1']]
+      table.rows << ['a2', 'b2']
+      table.rows << ['a2', 'b2']
+
+      puts table.to_s
     end
   end
 end

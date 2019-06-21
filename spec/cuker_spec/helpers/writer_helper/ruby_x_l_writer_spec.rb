@@ -60,14 +60,47 @@ module Cuker
       end
     end
 
-    context 'actually writing the result' do
-      it 'should generate the expected output' do
-        snapshot_name = 'snap-sample05-RubyXLModel'
-        data = CukerSpecHelper.snapshot_retrieve snapshot_name
-        # p data
-        w.make_new_file "reports/#{LOG_TIME_TODAY}/demo_sample_05"
-        data.each {|row| w.write_new_row row}
-        w.finishup
+    context "Writer combo test" do
+
+      context 'test extract methods' do
+        it 'handles BG steps and Tables and Examples properly' do
+          # feat_path = 'spec/cuker_spec/testdata/sample'
+          feat_path = 'spec/cuker_spec/testdata/sample/05'
+          gr = GherkinRipper.new feat_path
+          ast_map = gr.ast_map
+          # ap ast_map
+          rxlm = RubyXLModel.new ast_map
+          title = rxlm.title
+
+          exp_title = [
+              "Sl.No",
+              "Feature",
+              "Background",
+              "Scenario",
+              "Examples",
+              "Result",
+              "Tested By",
+              "Test Designer",
+              "Comments",
+          ]
+
+          expect(title).to eq exp_title
+
+          rows = rxlm.data
+          snapshot_name = 'snap-sample05-RubyXLModel'
+          CukerSpecHelper.snapshot_compare rows, snapshot_name
+        end
+      end
+
+      context 'actually writing the result' do
+        it 'should generate the expected output' do
+          snapshot_name = 'snap-sample05-RubyXLModel'
+          data = CukerSpecHelper.snapshot_retrieve snapshot_name
+          # p data
+          w.make_new_file "reports/#{LOG_TIME_TODAY}/demo_sample_05"
+          data.each {|row| w.write_new_row row}
+          w.finishup
+        end
       end
     end
 

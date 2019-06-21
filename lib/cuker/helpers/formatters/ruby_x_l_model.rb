@@ -2,6 +2,7 @@ require_relative '../writers/abstract_writer'
 
 module Cuker
   module ExcelSupport
+    EXCEL_BLANK = ''
 
     def surround_panel str, title = nil
       if title
@@ -17,6 +18,10 @@ module Cuker
       else
         "{color} #{str} {color}"
       end
+    end
+
+    def excel_content_format ary
+      ary.join "\n"
     end
 
     def excel_title keyword, title_ary
@@ -87,14 +92,6 @@ module Cuker
 
     def make_order
       [
-          # {:counter => "Sl.No"},
-          # {:feature_title => "Feature"},
-          # {:s_type => "Type"},
-          # {:s_title => "Title"},
-          # {:tags => special_tag_titles},
-          # {:file_s_num => "S.no"},
-          # {:file_name => "File"},
-          # {:other_tags => "Tags"},
           {:counter => "Sl.No"},
           {:feature => "Feature"},
           {:background => "Background"},
@@ -103,8 +100,8 @@ module Cuker
           {:result => "Result"},
           {:tested_by => "Tested By"},
           {:test_designer => "Test Designer"},
+          {:comments => "Comments"},
       ]
-
 # todo: make title order reorderable
 # todo: tag based reordering
     end
@@ -151,17 +148,20 @@ module Cuker
                 feat_content = excel_title FEATURE, feat_title
                 bg_content = [excel_title(BACKGROUND, item_title)] + content_ary
               else
-                if type == :Scenario or type == :ScenarioOutline
-                  row_hsh[:counter] = "#{feat_counter}.#{in_feat_counter += 1}"
-                  row_hsh[:feature] = feat_content
-                  row_hsh[:background] = bg_content
-                  row_hsh[:scenario] = [excel_title(type.to_s, item_title)] + content_ary
-                  row_hsh[:result] = EXCEL_CONSTS::RESULT::PENDING
-                  row_hsh[:tested_by] = ""
-                  row_hsh[:test_designer] = ""
+                # if type == :Scenario or type == :ScenarioOutline
+                scen_content = [excel_title(type.to_s, item_title)] + content_ary
 
-                elsif type == :ScenarioOutline
-                  row_hsh[:examples] = ""
+                row_hsh[:counter] = "#{feat_counter}.#{in_feat_counter += 1}"
+                row_hsh[:feature] = excel_content_format feat_content
+                row_hsh[:background] = excel_content_format bg_content
+                row_hsh[:scenario] = excel_content_format scen_content
+                row_hsh[:result] = EXCEL_CONSTS::RESULT::PENDING
+                row_hsh[:tested_by] = ""
+                row_hsh[:test_designer] = ""
+                row_hsh[:comments] = ""
+
+                if type == :ScenarioOutline
+                  row_hsh[:examples] = excel_content_format example_ary
                 end
                 row_ary = []
                 get_keys_ary(@order).each {|k| row_ary << (row_hsh[k])}
@@ -238,8 +238,8 @@ module Cuker
       if arg[:type] == :DataTable
         res = []
         arg[:rows].each_with_index do |row, i|
-          # sep = i == 0 ? EXCEL_TITLE_SEP : EXCEL_ROW_SEP
-          # res << surround(row[:cells].map {|hsh| excel_blank_pad hsh[:value]}, sep)
+          sep = i == 0 ? EXCEL_TITLE_SEP : EXCEL_ROW_SEP
+          res << surround(row[:cells].map {|hsh| excel_blank_pad hsh[:value]}, sep)
         end
         return res
       elsif arg[:type] == :DocString

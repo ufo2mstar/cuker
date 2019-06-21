@@ -11,5 +11,6 @@ group :test do
 end
 
 # core
-
+# gem "table_print"
+# gem "text-table"
 # ext
