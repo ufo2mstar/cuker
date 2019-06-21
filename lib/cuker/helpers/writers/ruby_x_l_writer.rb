@@ -50,9 +50,8 @@ module Cuker
       premade = File.basename(file_name) =~ /xlsm/
       # premade = true
       # premade = false
-      # template_file_name = './lib/cuker/helpers/writers/simple_macro_template.xlsm'
-      #
-      template_file_name = './lib/cuker/helpers/writers/demo_file2.xlsm'
+      template_file_name = './lib/cuker/helpers/writers/simple_macro_template.xlsm'
+      # template_file_name = './lib/cuker/helpers/writers/demo_file2.xlsm'
       @file_name = premade ? template_file_name : file_name
 
       super @file_name
@@ -62,7 +61,6 @@ module Cuker
       # @workbook.add_worksheet('Acceptance Tests')
       # @workbook[0].sheet_name = 'Acceptance Tests'
 
-      # puts @workbook[0][0][2]
       @worksheets = @workbook.worksheets
 
       # todo: delete sheet convenienve method
@@ -94,7 +92,7 @@ module Cuker
     end
 
     def current_row
-      rows.size
+      rows.size - 1
     end
 
     def current_col
@@ -106,7 +104,7 @@ module Cuker
       row, col = current_row, current_col
       worksheet.insert_row(row)
       ary.each do |val|
-        worksheet.insert_cell(row, col, val)
+        worksheet.insert_cell(row, col, val.to_s)
         col += 1
       end
       @log.warn sheet_rows

@@ -2,8 +2,8 @@ require_relative '../../spec_helper'
 
 module Cuker
   RSpec.describe RubyXLWriter do
+    subject(:w) {RubyXLWriter.new}
     context 'init' do
-      subject(:w) {RubyXLWriter.new}
 
       it 'should have an xlsx extension' do
         expect(w.ext).to eq '.xlsm'
@@ -29,10 +29,10 @@ module Cuker
       it 'should write a title increment counts' do
         w.make_new_file "reports/#{LOG_TIME_TODAY}/demo_file1"
         expect(w.book.size).to eq 1
-        expect(w.active_file.current_row).to eq 1
+        expect(w.active_file.current_row).to eq 4
         w.write_title ['#', 'num', 'name']
-        expect(w.active_file.rows.size).to eq 1
-        expect(w.active_file.current_row).to eq 2
+        expect(w.active_file.rows.size).to eq 6
+        # expect(w.active_file.current_row).to eq 2
         w.finishup
       end
 
@@ -59,5 +59,17 @@ module Cuker
         w.finishup
       end
     end
+
+    context 'actually writing the result' do
+      it 'should generate the expected output' do
+        snapshot_name = 'snap-sample05-RubyXLModel'
+        data = CukerSpecHelper.snapshot_retrieve snapshot_name
+        # p data
+        w.make_new_file "reports/#{LOG_TIME_TODAY}/demo_sample_05"
+        data.each {|row| w.write_new_row row}
+        w.finishup
+      end
+    end
+
   end
 end
