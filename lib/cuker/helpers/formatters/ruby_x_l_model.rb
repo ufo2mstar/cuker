@@ -99,7 +99,7 @@ module Cuker
     EXCEL_ROW_SEP = '|'
     EXCEL_EMPTY_LINE = ' '
     EXCEL_NEW_LINE = "\n"
-    EXCEL_HORIZ_RULER = ''
+    EXCEL_HORIZ_RULER = '   '
 
     EXCEL_OFFSET = 6
 
@@ -307,6 +307,7 @@ module Cuker
           eg_body.map {|row_hsh| example_data << get_table_row(row_hsh)}
 
           res << tableify(example_data)
+          res << EXCEL_HORIZ_RULER
         else
           @log.warn "Unknown type '#{example[:type]}' found in file @ #{@file_path}"
         end

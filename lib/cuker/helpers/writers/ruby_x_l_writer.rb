@@ -114,9 +114,9 @@ module Cuker
 
       link_sheet_name = "#{ary[0]} results"
       workbook.add_worksheet(link_sheet_name)
-      back_link_value = @link_sheet[0][0].value
-      back_link_formula = @link_sheet[0][0].formula
-      @workbook[link_sheet_name].add_cell(0, 0, back_link_value, back_link_formula)
+      # back_link_value = @link_sheet[0][0].value
+      # back_link_formula = @link_sheet[0][0].formula
+      # @workbook[link_sheet_name].add_cell(0, 0, back_link_value, back_link_formula)
       # workbook.worksheets <<
           # (link_sheet_name)
 

@@ -29,11 +29,11 @@
 - "  scen desc line 3"
 - abcd abcdefg ab abcdef abc abcdef abcdefg
 - abcd  ab abcde  abc abcde
-- "  {panel}|{panel} *Given* bg step 1"
-- " *When* bg step 2"
-- " *Then* bg step 3"
-- "  *And* bg step 4"
-- "  *But* bg step 5"
+- "  {panel}|{panel} *Given* scen step 1"
+- " *When* scen step 2"
+- " *Then* scen step 3"
+- "  *And* scen step 4"
+- "  *But* scen step 5"
 - " *When* table"
 - "||tab||tab||tab||"
 - "|1| |1|"
@@ -49,11 +49,11 @@
 - abcdef abc
 - scen outline desc abcde abcdef abcdefg
 - abcdef ab abc abcde abcd  abcd ab abc abcdefg
-- "  {panel}|{panel} *Given* bg step 1"
-- " *When* bg step 2"
-- " *Then* bg step 3"
-- "  *And* bg step 4"
-- "  *But* bg step 5"
+- "  {panel}|{panel} *Given* sout step 1"
+- " *When* sout step 2"
+- " *Then* sout step 3"
+- "  *And* sout step 4"
+- "  *But* sout step 5"
 - " *When* this *_<thing>_*"
 - "  *And* this *_<thing>_*"
 - "||tab||"

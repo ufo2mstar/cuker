@@ -24,11 +24,11 @@ Feature: feat name ab abcde abcdefg abcdefg abc   abcde abcdef abcd ab abc abcd 
   scen desc line 2 abcd abc ab abcdefg abc abcdef ab abcdef  abcd abcde abcdefg  abcde
   scen desc line 3 abcd abcdefg ab abcdef abc abcdef abcdefg abcd  ab abcde  abc abcde
 
-    Given bg step 1
-    When bg step 2
-    Then bg step 3
-    And bg step 4
-    But bg step 5
+    Given scen step 1
+    When scen step 2
+    Then scen step 3
+    And scen step 4
+    But scen step 5
     When table
       | tab | tab | tab |
       | 1   |     | 1   |
@@ -47,11 +47,11 @@ Feature: feat name ab abcde abcdefg abcdefg abc   abcde abcdef abcd ab abc abcd 
     #rand after so tag comment
   Scenario Outline: scen outline name <title>   abcde abcdefg abc ab   abcd abcdefg abcdef abcd ab abcde abcdef abc
   scen outline desc abcde abcdef abcdefg abcdef ab abc abcde abcd  abcd ab abc abcdefg
-    Given bg step 1
-    When bg step 2
-    Then bg step 3
-    And bg step 4
-    But bg step 5
+    Given sout step 1
+    When sout step 2
+    Then sout step 3
+    And sout step 4
+    But sout step 5
     When this <thing>
     #rand in SO comment
     And this <thing>

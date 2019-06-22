@@ -32,7 +32,7 @@ module Cuker
         expect(w.active_file.current_row).to eq 4
         w.write_title ['#', 'num', 'name']
         expect(w.active_file.rows.size).to eq 6
-        # expect(w.active_file.current_row).to eq 2
+        expect(w.active_file.current_row).to eq 5
         w.finishup
       end
 
@@ -42,8 +42,8 @@ module Cuker
         w.write_new_row %w[1 1 one]
         w.write_new_row %w[2 2 two]
         w.write_new_row %w[3 3 three]
-        # expect(w.active_file.rows.size).to eq 4
-        # expect(w.active_file.current_row).to eq 5
+        expect(w.active_file.rows.size).to eq 9
+        expect(w.active_file.current_row).to eq 8
         w.finishup
       end
 
@@ -64,7 +64,6 @@ module Cuker
 
       context 'test extract methods' do
         it 'handles BG steps and Tables and Examples properly' do
-          # feat_path = 'spec/cuker_spec/testdata/sample'
           feat_path = 'spec/cuker_spec/testdata/sample/05'
           gr = GherkinRipper.new feat_path
           ast_map = gr.ast_map

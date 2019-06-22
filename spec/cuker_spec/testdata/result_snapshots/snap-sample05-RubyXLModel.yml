@@ -22,11 +22,11 @@
 
       scen desc line 2 abcd abc ab abcdefg abc abcdef ab abcdef  abcd abcde abcdefg  abcde
       scen desc line 3 abcd abcdefg ab abcdef abc abcdef abcdefg abcd  ab abcde  abc abcde
-     Given bg step 1
-      When bg step 2
-      Then bg step 3
-       And bg step 4
-       But bg step 5
+     Given scen step 1
+      When scen step 2
+      Then scen step 3
+       And scen step 4
+       But scen step 5
       When table
            +-----+-----+-----+
            | tab | tab | tab |
@@ -64,11 +64,11 @@
     ScenarioOutline:
     scen outline name <title>   abcde abcdefg abc ab   abcd abcdefg abcdef abcd ab abcde abcdef abc
     scen outline desc abcde abcdef abcdefg abcdef ab abc abcde abcd  abcd ab abc abcdefg
-     Given bg step 1
-      When bg step 2
-      Then bg step 3
-       And bg step 4
-       But bg step 5
+     Given sout step 1
+      When sout step 2
+      Then sout step 3
+       And sout step 4
+       But sout step 5
       When this <thing>
        And this <thing>
            +-----+
@@ -79,32 +79,19 @@
            | two |
            +-----+
       Then that <thang>
-  - |-
-    Examples:
-    example name 1234 123 - 123456 1 12345 --- 1 12345 123456  '12' 1234 12  123
-    example desc
-    +--------------+-------+-------+
-    |    title     | thing | thang |
-    +--------------+-------+-------+
-    | case 1       | 1     | one   |
-    | case 2       | 1     | one   |
-    |              |       |       |
-    | blank case 3 |       |       |
-    |              |       |       |
-    +--------------+-------+-------+
-    Examples:
-    example name  123 123456 12 1 1234 1 12345 123.. 12 ,1234 123456  12345
-    example desc abcd abcdefg ab abcdef abc abcdef abcdefg abcd  ab abcde  abc abcde
-        abcde  abcdef abcdefg abcde abcd  abc abcd ab abcdefg ab abc abcd
-    +--------------+-------+--+-------+--+
-    |    title     | thing |  | thang |  |
-    +--------------+-------+--+-------+--+
-    | case 1       | 1     |  | one   |  |
-    | case 2       | 1     |  | one   |  |
-    |              |       |  |       |  |
-    | blank case 3 |       |  |       |  |
-    |              |       |  |       |  |
-    +--------------+-------+--+-------+--+
+  - "Examples:\nexample name 1234 123 - 123456 1 12345 --- 1 12345 123456  '12' 1234
+    12  123\nexample desc\n+--------------+-------+-------+\n|    title     | thing
+    | thang |\n+--------------+-------+-------+\n| case 1       | 1     | one   |\n|
+    case 2       | 1     | one   |\n|              |       |       |\n| blank case
+    3 |       |       |\n|              |       |       |\n+--------------+-------+-------+\n
+    \  \nExamples:\nexample name  123 123456 12 1 1234 1 12345 123.. 12 ,1234 123456
+    \ 12345\nexample desc abcd abcdefg ab abcdef abc abcdef abcdefg abcd  ab abcde
+    \ abc abcde\n    abcde  abcdef abcdefg abcde abcd  abc abcd ab abcdefg ab abc
+    abcd\n+--------------+-------+--+-------+--+\n|    title     | thing |  | thang
+    |  |\n+--------------+-------+--+-------+--+\n| case 1       | 1     |  | one
+    \  |  |\n| case 2       | 1     |  | one   |  |\n|              |       |  |       |
+    \ |\n| blank case 3 |       |  |       |  |\n|              |       |  |       |
+    \ |\n+--------------+-------+--+-------+--+\n   "
   - Pending
   - ''
   - ''
