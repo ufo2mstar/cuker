@@ -4,6 +4,7 @@ require 'text-table'
 module Cuker
   module ExcelSupport
     EXCEL_BLANK = ''
+    EXCEL_TABLE_PADDING = 7
 
     def surround_panel str, title = nil
       if title
@@ -62,16 +63,25 @@ module Cuker
 
     # Properly spaced out tables
     # def tableify header_ary, rows_ary
-    def tableify header_and_rows_ary
+    # @return [Array] tableified string array
+    # https://www.rubydoc.info/gems/text-table/1.2.4
+    def tableify header_and_rows_ary, padding = 0
       table = Text::Table.new(:horizontal_padding => 1,
                               :vertical_boundary => '-',
                               :horizontal_boundary => '|',
                               :boundary_intersection => '+',
-                              :first_row_is_head => true)
-      # table.head = header_ary
-      # table.rows = rows_ary
+                              :first_row_is_head => true,
+                              # :rows => header_and_rows_ary # works only for to_table
+      )
+      table.head = header_and_rows_ary[0]
+      table.rows = header_and_rows_ary[1..-1]
+
       # table.to_s
-      header_and_rows_ary.to_table.to_s
+      # table.rows = header_and_rows_ary
+      # table = header_and_rows_ary.to_table(:first_row_is_head => true)
+
+      res = table.to_s.split("\n")
+      res.map {|row_str| ' ' * padding + row_str}
     end
 
   end
@@ -240,9 +250,8 @@ module Cuker
           # step_ary << excel_monospace(step_str)
           step_ary << (step_str)
 
-          step_ary += tableify(get_step_args(step[:argument])).split("\n") if step[:argument]
+          step_ary += tableify(get_step_args(step[:argument]), EXCEL_TABLE_PADDING) if step[:argument]
           # todo: DOC string handle?
-          # todo: padding as needed
           yield step_ary
         else
           @log.warn "Unknown type '#{item[:type]}' found in file @ #{@file_path}"
@@ -255,9 +264,9 @@ module Cuker
       if arg[:type] == :DataTable
         res = []
         arg[:rows].each_with_index do |row, i|
-          sep = i == 0 ? EXCEL_TITLE_SEP : EXCEL_ROW_SEP
+          # sep = i == 0 ? EXCEL_TITLE_SEP : EXCEL_ROW_SEP
           # res << surround(row[:cells].map {|hsh| excel_blank_pad hsh[:value]}, sep)
-          res << row[:cells].map {|hsh|hsh[:value]}
+          res << row[:cells].map {|hsh| hsh[:value]}
         end
         return res
       elsif arg[:type] == :DocString
@@ -285,17 +294,19 @@ module Cuker
       res = []
       examples.each do |example|
         if example[:type] == :Examples
-          # res << EXCEL_HORIZ_RULER
+          # example_data << EXCEL_HORIZ_RULER
+          example_data = []
 
           eg_title = excel_title EXAMPLES, get_title_ary(example)
           res << eg_title
 
-          eg_header = surround(get_table_row(example[:tableHeader]), EXCEL_TITLE_SEP)
-          res << eg_header
+          eg_header = get_table_row(example[:tableHeader])
+          example_data << eg_header
 
           eg_body = example[:tableBody]
-          eg_body.map {|row_hsh| res << surround(get_table_row(row_hsh), EXCEL_ROW_SEP)}
+          eg_body.map {|row_hsh| example_data << get_table_row(row_hsh)}
 
+          res << tableify(example_data)
         else
           @log.warn "Unknown type '#{example[:type]}' found in file @ #{@file_path}"
         end

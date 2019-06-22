@@ -71,7 +71,7 @@ module CukerSpecHelper
 
     puts res
     puts "successfully stored in '#{snapshot_file_path}' - \n=> #{data}\n=> #{res}}"
-    exit
+    # exit
   end
 
   def get_file snapshot_partial, path
@@ -118,18 +118,14 @@ module CukerSpecHelper
     CukerSpecHelper.debug_show(rows)
     begin
       exp_rows = CukerSpecHelper.snapshot_retrieve snapshot_name
-      CukerSpecHelper.compare_arys rows, exp_rows # suddenly not working for some reason!
+      # CukerSpecHelper.compare_arys rows, exp_rows # suddenly not working for some reason!
       return [rows, exp_rows]
-        # rescue IOError => e
-        #   raise e
     rescue NotImplementedError => e
       #todo: make a better handle for snapshotting
       warn "\n#{e.message}\n... So creating a new snapshot => '#{snapshot_name}'"
       CukerSpecHelper.snapshot_store(rows, snapshot_name)
       # retry # having issues with retest scripts
-      CukerSpecHelper.snapshot_compare(rows, snapshot_name)
-    else
-      # puts "\npassing for rows: #{rows.size}, snapshot_name: #{snapshot_name}"
+      return CukerSpecHelper.snapshot_compare(rows, snapshot_name)
     end
     [nil, nil]
   end

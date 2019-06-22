@@ -28,12 +28,13 @@
        And bg step 4
        But bg step 5
       When table
-    +-----+-----+-----+
-    | tab | tab | tab |
-    | 1   |     | 1   |
-    |     |     |     |
-    | two | two |     |
-    +-----+-----+-----+
+           +-----+-----+-----+
+           | tab | tab | tab |
+           +-----+-----+-----+
+           | 1   |     | 1   |
+           |     |     |     |
+           | two | two |     |
+           +-----+-----+-----+
       Then kod 1
        And kod2
        But kod3
@@ -70,33 +71,40 @@
        But bg step 5
       When this <thing>
        And this <thing>
-    +-----+
-    | tab |
-    | 1   |
-    |     |
-    | two |
-    +-----+
+           +-----+
+           | tab |
+           +-----+
+           | 1   |
+           |     |
+           | two |
+           +-----+
       Then that <thang>
   - |-
     Examples:
     example name 1234 123 - 123456 1 12345 --- 1 12345 123456  '12' 1234 12  123
     example desc
-    |title|thing|thang|
-    |case 1|1|one|
-    |case 2|1|one|
-    ||||
-    |blank case 3|||
-    ||||
+    +--------------+-------+-------+
+    |    title     | thing | thang |
+    +--------------+-------+-------+
+    | case 1       | 1     | one   |
+    | case 2       | 1     | one   |
+    |              |       |       |
+    | blank case 3 |       |       |
+    |              |       |       |
+    +--------------+-------+-------+
     Examples:
     example name  123 123456 12 1 1234 1 12345 123.. 12 ,1234 123456  12345
     example desc abcd abcdefg ab abcdef abc abcdef abcdefg abcd  ab abcde  abc abcde
         abcde  abcdef abcdefg abcde abcd  abc abcd ab abcdefg ab abc abcd
-    |title|thing||thang||
-    |case 1|1||one||
-    |case 2|1||one||
-    ||||||
-    |blank case 3|||||
-    ||||||
+    +--------------+-------+--+-------+--+
+    |    title     | thing |  | thang |  |
+    +--------------+-------+--+-------+--+
+    | case 1       | 1     |  | one   |  |
+    | case 2       | 1     |  | one   |  |
+    |              |       |  |       |  |
+    | blank case 3 |       |  |       |  |
+    |              |       |  |       |  |
+    +--------------+-------+--+-------+--+
   - Pending
   - ''
   - ''
