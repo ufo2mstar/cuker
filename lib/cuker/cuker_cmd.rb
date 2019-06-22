@@ -19,34 +19,43 @@ module Cuker
   class CukerCmd
     include LoggerSetup
 
-    CONSTS = []
-    PRESETS = {
-        :simple_csv => [CsvModel, CsvWriter],
-        :simple_jira => [JiraModel, JiraWriter],
-        :monospaced_jira => [JiraMonoModel, JiraWriter],
-        # :simple_excel => [RubyXLModel, RubyXLWriter],
-    }
+    PRODUCERS = {}
+    PRODUCERS[:simple_csv] = [CsvModel, CsvWriter]
+    PRODUCERS[:simple_jira] = [JiraModel, JiraWriter]
+    PRODUCERS[:monospaced_jira] = [JiraMonoModel, JiraWriter]
+    PRODUCERS[:jira_excel] = [RubyXLModel, RubyXLWriter]
+
+    PRESETS = {}
+    PRESETS[:jira_package] = [:simple_jira, :jira_excel]
+    PRESETS[:jira_text] = [:simple_jira]
+    PRESETS[:jira_excel] = [:jira_excel]
+
 
     # desc "report PRESET_KEY [FEATURE_PATH [REPORT_PATH [REPORT_FILE_NAME [LOG_LEVEL]]]]",
     #      "reports parsed results into \nREPORT_PATH/REPORT_FILE_NAME \nfor all '*.feature' files in the given FEATURE_PATH\nSTDIO LOG_LEVEL adjustable\n"
 
     def report preset_key, feat_path = "../", report_file_name = 'sample_report', report_path = ".", log_level = :error
       init_logger log_level
-      report_path = File.join report_path, 'reports', LOG_TIME_TODAY
+      output_files = []
+      producers = PRESETS[preset_key]
+      @log.info
+      producers.each do |producer|
+        report_path = File.join report_path, 'reports', LOG_TIME_TODAY
+        msg = "running '#{preset_key.to_s.upcase}' reporter @\n Feature Path: '#{feat_path}' \n Report Path => '#{report_path}' - '#{report_file_name}'\n"
 
-      msg = "running '#{preset_key.to_s.upcase}' reporter @\n Feature Path: '#{feat_path}' \n Report Path => '#{report_path}' - '#{report_file_name}'\n"
+        @log.info msg
+        puts msg
+        model, writer = PRODUCERS[producer]
 
-      @log.info msg
-      puts msg
+        gr = GherkinRipper.new feat_path
+        ast_map = gr.ast_map
+        preset_model = model.new ast_map
+        preset_writer = writer.new
+        grr = GherkinReporter.new preset_writer, preset_model, report_path, report_file_name
 
-      model, writer = PRESETS[preset_key]
-
-      gr = GherkinRipper.new feat_path
-      ast_map = gr.ast_map
-      preset_model = model.new ast_map
-      preset_writer = writer.new
-      grr = GherkinReporter.new preset_writer, preset_model, report_path, report_file_name
-      File.expand_path grr.write
+        output_files << File.expand_path(grr.write)
+      end
+      output_files
     end
 
     private

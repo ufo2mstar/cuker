@@ -23,6 +23,7 @@ class GherkinReporter
   def write
     # todo: why don't we just give the writer the model?
     file_name = @writer.make_new_file @file_path
+    #todo: redo, causing issue!
     @writer.write_title @model.title
     @model.data.each {|row| @writer.write_new_row row}
     @writer.finishup

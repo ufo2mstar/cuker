@@ -7,8 +7,17 @@ module Cuker
 
     context "Constants validation" do
       it 'should contain the following preset locations' do
+        res = CukerCmd::PRODUCERS.keys
+        # exp = [:simple_csv]
+        # exp = [:simple_csv, :simple_jira]
+        # exp = [:simple_csv, :simple_jira, :monospaced_jira]
+        exp = [:simple_csv, :simple_jira, :monospaced_jira, :jira_excel]
+        expect(res).to eq exp
+      end
+
+      it 'should contain the following preset locations' do
         res = CukerCmd::PRESETS.keys
-        exp = [:simple_csv, :simple_jira, :monospaced_jira]
+        exp = [:jira_package, :jira_text, :jira_excel]
         expect(res).to eq exp
       end
     end
@@ -17,7 +26,20 @@ module Cuker
       File.rename res, "#{res}#{REPORT_FILE_NAME}"
     end
 
-    context "ccmd usage" do
+    context "ccmd preset usage" do
+      let(:file_name) {"sample_report"}
+      let(:feat_path) {"spec/cuker_spec/testdata/sample/05*"}
+      it 'should excel' do
+        local_file_name = 'excel_jira'
+        res = cc.report :jira_package, feat_path, local_file_name
+        exp_name = "^.*:.*reports.*#{local_file_name}.*"
+        expect(res.size).to eq(2)
+        # expect(res).to match(exp_name)
+        # demo_rename res
+      end
+    end
+
+    xcontext "ccmd preset usage" do
       # skip "gp cmd usage" do
       let(:file_name) {"sample_report"}
       let(:feat_path) {"spec/cuker_spec/testdata/sample/05*"}
