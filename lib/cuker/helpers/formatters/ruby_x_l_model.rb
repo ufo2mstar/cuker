@@ -1,4 +1,5 @@
 require_relative '../writers/abstract_writer'
+require 'text-table'
 
 module Cuker
   module ExcelSupport
@@ -59,6 +60,20 @@ module Cuker
       s.empty? ? EXCEL_BLANK : s
     end
 
+    # Properly spaced out tables
+    # def tableify header_ary, rows_ary
+    def tableify header_and_rows_ary
+      table = Text::Table.new(:horizontal_padding => 1,
+                              :vertical_boundary => '-',
+                              :horizontal_boundary => '|',
+                              :boundary_intersection => '+',
+                              :first_row_is_head => true)
+      # table.head = header_ary
+      # table.rows = rows_ary
+      # table.to_s
+      header_and_rows_ary.to_table.to_s
+    end
+
   end
   class RubyXLModel < AbstractModel
     include LoggerSetup
@@ -75,6 +90,8 @@ module Cuker
     EXCEL_EMPTY_LINE = ' '
     EXCEL_NEW_LINE = "\n"
     EXCEL_HORIZ_RULER = ''
+
+    EXCEL_OFFSET = 6
 
     def initialize ast_map
       super
@@ -216,14 +233,14 @@ module Cuker
         if step[:type] == :Step
           step_ary = []
           step_str = [
-              ((excel_bold(step[:keyword].strip)).rjust(6)), # bolding the keywords
+              ((excel_bold(step[:keyword].strip)).rjust(EXCEL_OFFSET)), # bolding the keywords
               (step[:text].strip)
           ].join(' ')
 
           # step_ary << excel_monospace(step_str)
           step_ary << (step_str)
 
-          step_ary += in_step_args(step[:argument]) if step[:argument]
+          step_ary += tableify(get_step_args(step[:argument])).split("\n") if step[:argument]
           # todo: DOC string handle?
           # todo: padding as needed
           yield step_ary
@@ -234,12 +251,13 @@ module Cuker
     end
 
     # helps handle tables for now
-    def in_step_args arg
+    def get_step_args arg
       if arg[:type] == :DataTable
         res = []
         arg[:rows].each_with_index do |row, i|
           sep = i == 0 ? EXCEL_TITLE_SEP : EXCEL_ROW_SEP
-          res << surround(row[:cells].map {|hsh| excel_blank_pad hsh[:value]}, sep)
+          # res << surround(row[:cells].map {|hsh| excel_blank_pad hsh[:value]}, sep)
+          res << row[:cells].map {|hsh|hsh[:value]}
         end
         return res
       elsif arg[:type] == :DocString

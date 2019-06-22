@@ -36,7 +36,8 @@ module Cuker
 
         rows = jm.data
         snapshot_name = 'snap-sample05-JiraModel'
-        CukerSpecHelper.snapshot_compare rows, snapshot_name
+        res_rows, exp_rows = CukerSpecHelper.snapshot_compare rows, snapshot_name
+        expect(res_rows.join "\n").to be_similar_to exp_rows.join "\n"
       end
     end
 

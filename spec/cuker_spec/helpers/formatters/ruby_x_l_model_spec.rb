@@ -56,7 +56,8 @@ module Cuker
 
         rows = rxlm.data
         snapshot_name = 'snap-sample05-RubyXLModel'
-        CukerSpecHelper.snapshot_compare rows, snapshot_name
+        res_rows, exp_rows = CukerSpecHelper.snapshot_compare rows, snapshot_name
+        expect(res_rows.join "\n").to be_similar_to exp_rows.join "\n"
       end
     end
 
@@ -90,12 +91,32 @@ module Cuker
       puts table.to_s
 
       table = Text::Table.new :rows => [['a', 'b'], ['c', 'd']],
-          :horizontal_padding    => 1,
-          :vertical_boundary     => '-',
-          :horizontal_boundary   => '|',
-          :boundary_intersection => '+'
+                              :horizontal_padding => 1,
+                              :vertical_boundary => '-',
+                              :horizontal_boundary => '|',
+                              :boundary_intersection => '.'
 
       puts table.to_s
+    end
+
+    it 'should print this data as expected' do
+      extend ExcelSupport
+      header_ary = %w[header1 head2 h3]
+      rows_ary = [
+          ['a', 'b', 'c'],
+          %w[kod hello k]
+      ]
+      # res = tableify header_ary, rows_ary
+      res = tableify rows_ary.unshift header_ary
+      exp = "+---------+-------+----+\n
+| header1 | head2 | h3 |\n
++---------+-------+----+\n
+| a       | b     | c  |\n
+| kod     | hello | k  |\n
++---------+-------+----+\n"
+
+      expect(res).to eq exp
+      expect(res).to be_similar_to exp
     end
   end
 end

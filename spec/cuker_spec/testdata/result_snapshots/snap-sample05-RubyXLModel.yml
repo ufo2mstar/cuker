@@ -28,10 +28,12 @@
        And bg step 4
        But bg step 5
       When table
-    |tab|tab|tab|
-    |1||1|
-    ||||
-    |two|two||
+    +-----+-----+-----+
+    | tab | tab | tab |
+    | 1   |     | 1   |
+    |     |     |     |
+    | two | two |     |
+    +-----+-----+-----+
       Then kod 1
        And kod2
        But kod3
@@ -68,10 +70,12 @@
        But bg step 5
       When this <thing>
        And this <thing>
-    |tab|
-    |1|
-    ||
-    |two|
+    +-----+
+    | tab |
+    | 1   |
+    |     |
+    | two |
+    +-----+
       Then that <thang>
   - |-
     Examples:
