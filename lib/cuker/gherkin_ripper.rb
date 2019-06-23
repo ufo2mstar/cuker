@@ -54,6 +54,7 @@ module Cuker
     def parse_all
       parse_hsh = {}
       @features.each do |feat|
+        @log.info "Parsing file: #{feat}"
         feature_text = File.read(feat)
         scanner = TokenScanner.new(feature_text)
         parse_handle(feat) {

@@ -37,7 +37,7 @@ module Cuker
   class JiraFile < AbstractFile
     def initialize file_name
       super file_name
-      @log.info "Making new #{self.class} => #{file_name}"
+      @log.debug "Making new #{self.class} => #{file_name}"
       @jira_file = File.open(file_name, "wb")
       @jira_file.close
     end

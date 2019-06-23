@@ -70,6 +70,14 @@ module Cuker
     def new_name name
       name.nil? ? "Sheet_#{@book.size + 1}" : name
     end
+
+    def write model, output_file_path
+      file_name = make_new_file output_file_path
+      write_title model.title
+      model.data.each {|row| write_new_row row}
+      finishup
+      file_name
+    end
   end
 
   class AbstractFile

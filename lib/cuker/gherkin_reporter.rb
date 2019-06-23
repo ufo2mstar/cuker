@@ -10,17 +10,21 @@ class GherkinReporter
 
   attr_accessor :file_path, :workbook
 
-  def initialize(writer, model, loc, file_name = nil)
+  def initialize(writer, model, path, file_name = nil)
     init_logger
 
     @writer = writer
     @model = model
 
-    @file_path = FileHelper.file_path(loc, "#{LOG_TIME_NOW}_#{file_name}")
+    @file_path = FileHelper.file_path(path, "#{LOG_TIME_NOW}_#{file_name}")
     @log.info "Report file => #{@file_name}#{@writer.ext}"
   end
 
   def write
+    @writer.write @model, @file_path
+  end
+
+  def old_write
     # todo: why don't we just give the writer the model?
     file_name = @writer.make_new_file @file_path
     #todo: redo, causing issue!

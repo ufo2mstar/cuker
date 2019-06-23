@@ -40,6 +40,13 @@ module Cuker
     def finishup
       @active_file.finishup if @active_file
     end
+
+    def write model, output_file_path
+      file_name = make_new_file output_file_path
+      model.data.each(&method(:write_new_row))
+      finishup
+      file_name
+    end
   end
 
   class RubyXLFile < AbstractFile
@@ -55,7 +62,7 @@ module Cuker
       @file_name = premade ? template_file_name : file_name
 
       super @file_name
-      @log.info "Making new #{self.class} => #{@file_name}"
+      @log.debug "Making new #{self.class} => #{@file_name}"
 
       @workbook = premade ? RubyXL::Parser.parse(@file_name) : RubyXL::Workbook.new
       # @workbook.add_worksheet('Acceptance Tests')
@@ -118,10 +125,10 @@ module Cuker
       # back_link_formula = @link_sheet[0][0].formula
       # @workbook[link_sheet_name].add_cell(0, 0, back_link_value, back_link_formula)
       # workbook.worksheets <<
-          # (link_sheet_name)
+      # (link_sheet_name)
 
-      @log.info workbook.worksheets.map(&:sheet_name)
-      @log.info sheet_rows
+      @log.trace workbook.worksheets.map(&:sheet_name)
+      # @log.debug sheet_rows
       # @log.debug worksheet.rows
     end
 
