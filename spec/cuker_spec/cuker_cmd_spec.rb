@@ -28,10 +28,11 @@ module Cuker
 
     context "ccmd preset usage" do
       let(:file_name) {"sample_report"}
-      let(:feat_path) {"spec/cuker_spec/testdata/sample/05*"}
-      # let(:feat_path) {"spec/cuker_spec/testdata/good/*"}
+      # let(:feat_path) {"spec/cuker_spec/testdata/sample/05*"}
+      let(:feat_path) {"spec/cuker_spec/testdata/good/*"}
       it 'should excel' do
         local_file_name = "cmd test"
+        cc = CukerCmd.new
         res = cc.report :jira_package, feat_path, local_file_name
         exp_name = "^.*:.*reports.*#{LOG_TIME_TODAY}.*#{local_file_name}.*"
         expect(res.class).to eq(Array)

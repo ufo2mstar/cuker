@@ -12,13 +12,13 @@ module Cuker
 
     def write_title title_ary
       super title_ary
-      @log.debug "rxl write title"
+      @log.trace "rxl write title: #{title_ary}"
       @active_file.add_row title_ary
     end
 
     def write_new_row row_ary
       super row_ary
-      @log.debug "rxl write row: #{row_ary}"
+      @log.trace "rxl write row: #{row_ary}"
       @active_file.add_row row_ary
     end
 

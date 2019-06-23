@@ -10,13 +10,13 @@ module Cuker
 
     def write_title title_ary
       super title_ary
-      @log.debug "csv write title"
+      @log.trace "csv write title"
       @active_file.add_row title_ary
     end
 
     def write_new_row row_ary
       super row_ary
-      @log.debug "csv write row: #{row_ary}"
+      @log.trace "csv write row: #{row_ary}"
       @active_file.add_row row_ary
     end
 

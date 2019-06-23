@@ -21,14 +21,15 @@ module Cuker
 
       @location = path.strip
       @location = '.' if @location.empty? # handle blank path searching all features
-      @features = get_features @location
+
+      ext = '.feature'
+      @features = get_files @location, ext
 
       @log.trace "Gherkin ripper running at #{path}"
-
       @parser = Gherkin::Parser.new
       @ast_map = {}
 
-      @log.info "Parsed '.feature' files @ #{path} = #{@features.size} files"
+      @log.trace "Parsed '.feature' files @ #{path} = #{@features.size} files"
     end
 
     def ast_map
@@ -41,13 +42,13 @@ module Cuker
     # if you need to ignore any pattern of files, change this regex to match those patterns
     IGNORE_EXP = /^$/
 
-    # dir glob for all feature files
-    # @param location dir location of all the feature files
-    def get_features(path_or_file)
-      ext = '.feature'
+    # dir glob for all files with extension = ext
+    # @param location dir location of all the ext files
+    def get_files(path_or_file, ext = '.feature')
       files = FileHelper.get_files(path_or_file, ext, IGNORE_EXP)
       files = FileHelper.get_file(path_or_file, ext, IGNORE_EXP) if files.empty?
       raise NoFilesFoundError.new "No '#{ext}' files found @ path '#{path_or_file}'... " if files.empty?
+      @log.info "Number of '#{ext}' files to parse : @#{path_or_file} = #{files.size}"
       files
     end
 

@@ -38,7 +38,11 @@ module Cuker
       init_logger log_level
       output_files = []
       producers = PRESETS[preset_key]
-      @log.info
+
+      @log.info "Using preset: #{preset_key} => #{producers}"
+      gr = GherkinRipper.new feat_path
+      ast_map = gr.ast_map
+
       producers.each do |producer|
         report_path = File.join report_path_input, 'reports', LOG_TIME_TODAY
         msg = "running '#{preset_key.to_s.upcase}' reporter @\n Feature Path: '#{feat_path}' \n Report Path => '#{report_path}' - '#{report_file_name}'\n"
@@ -47,8 +51,6 @@ module Cuker
         puts msg
         model, writer = PRODUCERS[producer]
 
-        gr = GherkinRipper.new feat_path
-        ast_map = gr.ast_map
         preset_model = model.new ast_map
         preset_writer = writer.new
         grr = GherkinReporter.new preset_writer, preset_model, report_path, report_file_name

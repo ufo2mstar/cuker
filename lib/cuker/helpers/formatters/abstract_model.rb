@@ -85,7 +85,7 @@ module Cuker
       if hsh[:tags] and hsh[:tags].any?
         hsh[:tags].map {|tag| tag[:name]}
       else
-        @log.warn "No Tags found in #{hsh[:keyword]} @ #{@file_path}"
+        @log.debug "No Tags found in #{hsh[:keyword]} @ #{@file_path}"
         []
       end
     end

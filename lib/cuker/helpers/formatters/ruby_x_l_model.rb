@@ -70,14 +70,17 @@ module Cuker
                               :vertical_boundary => '-',
                               :horizontal_boundary => '|',
                               :boundary_intersection => '+',
+                              # :boundary_intersection => '-',
+                              # :boundary_intersection => ' ',
                               :first_row_is_head => true,
-                              # :rows => header_and_rows_ary # works only for to_table
+      # :rows => header_and_rows_ary # works only for to_table
       )
       table.head = header_and_rows_ary[0]
       table.rows = header_and_rows_ary[1..-1]
 
       # table.to_s
       # table.rows = header_and_rows_ary
+      #
       # table = header_and_rows_ary.to_table(:first_row_is_head => true)
 
       res = table.to_s.split("\n")
@@ -119,6 +122,7 @@ module Cuker
 
     def make_order
       [
+# todo: template{:col_key => ["Title text",fill_color,font, etc]},
           {:counter => "Sl.No"},
           {:feature => "Feature"},
           {:background => "Background"},
@@ -154,7 +158,7 @@ module Cuker
 
     def make_rows
       if @asts.nil? or @asts.empty?
-        @log.warn "No asts to parse!"
+        @log.debug "No asts to parse!"
         return []
       end
 
@@ -164,6 +168,7 @@ module Cuker
 
       res = []
       @asts.each do |file_path, ast|
+        @log.info "Understanding file: #{file_path}"
         @file_path = file_path
         in_feat_counter = 0
 
@@ -216,7 +221,7 @@ module Cuker
         children = feat[:children]
         children.each {|child| yield feat_tags, feat_title, child}
       else
-        @log.warn "No Features found in file @ #{@file_path}"
+        @log.debug "No Features found in file @ #{@file_path}"
       end
     end
 
@@ -234,7 +239,7 @@ module Cuker
         yield tags, child[:type], item_title, get_steps(child), get_examples(child[:examples])
         #   todo: think about new examples in new lines
       else
-        @log.warn "Unknown type '#{child[:type]}' found in file @ #{@file_path}"
+        @log.debug "Unknown type '#{child[:type]}' found in file @ #{@file_path}"
       end
     end
 
@@ -254,7 +259,7 @@ module Cuker
           # todo: DOC string handle?
           yield step_ary
         else
-          @log.warn "Unknown type '#{item[:type]}' found in file @ #{@file_path}"
+          @log.debug "Unknown type '#{item[:type]}' found in file @ #{@file_path}"
         end
       end
     end
@@ -271,9 +276,9 @@ module Cuker
         return res
       elsif arg[:type] == :DocString
         # todo: handle if needed
-        @log.warn "Docstrings found in '#{arg}' found in file @ #{@file_path}"
+        @log.debug "Docstrings found in '#{arg}' found in file @ #{@file_path}"
       else
-        @log.warn "Unknown type '#{arg[:type]}' found in file @ #{@file_path}"
+        @log.debug "Unknown type '#{arg[:type]}' found in file @ #{@file_path}"
       end
       []
     end
@@ -285,7 +290,7 @@ module Cuker
         in_step(steps) {|step| content += step}
         content
       else
-        @log.warn "No Tags found in #{hsh[:keyword]} @ #{@file_path}"
+        @log.debug "No Tags found in #{hsh[:keyword]} @ #{@file_path}"
         []
       end
     end
@@ -309,7 +314,7 @@ module Cuker
           res << tableify(example_data)
           res << EXCEL_HORIZ_RULER
         else
-          @log.warn "Unknown type '#{example[:type]}' found in file @ #{@file_path}"
+          @log.debug "Unknown type '#{example[:type]}' found in file @ #{@file_path}"
         end
       end
       res
@@ -319,7 +324,7 @@ module Cuker
       if row_hsh[:type] == :TableRow
         row_hsh[:cells].map(&method(:get_table_cell))
       else
-        @log.warn "Expected :TableRow in #{row_hsh} @ #{@file_path}"
+        @log.debug "Expected :TableRow in #{row_hsh} @ #{@file_path}"
         []
       end
     end
@@ -329,7 +334,7 @@ module Cuker
         val = cell_hsh[:value].strip
         val.empty? ? EXCEL_BLANK : val
       else
-        @log.warn "Expected :TableCell in #{cell_hsh} @ #{@file_path}"
+        @log.debug "Expected :TableCell in #{cell_hsh} @ #{@file_path}"
         EXCEL_BLANK
       end
     end

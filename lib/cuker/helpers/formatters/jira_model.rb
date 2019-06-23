@@ -56,7 +56,7 @@ module Cuker
 
     def make_rows
       if @asts.nil? or @asts.empty?
-        @log.warn "No asts to parse!"
+        @log.debug "No asts to parse!"
         return []
       end
 
@@ -120,7 +120,7 @@ module Cuker
           yield feat_tags, feat_title, child
         end
       else
-        @log.warn "No Features found in file @ #{@file_path}"
+        @log.debug "No Features found in file @ #{@file_path}"
       end
     end
 
@@ -138,7 +138,7 @@ module Cuker
         yield tags, item_title, child[:type], get_steps(child)
         #   todo: think about new examples in new lines
       else
-        @log.warn "Unknown type '#{child[:type]}' found in file @ #{@file_path}"
+        @log.debug "Unknown type '#{child[:type]}' found in file @ #{@file_path}"
       end
     end
 
@@ -152,7 +152,7 @@ module Cuker
         content += in_example(hsh[:examples]) if hsh[:examples]
         content
       else
-        @log.warn "No Tags found in #{hsh[:keyword]} @ #{@file_path}"
+        @log.debug "No Tags found in #{hsh[:keyword]} @ #{@file_path}"
         []
       end
     end
@@ -173,7 +173,7 @@ module Cuker
           eg_body.map {|row_hsh| res << surround(in_table_row(row_hsh), '|')}
 
         else
-          @log.warn "Unknown type '#{item[:type]}' found in file @ #{@file_path}"
+          @log.debug "Unknown type '#{item[:type]}' found in file @ #{@file_path}"
         end
       end
       res
@@ -183,7 +183,7 @@ module Cuker
       if row_hsh[:type] == :TableRow
         row_hsh[:cells].map(&method(:in_table_cell))
       else
-        @log.warn "Expected :TableRow in #{row_hsh} @ #{@file_path}"
+        @log.debug "Expected :TableRow in #{row_hsh} @ #{@file_path}"
         []
       end
     end
@@ -193,7 +193,7 @@ module Cuker
         val = cell_hsh[:value].strip
         val.empty? ? JIRA_BLANK : val
       else
-        @log.warn "Expected :TableCell in #{cell_hsh} @ #{@file_path}"
+        @log.debug "Expected :TableCell in #{cell_hsh} @ #{@file_path}"
         JIRA_BLANK
       end
     end
@@ -214,7 +214,7 @@ module Cuker
           # todo: padding as needed
           yield step_ary
         else
-          @log.warn "Unknown type '#{item[:type]}' found in file @ #{@file_path}"
+          @log.debug "Unknown type '#{item[:type]}' found in file @ #{@file_path}"
         end
       end
     end
@@ -230,16 +230,16 @@ module Cuker
         return res
       elsif arg[:type] == :DocString
         # todo: handle if needed
-        @log.warn "Docstrings found in '#{arg}' found in file @ #{@file_path}"
+        @log.debug "Docstrings found in '#{arg}' found in file @ #{@file_path}"
       else
-        @log.warn "Unknown type '#{arg[:type]}' found in file @ #{@file_path}"
+        @log.debug "Unknown type '#{arg[:type]}' found in file @ #{@file_path}"
       end
       []
     end
 
     def name_merge hsh, max_len = TITLE_MAX_LEN
       str = ""
-      @log.debug "name merge for #{hsh} with max_len (#{max_len})"
+      @log.trace "name merge for #{hsh} with max_len (#{max_len})"
       str += add_newlines!(hsh[:name].strip.force_encoding("UTF-8"), max_len) if hsh[:name]
       str += add_newlines!("\n#{hsh[:description].strip.force_encoding("UTF-8")}", max_len) if hsh[:description]
       str
