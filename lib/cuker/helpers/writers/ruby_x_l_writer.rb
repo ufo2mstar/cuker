@@ -57,9 +57,11 @@ module Cuker
       premade = File.basename(file_name) =~ /xlsm/
       # premade = true
       # premade = false
-      template_file_name = './lib/cuker/helpers/writers/simple_macro_template.xlsm'
+      template_file_name = "simple_macro_template.xlsm"
+      template_file_path = File.join File.dirname(__FILE__), template_file_name
+      # template_file_name = './lib/cuker/helpers/writers/simple_macro_template.xlsm'
       # template_file_name = './lib/cuker/helpers/writers/demo_file2.xlsm'
-      @file_name = premade ? template_file_name : file_name
+      @file_name = premade ? template_file_path : file_name
 
       super @file_name
       @log.debug "Making new #{self.class} => #{@file_name}"
