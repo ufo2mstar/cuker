@@ -154,7 +154,10 @@ RSpec.configure do |config|
     # LoggerSetup.reset_appender_log_levels :warn
     # LoggerSetup.reset_appender_log_levels :error
     # LoggerSetup.reset_appender_log_levels :fatal, :info
-    LoggerSetup.reset_appender_log_levels :info, :trace
+    # LoggerSetup.reset_appender_log_levels :info, :trace
+
+    # LoggerSetup.reset_appender_log_levels :warn, :debug
+    LoggerSetup.reset_appender_log_levels :fatal, :info
   end
   config.after(:all) do
     # puts "after all"

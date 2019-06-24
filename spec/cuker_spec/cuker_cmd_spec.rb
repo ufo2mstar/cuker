@@ -30,7 +30,8 @@ module Cuker
       let(:file_name) {"sample_report"}
       # let(:feat_path) {"spec/cuker_spec/testdata/sample/05*"}
       let(:feat_path) {"spec/cuker_spec/testdata/good/*"}
-      it 'should excel' do
+      # let(:feat_path) {"spec/cuker_spec/testdata/good/data*"}
+      it 'should jira package print stuff' do
         local_file_name = "cmd test"
         cc = CukerCmd.new
         res = cc.report :jira_package, feat_path, local_file_name
@@ -38,7 +39,29 @@ module Cuker
         expect(res.class).to eq(Array)
         expect(res.size).to eq(2)
         res.each {|f| expect(f).to match(exp_name)}
-        # demo_rename res
+        res.each(&method(:demo_rename))
+      end
+
+      it 'should jira_text it' do
+        local_file_name = "cmd test"
+        cc = CukerCmd.new
+        res = cc.report :jira_text, feat_path, local_file_name
+        exp_name = "^.*:.*reports.*#{LOG_TIME_TODAY}.*#{local_file_name}.txt"
+        expect(res.class).to eq(Array)
+        expect(res.size).to eq(1)
+        res.each {|f| expect(f).to match(exp_name)}
+        res.each(&method(:demo_rename))
+      end
+
+      it 'should jira_excel it' do
+        local_file_name = "cmd test"
+        cc = CukerCmd.new
+        res = cc.report :jira_excel, feat_path, local_file_name
+        exp_name = "^.*:.*reports.*#{LOG_TIME_TODAY}.*#{local_file_name}.xls"
+        expect(res.class).to eq(Array)
+        expect(res.size).to eq(1)
+        res.each {|f| expect(f).to match(exp_name)}
+        res.each(&method(:demo_rename))
       end
     end
 

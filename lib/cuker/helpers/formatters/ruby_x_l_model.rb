@@ -163,12 +163,12 @@ module Cuker
       end
 
       feat_counter = 1
-      feat_content = ''
-      bg_content = ''
+      feat_content = []
+      bg_content = []
 
       res = []
       @asts.each do |file_path, ast|
-        @log.info "Understanding file: #{file_path}"
+        @log.debug "Understanding file: #{file_path}"
         @file_path = file_path
         in_feat_counter = 0
 
@@ -176,8 +176,8 @@ module Cuker
           in_feature(ast) do |feat_tags_ary, feat_title, feat_item|
             in_item(feat_item) do |tags_ary, type, item_title, content_ary, example_ary|
               row_hsh = {}
+              feat_content = excel_title FEATURE, feat_title
               if type == :Background or type == :Feature
-                feat_content = excel_title FEATURE, feat_title
                 bg_content = [excel_title(BACKGROUND, item_title)] + content_ary
               else
                 # if type == :Scenario or type == :ScenarioOutline
@@ -192,6 +192,7 @@ module Cuker
                 row_hsh[:test_designer] = ""
                 row_hsh[:comments] = ""
 
+                # row_hsh[:examples] = "" # is nil by default
                 if type == :ScenarioOutline
                   row_hsh[:examples] = excel_content_format example_ary
                 end
@@ -204,8 +205,8 @@ module Cuker
           end
         end
         feat_counter += 1
-        feat_title = ''
-        bg_content = ''
+        feat_title = []
+        bg_content = []
       end
       @file_path = nil
       res
@@ -305,11 +306,12 @@ module Cuker
           eg_title = excel_title EXAMPLES, get_title_ary(example)
           res << eg_title
 
-          eg_header = get_table_row(example[:tableHeader])
+          table_header = example[:tableHeader]
+          eg_header = table_header.nil? ? [] : get_table_row(table_header)
           example_data << eg_header
 
           eg_body = example[:tableBody]
-          eg_body.map {|row_hsh| example_data << get_table_row(row_hsh)}
+          eg_body.map {|row_hsh| example_data << get_table_row(row_hsh)} unless eg_body.nil?
 
           res << tableify(example_data)
           res << EXCEL_HORIZ_RULER
@@ -324,7 +326,7 @@ module Cuker
       if row_hsh[:type] == :TableRow
         row_hsh[:cells].map(&method(:get_table_cell))
       else
-        @log.debug "Expected :TableRow in #{row_hsh} @ #{@file_path}"
+        @log.debug "Expected :TableRow in '#{row_hsh}' @ #{@file_path}"
         []
       end
     end
@@ -334,7 +336,7 @@ module Cuker
         val = cell_hsh[:value].strip
         val.empty? ? EXCEL_BLANK : val
       else
-        @log.debug "Expected :TableCell in #{cell_hsh} @ #{@file_path}"
+        @log.debug "Expected :TableCell in '#{cell_hsh}' @ #{@file_path}"
         EXCEL_BLANK
       end
     end

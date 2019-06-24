@@ -77,7 +77,7 @@ module Cuker
       locate_sheet 'test_id'
 
       # @worksheet = @workbook[0]
-      @worksheet = @workbook['Acceptance Tests']
+      @worksheet = @workbook['Acceptance Tests raw']
 
 
       @rows = sheet_rows.dup # starting Row
@@ -136,7 +136,7 @@ module Cuker
 
     # @return ary of rows
     def sheet_rows
-      @worksheet.sheet_data.rows
+      worksheet.sheet_data.rows
     end
 
     def finishup
