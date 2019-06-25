@@ -2,6 +2,7 @@ require 'rspec'
 require 'ap'
 require 'require_all'
 require 'yaml'
+require 'bindata'
 
 require_all 'lib/**/*.rb'
 
@@ -52,15 +53,31 @@ module CukerSpecHelper
   end
 
   def snapshot_store data, snapshot_file_name, type = PICKLER_TYPE # objects can be pickled with :marshal
-    snapshot_file_path = File.join(TESTDATA_LOC, 'result_snapshots', "#{snapshot_file_name}.yml")
-
-    if type == :marshal
+    snapshot_file_path = File.join(TESTDATA_LOC, 'result_snapshots', snapshot_file_name)
+    res = nil
+    case type
+    when :file
+      snapshot_file_path = "#{snapshot_file_path}"
+      File.open(snapshot_file_path, 'w') {|file| file.write(data)}
+      res = File.read snapshot_file_path
+      res
+    when :binary
+      snapshot_file_path = "#{snapshot_file_path}.bin"
+      File.open(snapshot_file_path, 'wb') {|file| BinData::Int32be.new(data).write(file)}
+      # File.open(snapshot_file_path, 'wb') {|file| file.write(data)}
+      res = File.binread snapshot_file_path
+      res
+    when :marshal
+      # http://rubylearning.com/satishtalim/object_serialization.html
+      # todo: proper serialization for later
+      snapshot_file_path = "#{snapshot_file_path}.marshal"
       # marshal method
       dump = Marshal.dump data
       File.write(snapshot_file_path, dump)
-      res = Marshal.load File.read snapshot_file_path
-    elsif type == :yaml
+      res = Marshal.load File.binread snapshot_file_path
+    when :yaml
       # YAML method
+      snapshot_file_path = "#{snapshot_file_path}.yml"
       dump = data.to_yaml
       # File.open(snapshot_file_path, "w") {|file| file.write(dump)}
       File.write(snapshot_file_path, dump)
@@ -69,7 +86,7 @@ module CukerSpecHelper
       raise ScriptError.new "enter one of these values :marshal, :yaml"
     end
 
-    puts res
+    # puts res
     puts "successfully stored in '#{snapshot_file_path}' - \n=> #{data}\n=> #{res}}"
     # exit
   end
@@ -95,10 +112,17 @@ module CukerSpecHelper
 
   def snapshot_retrieve snapshot_partial, type = PICKLER_TYPE # objects can be pickled with :marshal
     get_file(snapshot_partial, File.join(TESTDATA_LOC, 'result_snapshots')) do |file_name|
-      dump = File.read file_name
-      if type == :marshal
+      if type == :binary
+        dump = File.binread file_name
+      elsif type == :binary
+        dump = File.binread file_name
+        dump
+      elsif type == :marshal
+        # todo: marshall object
+        dump = File.read file_name
         Marshal.load dump
       elsif type == :yaml
+        dump = File.read file_name
         YAML.load dump
       else
         raise ScriptError.new "enter one of these values :marshal, :yaml"
@@ -114,8 +138,26 @@ module CukerSpecHelper
     end
   end
 
-  def self.marshal_compare(snapshot_name)
-    #todo for final output files
+  def self.compare_file(data, snapshot_name)
+    begin
+      marshal = CukerSpecHelper.snapshot_retrieve snapshot_name, :file
+      return marshal
+    rescue NotImplementedError => e
+      warn "\n#{e.message}\n... So creating a new binary snapshot => '#{snapshot_name}'"
+      CukerSpecHelper.snapshot_store data, snapshot_name, :file
+      return CukerSpecHelper.compare_file(data, snapshot_name)
+    end
+  end
+
+  def self.compare_binary(data, snapshot_name)
+    begin
+      marshal = CukerSpecHelper.snapshot_retrieve snapshot_name, :binary
+      return marshal
+    rescue NotImplementedError => e
+      warn "\n#{e.message}\n... So creating a new binary snapshot => '#{snapshot_name}'"
+      CukerSpecHelper.snapshot_store data, snapshot_name, :binary
+      return CukerSpecHelper.compare_marshal(data, snapshot_name)
+    end
   end
 
   def self.compare_snapshot(rows, snapshot_name)
@@ -131,7 +173,6 @@ module CukerSpecHelper
       # retry # having issues with retest scripts
       return CukerSpecHelper.compare_snapshot(rows, snapshot_name)
     end
-    [nil, nil]
   end
 end
 

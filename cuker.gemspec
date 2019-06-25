@@ -37,20 +37,26 @@ Gem::Specification.new do |spec|
   # gem.executables   = ["cuker"]
   spec.require_paths = ["lib"]
 
+
+  # https://guides.rubygems.org/specification-reference/
+
+  # Dev Deps
   spec.add_development_dependency "bundler", "~> 2.0"
   spec.add_development_dependency "rake", "~> 10.0"
   # spec.add_development_dependency "rspec", "~> 3.0"
-
-  spec.add_development_dependency "require_all"
   spec.add_development_dependency "awesome_print"
-  spec.add_development_dependency "logging"
 
-  spec.add_development_dependency "gherkin", "~> 5.1"
+  # Runtime Deps
+  spec.add_runtime_dependency "require_all"
+  spec.add_runtime_dependency "logging"
 
-  # spec.add_development_dependency "thor"
-  spec.add_development_dependency "highline"
+  spec.add_runtime_dependency "gherkin", "~> 5.1"
 
-  spec.add_development_dependency "rubyXL"
-  # spec.add_development_dependency "table_print"
-  spec.add_development_dependency "text-table"
+  spec.add_runtime_dependency "rubyXL"
+  # spec.add_runtime_dependency "table_print"
+  spec.add_runtime_dependency "text-table"
+
+  # spec.add_runtime_dependency  "thor"
+  spec.add_runtime_dependency  "highline"
+  spec.add_runtime_dependency  "bindata"
 end
