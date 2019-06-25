@@ -114,7 +114,11 @@ module CukerSpecHelper
     end
   end
 
-  def self.snapshot_compare(rows, snapshot_name)
+  def self.marshal_compare(snapshot_name)
+    #todo for final output files
+  end
+
+  def self.compare_snapshot(rows, snapshot_name)
     CukerSpecHelper.debug_show(rows)
     begin
       exp_rows = CukerSpecHelper.snapshot_retrieve snapshot_name
@@ -125,7 +129,7 @@ module CukerSpecHelper
       warn "\n#{e.message}\n... So creating a new snapshot => '#{snapshot_name}'"
       CukerSpecHelper.snapshot_store(rows, snapshot_name)
       # retry # having issues with retest scripts
-      return CukerSpecHelper.snapshot_compare(rows, snapshot_name)
+      return CukerSpecHelper.compare_snapshot(rows, snapshot_name)
     end
     [nil, nil]
   end

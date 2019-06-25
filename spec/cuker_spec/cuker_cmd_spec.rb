@@ -51,6 +51,10 @@ module Cuker
         expect(res.size).to eq(1)
         res.each {|f| expect(f).to match(exp_name)}
         res.each(&method(:demo_rename))
+
+        # todo: enhance file production tests before ploughing on ahead
+        # res_file = File.read res.first
+        # rows = CukerSpecHelper.marshal_compare local_file_name
       end
 
       it 'should jira_excel it' do

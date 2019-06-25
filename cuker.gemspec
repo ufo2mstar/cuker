@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["ufo2mstar@gmail.com"]
 
   spec.summary       = %q{Cucumber Summary Gem}
-  spec.description   = %q{generates reports and gives some customizable formatting options}
+  spec.description   = %q{generates reports of your feature files and gives some customizable formatting options}
   spec.homepage      = "https://github.com/ufo2mstar/cuker"
   spec.license       = "MIT"
 

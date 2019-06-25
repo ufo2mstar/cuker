@@ -18,7 +18,7 @@ module Cuker
     #     expect(title).to eq exp_title
     #     rows = csvm.data
     #     snapshot_name = 'JiraMonoModel-snap-asttest'
-    #     CukerSpecHelper.snapshot_compare rows, snapshot_name
+    #     CukerSpecHelper.compare_snapshot rows, snapshot_name
     #   end
     # end
 
@@ -36,7 +36,7 @@ module Cuker
 
         rows = csvm.data
         snapshot_name = 'snap-sample05-JiraMonoModel'
-        res_rows, exp_rows = CukerSpecHelper.snapshot_compare rows, snapshot_name
+        res_rows, exp_rows = CukerSpecHelper.compare_snapshot rows, snapshot_name
         expect(res_rows.join "\n").to be_similar_to exp_rows.join "\n"
       end
 
