@@ -1,20 +1,19 @@
 module Cuker
   class SummaryXLModel < RubyXLModel
     def make_order
-      [
 # todo: template{:col_key => ["Title text",fill_color,font, etc]},
-          {:counter => "Sl.No"},
-          {:feature => "Feature"},
-          {:background => "Background"},
-          {:scenario => "Scenario"},
-          {:examples => "Examples"},
-          {:result => "Result"},
-          {:tested_by => "Tested By"},
-          {:test_designer => "Test Designer"},
-          {:comments => "Comments"},
-      ]
-# todo: make title order reorderable
 # todo: tag based reordering
+      [
+          {:counter => "Sl.No"},
+          {:s_type => "Type"},
+          {:s_title => "Title"},
+          {:tags => special_tag_titles},
+          {:other_tags => "Other Tags"},
+          {:feature_title => "Feature"},
+          {:bg_title => "Background"},
+          {:file_s_num => "Scen.no"},
+          {:file_name => "File"},
+      ]
     end
 
     def make_title order
@@ -36,6 +35,10 @@ module Cuker
       [select_list, ignore_list]
     end
 
+    def other_tags
+      # code here
+    end
+
     def make_rows
       if @asts.nil? or @asts.empty?
         @log.debug "No asts to parse!"
@@ -43,8 +46,8 @@ module Cuker
       end
 
       feat_counter = 1
-      feat_content = []
-      bg_content = []
+      feature_title = []
+      bg_title = []
 
       res = []
       @asts.each do |file_path, ast|
@@ -56,41 +59,51 @@ module Cuker
           in_feature(ast) do |feat_tags_ary, feat_title, feat_item|
             in_item(feat_item) do |tags_ary, type, item_title, content_ary, example_ary|
               row_hsh = {}
-              feat_content = excel_title FEATURE, feat_title
+              feature_title = excel_title FEATURE, feat_title
               if type == :Background or type == :Feature
-                bg_content = [excel_title(BACKGROUND, item_title)] + content_ary
+                bg_title = [excel_title(BACKGROUND, item_title)] + content_ary
               else
                 # if type == :Scenario or type == :ScenarioOutline
-                scen_content = [excel_title(type.to_s, item_title)] + content_ary
+                scen_title = [excel_title(type.to_s, item_title)] + content_ary
 
-                row_hsh[:counter] = "#{feat_counter}.#{in_feat_counter += 1}"
-                row_hsh[:feature] = excel_content_format feat_content
-                row_hsh[:background] = excel_content_format bg_content
-                row_hsh[:scenario] = excel_content_format scen_content
-                row_hsh[:result] = EXCEL_CONSTS::RESULT::PENDING
-                row_hsh[:tested_by] = ""
-                row_hsh[:test_designer] = ""
-                row_hsh[:comments] = ""
+                row_hsh[:counter] = "#{feat_counter}"
+                row_hsh[:s_type] = type == :Scenario ? "S" : "SO"
+                row_hsh[:s_title] = excel_content_format scen_title
+
+                row_hsh[:tags] = special_tag_lookup
+                row_hsh[:other_tags] = other_tags
+                row_hsh[:feature_title] = excel_content_format feature_title
+                row_hsh[:bg_title] = excel_content_format bg_title
+                row_hsh[:file_s_num] = "#{in_feat_counter += 1}"
+                row_hsh[:file_name] = file_path
 
                 # row_hsh[:examples] = "" # is nil by default
                 if type == :ScenarioOutline
-                  row_hsh[:examples] = excel_content_format example_ary
+                  row_hsh[:examples] = example_count example_ary
                 end
                 row_ary = []
-                get_keys_ary(@order).each {|k| row_ary << (row_hsh[k])}
-                # get_keys_ary(@order).each {|k| row_ary << excel_arg_hilight(row_hsh[k])}
+                get_keys_ary(@order).each do |k, v|
+                  if v.class == Array
+                    # v.each { |tag| row_ary << (tag.nil?? EXCEL_BLANK : tag) }
+                    v.each {|tag| row_ary << (tag || EXCEL_BLANK)}
+                  else
+                    row_ary << (row_hsh[k])
+                  end
+                end
                 res << row_ary
               end
+              # get_keys_ary(@order).each {|k| row_ary << excel_arg_hilight(row_hsh[k])}
             end
+            feat_counter += 1
+            feature_title = []
+            bg_title = []
           end
         end
-        feat_counter += 1
-        feat_title = []
-        bg_content = []
       end
       @file_path = nil
       res
     end
 
   end
+
 end
