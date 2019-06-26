@@ -3,51 +3,14 @@ require 'rubyXL'
 require 'rubyXL/convenience_methods'
 
 module Cuker
-  class RubyXLWriter < AbstractWriter
+  class SummaryXLWriter < RubyXLWriter
     def initialize
-      @ext = '.xlsm'
+      # @ext = '.xlsm'
       super
-      @template_file_name = "template_excel_jira.xlsm"
+      @template_file_name = "template_excel_summary.xlsm"
       @log.debug "initing #{self.class}"
     end
 
-    def write_title title_ary
-      super title_ary
-      @log.trace "rxl write title: #{title_ary}"
-      @active_file.add_row title_ary
-    end
-
-    def write_new_row row_ary
-      super row_ary
-      @log.trace "rxl write row: #{row_ary}"
-      @active_file.add_row row_ary
-    end
-
-    def make_new_book name
-      @log.debug "rxl make new sheet"
-      #todo: dangit! handling this path naming properly
-      file_name = "#{name.nil? ? super(name) : name}#{ext}"
-      @book[file_name] = RubyXLFile.new file_name, @template_file_name
-      @active_file = @book[file_name]
-      file_name
-    end
-
-    def make_new_file name
-      path = super name
-      finishup
-      make_new_book name
-    end
-
-    def finishup
-      @active_file.finishup if @active_file
-    end
-
-    def write model, output_file_path
-      file_name = make_new_file output_file_path
-      model.data.each(&method(:write_new_row))
-      finishup
-      file_name
-    end
   end
 
   class RubyXLFile < AbstractFile

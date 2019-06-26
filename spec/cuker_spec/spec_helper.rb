@@ -87,7 +87,8 @@ module CukerSpecHelper
     end
 
     # puts res
-    puts "successfully stored in '#{snapshot_file_path}' - \n=> #{data}\n=> #{res}}"
+    # puts "successfully stored in '#{snapshot_file_path}' - \n=> #{data}\n=> #{res}}"
+    puts "successfully stored in '#{snapshot_file_path}' - \n=> #{data}\n=> res}"
     # exit
   end
 
@@ -112,8 +113,9 @@ module CukerSpecHelper
 
   def snapshot_retrieve snapshot_partial, type = PICKLER_TYPE # objects can be pickled with :marshal
     get_file(snapshot_partial, File.join(TESTDATA_LOC, 'result_snapshots')) do |file_name|
-      if type == :binary
-        dump = File.binread file_name
+      if type == :file
+        # dump = File.binread file_name
+        file_name
       elsif type == :binary
         dump = File.binread file_name
         dump
@@ -140,10 +142,10 @@ module CukerSpecHelper
 
   def self.compare_file(data, snapshot_name)
     begin
-      marshal = CukerSpecHelper.snapshot_retrieve snapshot_name, :file
-      return marshal
+      file_name = CukerSpecHelper.snapshot_retrieve snapshot_name, :file
+      return file_name
     rescue NotImplementedError => e
-      warn "\n#{e.message}\n... So creating a new binary snapshot => '#{snapshot_name}'"
+      warn "\n#{e.message}\n... So creating a new file snapshot => '#{snapshot_name}'"
       CukerSpecHelper.snapshot_store data, snapshot_name, :file
       return CukerSpecHelper.compare_file(data, snapshot_name)
     end

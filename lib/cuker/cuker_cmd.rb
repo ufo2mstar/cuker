@@ -24,11 +24,13 @@ module Cuker
     PRODUCERS[:simple_jira] = [JiraModel, JiraWriter]
     PRODUCERS[:monospaced_jira] = [JiraMonoModel, JiraWriter]
     PRODUCERS[:jira_excel] = [RubyXLModel, RubyXLWriter]
+    PRODUCERS[:feature_excel] = [SummaryXLModel, RubyXLWriter]
 
     PRESETS = {}
     PRESETS[:jira_package] = [:simple_jira, :jira_excel]
     PRESETS[:jira_text] = [:simple_jira]
     PRESETS[:jira_excel] = [:jira_excel]
+    PRESETS[:feature_summary] = [:feature_excel]
 
 
     # desc "report PRESET_KEY [FEATURE_PATH [REPORT_PATH [REPORT_FILE_NAME [LOG_LEVEL]]]]",

@@ -12,13 +12,13 @@ module Cuker
         # exp = [:simple_csv]
         # exp = [:simple_csv, :simple_jira]
         # exp = [:simple_csv, :simple_jira, :monospaced_jira]
-        exp = [:simple_csv, :simple_jira, :monospaced_jira, :jira_excel]
+        exp = [:simple_csv, :simple_jira, :monospaced_jira, :jira_excel, :feature_excel]
         expect(res).to eq exp
       end
 
       it 'should contain the following preset locations' do
         res = CukerCmd::PRESETS.keys
-        exp = [:jira_package, :jira_text, :jira_excel]
+        exp = [:jira_package, :jira_text, :jira_excel, :feature_summary]
         expect(res).to eq exp
       end
     end
@@ -28,7 +28,10 @@ module Cuker
     end
 
     def file_compare_test(res_file_name, stored_file_partial)
-      res_data = File.read res_file_name
+      file = File.open(res_file_name,'rb')
+      res_data = file.read
+      file.close
+      # res_data = File.read res_file_name
       # marshal = CukerSpecHelper.compare_binary res_data, marshal_file_name
       # expect(res_data).to eq marshal
       stored_file_name = CukerSpecHelper.compare_file res_data, stored_file_partial
@@ -37,7 +40,7 @@ module Cuker
 
     def marshal_test(res_file_name, marshal_file_name)
       res_data = File.read res_file_name
-      marshal = CukerSpecHelper.compare_marshal res_data, marshal_file_name
+      marshal = CukerSpecHelper.compare_file res_data, marshal_file_name
       expect(res_data).to be_similar_to marshal
     end
 
@@ -67,7 +70,8 @@ module Cuker
         res.each {|f| expect(f).to match(exp_name)}
 
         # todo: enhance file production tests before ploughing on ahead
-        marshal_test res.first, local_file_name
+        # marshal_test res.first, local_file_name
+        # excel_test res.first, local_file_name
         res.each(&method(:demo_rename))
       end
 
@@ -80,7 +84,7 @@ module Cuker
         expect(res.size).to eq(1)
         res.each {|f| expect(f).to match(exp_name)}
 
-        file_compare_test res.first, local_file_name
+        # file_compare_test res.first, local_file_name
         res.each(&method(:demo_rename))
       end
     end
