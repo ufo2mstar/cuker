@@ -62,7 +62,7 @@ module Cuker
     }
 
 
-    xcontext 'test extract methods' do
+    context 'test extract methods' do
       it 'handles BG steps and Tables and Examples properly' do
         # feat_path = 'spec/cuker_spec/testdata/sample'
         feat_path = 'spec/cuker_spec/testdata/sample/05'

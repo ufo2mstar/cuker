@@ -4,8 +4,6 @@ module Cuker
 
     def initialize ast_map, tags_list
       init_logger
-      # @title = []
-      # @data = []
 
       @log.trace "initing #{self.class}"
       @log.debug "has #{ast_map.size} items"
@@ -13,29 +11,14 @@ module Cuker
       @asts = ast_map
 
       @special_tag_list = tags_list
-      special_tag_titles
-      # special_tag_hsh = special_tags
+      # special_tag_titles
 
       @order = make_order
       @title = make_title @order
       @data = make_rows
     end
 
-    # def order
-    #   @order = make_order
-    # end
-    #
-    # def title
-    #   @title = make_title order
-    # end
-    #
-    # def data
-    #   @data = make_rows
-    # end
-
     def make_order
-# todo: template{:col_key => ["Title text",fill_color,font, etc]},
-# todo: tag based reordering
       [
           {:counter => "Sl.No"},
           {:s_type => "Type"},
@@ -54,12 +37,10 @@ module Cuker
     end
 
     def special_tag_titles
-      # @special_tag_titles ||= get_values_ary @special_tag_hsh if @special_tag_hsh
       @special_tag_titles ||= @special_tag_list if @special_tag_list
     end
 
     def special_tags
-      # @special_tags ||= get_keys_ary @special_tag_hsh if @special_tag_hsh
       @special_tags ||= @special_tag_list if @special_tag_list
     end
 
@@ -68,12 +49,8 @@ module Cuker
       ignore_list = all_tags - special_tags
       select_list = all_tags - ignore_list
       ordered_list = []
-      special_tag_titles.each { |tag| ordered_list << (select_list.include?(tag) ? tag : EXCEL_BLANK) }
+      special_tag_titles.each {|tag| ordered_list << (select_list.include?(tag) ? tag : EXCEL_BLANK)}
       [ordered_list, ignore_list, select_list]
-    end
-
-    def other_tags
-      # code here
     end
 
     def make_rows
@@ -98,18 +75,21 @@ module Cuker
               row_hsh = {}
               feature_title = excel_title FEATURE, feat_title
               if type == :Background or type == :Feature
-                bg_title = [excel_title(BACKGROUND, item_title)] + content_ary
+                # bg_title = [excel_title(BACKGROUND, item_title)] + content_ary
+                bg_title = [excel_title(BACKGROUND, item_title)]
               else
                 # if type == :Scenario or type == :ScenarioOutline
-                scen_title = [excel_title(type.to_s, item_title)] + content_ary
+                # scen_title = [excel_title(type.to_s, item_title)] + content_ary
+                scen_title = [excel_title(type.to_s, item_title)]
 
                 row_hsh[:counter] = "#{feat_counter}"
                 row_hsh[:s_type] = type == :Scenario ? "S" : "SO"
                 row_hsh[:s_title] = excel_content_format scen_title
 
-                all_tags = [feat_tags_ary,tags_ary].flatten.compact
-                row_hsh[:tags] = filter_special_tags(all_tags)
-                row_hsh[:other_tags] = other_tags
+                all_tags = [feat_tags_ary, tags_ary].flatten.compact
+                ordered_list, ignore_list, select_list = filter_special_tags(all_tags)
+                row_hsh[:tags] = ordered_list
+                row_hsh[:other_tags] = ignore_list.join ", "
                 row_hsh[:feature_title] = excel_content_format feature_title
                 row_hsh[:bg_title] = excel_content_format bg_title
                 row_hsh[:file_s_num] = "#{in_feat_counter += 1}"
@@ -120,10 +100,11 @@ module Cuker
                   row_hsh[:examples] = example_count example_ary
                 end
                 row_ary = []
-                get_keys_ary(@order).each do |k, v|
-                  if v.class == Array
+                get_keys_ary(@order).each do |k|
+                  if k == :tags
                     # v.each { |tag| row_ary << (tag.nil?? EXCEL_BLANK : tag) }
-                    v.each {|tag| row_ary << (tag || EXCEL_BLANK)}
+                    tags_ary = row_hsh[k]
+                    tags_ary.each {|tag| row_ary << tag}
                   else
                     row_ary << (row_hsh[k])
                   end
@@ -146,10 +127,6 @@ module Cuker
       example_ary.size
     end
 
-    # def special_tag_hsh= tag_list
-    #   @special_tag_hsh = tag_list
-    #   special_tag_titles
-    # end
   end
 
 end
