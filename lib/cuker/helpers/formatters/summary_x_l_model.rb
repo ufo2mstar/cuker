@@ -1,5 +1,38 @@
 module Cuker
   class SummaryXLModel < RubyXLModel
+
+
+    def initialize ast_map, tag_list
+      init_logger
+      # @title = []
+      # @data = []
+
+      @log.trace "initing #{self.class}"
+      @log.debug "has #{ast_map.size} items"
+
+      @asts = ast_map
+
+      @special_tag_list = tag_list
+      special_tag_titles
+      # special_tag_list = special_tags
+
+      @order = make_order
+      @title = make_title @order
+      @data = make_rows
+    end
+
+    # def order
+    #   @order = make_order
+    # end
+    #
+    # def title
+    #   @title = make_title order
+    # end
+    #
+    # def data
+    #   @data = make_rows
+    # end
+
     def make_order
 # todo: template{:col_key => ["Title text",fill_color,font, etc]},
 # todo: tag based reordering
@@ -21,11 +54,13 @@ module Cuker
     end
 
     def special_tag_titles
-      @special_tag_titles ||= get_values_ary @special_tag_list if @special_tag_list
+      # @special_tag_titles ||= get_values_ary @special_tag_list if @special_tag_list
+      @special_tag_titles ||= @special_tag_list if @special_tag_list
     end
 
     def special_tag_lookup
-      @special_tag_lookup ||= get_keys_ary @special_tag_list if @special_tag_list
+      # @special_tag_lookup ||= get_keys_ary @special_tag_list if @special_tag_list
+      @special_tag_lookup ||= @special_tag_list if @special_tag_list
     end
 
     def filter_special_tags(all_tags)
@@ -104,6 +139,14 @@ module Cuker
       res
     end
 
+    def example_count example_ary
+      example_ary.size
+    end
+
+    # def special_tag_list= tag_list
+    #   @special_tag_list = tag_list
+    #   special_tag_titles
+    # end
   end
 
 end
