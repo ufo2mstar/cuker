@@ -145,13 +145,13 @@ module Cuker
       @special_tag_titles ||= get_values_ary @special_tag_list if @special_tag_list
     end
 
-    def special_tag_lookup
-      @special_tag_lookup ||= get_keys_ary @special_tag_list if @special_tag_list
+    def special_tags
+      @special_tags ||= get_keys_ary @special_tag_list if @special_tag_list
     end
 
     def filter_special_tags(all_tags)
-      return [[], all_tags] unless special_tag_lookup
-      ignore_list = all_tags - special_tag_lookup
+      return [[], all_tags] unless special_tags
+      ignore_list = all_tags - special_tags
       select_list = all_tags - ignore_list
       [select_list, ignore_list]
     end

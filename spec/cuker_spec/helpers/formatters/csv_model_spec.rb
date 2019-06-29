@@ -30,7 +30,7 @@ module Cuker
     # end
 
     context 'util methods' do
-      it 'should filter special_tag_list ' do
+      it 'should filter special_tag_hsh ' do
         csvm = CsvModel.new({})
         csvm.special_tag_list = [
             {'spl' => "SecialTag"},

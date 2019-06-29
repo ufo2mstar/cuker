@@ -2,7 +2,7 @@ module Cuker
   class SummaryXLModel < RubyXLModel
 
 
-    def initialize ast_map, tag_list
+    def initialize ast_map, tags_list
       init_logger
       # @title = []
       # @data = []
@@ -12,9 +12,9 @@ module Cuker
 
       @asts = ast_map
 
-      @special_tag_list = tag_list
+      @special_tag_list = tags_list
       special_tag_titles
-      # special_tag_list = special_tags
+      # special_tag_hsh = special_tags
 
       @order = make_order
       @title = make_title @order
@@ -54,20 +54,22 @@ module Cuker
     end
 
     def special_tag_titles
-      # @special_tag_titles ||= get_values_ary @special_tag_list if @special_tag_list
+      # @special_tag_titles ||= get_values_ary @special_tag_hsh if @special_tag_hsh
       @special_tag_titles ||= @special_tag_list if @special_tag_list
     end
 
-    def special_tag_lookup
-      # @special_tag_lookup ||= get_keys_ary @special_tag_list if @special_tag_list
-      @special_tag_lookup ||= @special_tag_list if @special_tag_list
+    def special_tags
+      # @special_tags ||= get_keys_ary @special_tag_hsh if @special_tag_hsh
+      @special_tags ||= @special_tag_list if @special_tag_list
     end
 
     def filter_special_tags(all_tags)
-      return [[], all_tags] unless special_tag_lookup
-      ignore_list = all_tags - special_tag_lookup
+      return [[], all_tags] unless special_tags
+      ignore_list = all_tags - special_tags
       select_list = all_tags - ignore_list
-      [select_list, ignore_list]
+      ordered_list = []
+      special_tag_titles.each { |tag| ordered_list << (select_list.include?(tag) ? tag : EXCEL_BLANK) }
+      [ordered_list, ignore_list, select_list]
     end
 
     def other_tags
@@ -105,7 +107,8 @@ module Cuker
                 row_hsh[:s_type] = type == :Scenario ? "S" : "SO"
                 row_hsh[:s_title] = excel_content_format scen_title
 
-                row_hsh[:tags] = special_tag_lookup
+                all_tags = [feat_tags_ary,tags_ary].flatten.compact
+                row_hsh[:tags] = filter_special_tags(all_tags)
                 row_hsh[:other_tags] = other_tags
                 row_hsh[:feature_title] = excel_content_format feature_title
                 row_hsh[:bg_title] = excel_content_format bg_title
@@ -143,8 +146,8 @@ module Cuker
       example_ary.size
     end
 
-    # def special_tag_list= tag_list
-    #   @special_tag_list = tag_list
+    # def special_tag_hsh= tag_list
+    #   @special_tag_hsh = tag_list
     #   special_tag_titles
     # end
   end

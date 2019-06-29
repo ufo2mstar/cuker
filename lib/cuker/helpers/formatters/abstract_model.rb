@@ -42,13 +42,6 @@ module Cuker
       @data = []
     end
 
-    def get_values_ary ary_of_hshs
-      get_item_ary ary_of_hshs, :values
-    end
-
-    def get_keys_ary ary_of_hshs
-      get_item_ary ary_of_hshs, :keys
-    end
 
     # utility methods
     # used by any model
@@ -90,10 +83,20 @@ module Cuker
       end
     end
 
+
+    def get_values_ary ary_of_hshs
+      get_item_ary ary_of_hshs, :values
+    end
+
+    def get_keys_ary ary_of_hshs
+      get_item_ary ary_of_hshs, :keys
+    end
+
     private
 
     def get_item_ary ary_of_hshs, item
       ary_of_hshs.map(&item).flatten
     end
+
   end
 end

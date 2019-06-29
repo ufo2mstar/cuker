@@ -40,7 +40,7 @@ module Cuker
     end
 
     def special_tag_lookup
-      @special_tag_lookup ||= get_keys_ary @special_tag_list if @special_tag_list
+      @special_tags ||= get_keys_ary @special_tag_list if @special_tag_list
     end
 
     def make_title order
