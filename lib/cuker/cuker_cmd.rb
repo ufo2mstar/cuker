@@ -24,13 +24,13 @@ module Cuker
     PRODUCERS[:simple_jira] = [JiraModel, JiraWriter]
     PRODUCERS[:monospaced_jira] = [JiraMonoModel, JiraWriter]
     PRODUCERS[:jira_excel] = [RubyXLModel, RubyXLWriter]
-    PRODUCERS[:feature_excel] = [SummaryXLModel, SummaryXLWriter]
+    PRODUCERS[:summary_excel] = [SummaryXLModel, SummaryXLWriter]
 
     PRESETS = {}
     PRESETS[:jira_package] = [:simple_jira, :jira_excel]
     PRESETS[:jira_text] = [:simple_jira]
     PRESETS[:jira_excel] = [:jira_excel]
-    PRESETS[:feature_summary] = [:feature_excel]
+    PRESETS[:testsuite_summary] = [:summary_excel]
 
 
     # desc "report PRESET_KEY [FEATURE_PATH [REPORT_PATH [REPORT_FILE_NAME [LOG_LEVEL]]]]",
@@ -58,7 +58,7 @@ module Cuker
 
       producers.each do |producer|
         report_path = File.join report_path_input, 'reports', LOG_TIME_TODAY
-        msg = "running '#{preset_key.to_s.upcase}' reporter @ Feature Path: '#{feat_path}' Report Path => '#{report_path}' - '#{report_file_name}'\n"
+        msg = "producing '#{producer.to_s.upcase}' report\t @ Report Path => '#{report_path}' - '#{report_file_name}' \t for Feature Files @ '#{feat_path}'\n"
 
         @log.info msg
         puts msg

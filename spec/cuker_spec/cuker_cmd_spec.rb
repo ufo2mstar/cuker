@@ -12,13 +12,13 @@ module Cuker
         # exp = [:simple_csv]
         # exp = [:simple_csv, :simple_jira]
         # exp = [:simple_csv, :simple_jira, :monospaced_jira]
-        exp = [:simple_csv, :simple_jira, :monospaced_jira, :jira_excel, :feature_excel]
+        exp = [:simple_csv, :simple_jira, :monospaced_jira, :jira_excel, :summary_excel]
         expect(res).to eq exp
       end
 
       it 'should contain the following preset locations' do
         res = CukerCmd::PRESETS.keys
-        exp = [:jira_package, :jira_text, :jira_excel, :feature_summary]
+        exp = [:jira_package, :jira_text, :jira_excel, :testsuite_summary]
         expect(res).to eq exp
       end
     end
@@ -46,8 +46,8 @@ module Cuker
 
     context "ccmd preset usage" do
       let(:file_name) {"sample_report"}
-      # let(:feat_path) {"spec/cuker_spec/testdata/sample/*"}
-      let(:feat_path) {"spec/cuker_spec/testdata/good/*"}
+      let(:feat_path) {"spec/cuker_spec/testdata/sample/*"}
+      # let(:feat_path) {"spec/cuker_spec/testdata/good/*"}
       # let(:feat_path) {"spec/cuker_spec/testdata/good/data*"}
       it 'should jira package print stuff' do
         local_file_name = "jira_package"
@@ -89,19 +89,19 @@ module Cuker
       end
 
 
-      it 'should feature_summary it' do
-        feat_path = "spec/cuker_spec/testdata/good/*"
-        special_tags = [
-            "@uat_done",
-            "@cmo_done",
-            "@tech_done",
-            "@test_done",
-        ]
+      it 'should testsuite_summary it' do
+        # feat_path = "spec/cuker_spec/testdata/sample/*"
+        # special_tags = [
+        #     "@uat_done",
+        #     "@cmo_done",
+        #     "@tech_done",
+        #     "@test_done",
+        # ]
 
-        local_file_name = "feature_summary"
+        local_file_name = "testsuite_summary"
         cc = CukerCmd.new
-        # res = cc.report :feature_summary, feat_path, local_file_name, ".", special_tags
-        res = cc.report :feature_summary, feat_path, local_file_name
+        # res = cc.report :testsuite_summary, feat_path, local_file_name, ".", special_tags
+        res = cc.report :testsuite_summary, feat_path, local_file_name
         exp_name = "^.*:.*reports.*#{LOG_TIME_TODAY}.*#{local_file_name}.xlsm"
         expect(res.class).to eq(Array)
         expect(res.size).to eq(1)
