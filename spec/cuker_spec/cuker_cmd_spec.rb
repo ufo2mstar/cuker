@@ -28,14 +28,14 @@ module Cuker
     end
 
     def file_compare_test(res_file_name, stored_file_partial)
-      file = File.open(res_file_name,'rb')
+      file = File.open(res_file_name, 'rb')
       res_data = file.read
       file.close
       # res_data = File.read res_file_name
       # marshal = CukerSpecHelper.compare_binary res_data, marshal_file_name
       # expect(res_data).to eq marshal
       stored_file_name = CukerSpecHelper.compare_file res_data, stored_file_partial
-      expect(FileUtils.compare_file(res_file_name,stored_file_name)).to eq true
+      expect(FileUtils.compare_file(res_file_name, stored_file_name)).to eq true
     end
 
     def marshal_test(res_file_name, marshal_file_name)
@@ -87,34 +87,57 @@ module Cuker
         # file_compare_test res.first, local_file_name
         res.each(&method(:demo_rename))
       end
+
+
+      it 'should feature_summary it' do
+        # feat_path = "spec/cuker_spec/testdata/sample/*"
+        special_tags = [
+            "@uat_done",
+            "@cmo_done",
+            "@tech_done",
+            "@test_done",
+        ]
+
+        local_file_name = "feature_summary"
+        cc = CukerCmd.new
+        # res = cc.report :feature_summary, feat_path, local_file_name, ".", special_tags
+        res = cc.report :feature_summary, feat_path, local_file_name
+        exp_name = "^.*:.*reports.*#{LOG_TIME_TODAY}.*#{local_file_name}.xlsm"
+        expect(res.class).to eq(Array)
+        expect(res.size).to eq(1)
+        res.each {|f| expect(f).to match(exp_name)}
+
+          # file_compare_test res.first, local_file_name
+          # res.each(&method(:demo_rename))
+      end
     end
 
-      # xcontext "ccmd preset usage" do
-      #   # skip "gp cmd usage" do
-      #   let(:file_name) {"sample_report"}
-      #   let(:feat_path) {"spec/cuker_spec/testdata/sample/05*"}
-      #   it 'should read and write the good test data loc: simple_csv' do
-      #     res = cc.report :simple_csv, feat_path
-      #     exp_name = "^.*:.*reports.*#{file_name}.csv"
-      #     expect(res).to match(exp_name)
-      #     demo_rename res
-      #   end
-      #
-      #   it 'should read and write the good test data loc: jira' do
-      #     local_file_name = 'simple_jira'
-      #     res = cc.report :simple_jira, feat_path, local_file_name
-      #     exp_name = "^.*:.*reports.*#{local_file_name }.txt"
-      #     expect(res).to match(exp_name)
-      #     demo_rename res
-      #   end
-      #
-      #   it 'should monospaced jira' do
-      #     local_file_name = 'monospaced_jira'
-      #     res = cc.report :monospaced_jira, feat_path, local_file_name
-      #     exp_name = "^.*:.*reports.*#{local_file_name }.txt"
-      #     expect(res).to match(exp_name)
-      #     demo_rename res
-      #   end
-      # end
+    # xcontext "ccmd preset usage" do
+    #   # skip "gp cmd usage" do
+    #   let(:file_name) {"sample_report"}
+    #   let(:feat_path) {"spec/cuker_spec/testdata/sample/05*"}
+    #   it 'should read and write the good test data loc: simple_csv' do
+    #     res = cc.report :simple_csv, feat_path
+    #     exp_name = "^.*:.*reports.*#{file_name}.csv"
+    #     expect(res).to match(exp_name)
+    #     demo_rename res
+    #   end
+    #
+    #   it 'should read and write the good test data loc: jira' do
+    #     local_file_name = 'simple_jira'
+    #     res = cc.report :simple_jira, feat_path, local_file_name
+    #     exp_name = "^.*:.*reports.*#{local_file_name }.txt"
+    #     expect(res).to match(exp_name)
+    #     demo_rename res
+    #   end
+    #
+    #   it 'should monospaced jira' do
+    #     local_file_name = 'monospaced_jira'
+    #     res = cc.report :monospaced_jira, feat_path, local_file_name
+    #     exp_name = "^.*:.*reports.*#{local_file_name }.txt"
+    #     expect(res).to match(exp_name)
+    #     demo_rename res
+    #   end
+    # end
   end
 end

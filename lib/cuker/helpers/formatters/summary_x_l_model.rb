@@ -25,7 +25,8 @@ module Cuker
           {:s_title => "Title"},
           {:tags => special_tag_titles},
           {:other_tags => "Other Tags"},
-          {:feature_title => "Feature"},
+          {:feature_title => "Feature Title"},
+          {:feature_count => "Feature"},
           {:bg_title => "Background"},
           {:file_s_num => "Scen.no"},
           {:file_name => "File"},
@@ -73,14 +74,14 @@ module Cuker
           in_feature(ast) do |feat_tags_ary, feat_title, feat_item|
             in_item(feat_item) do |tags_ary, type, item_title, content_ary, example_ary|
               row_hsh = {}
-              feature_title = excel_title FEATURE, feat_title
+              feature_title = feat_title
               if type == :Background or type == :Feature
                 # bg_title = [excel_title(BACKGROUND, item_title)] + content_ary
-                bg_title = [excel_title(BACKGROUND, item_title)]
+                bg_title = item_title
               else
                 # if type == :Scenario or type == :ScenarioOutline
                 # scen_title = [excel_title(type.to_s, item_title)] + content_ary
-                scen_title = [excel_title(type.to_s, item_title)]
+                scen_title = item_title
 
                 row_hsh[:counter] = "#{feat_counter}"
                 row_hsh[:s_type] = type == :Scenario ? "S" : "SO"
@@ -93,6 +94,7 @@ module Cuker
                 row_hsh[:feature_title] = excel_content_format feature_title
                 row_hsh[:bg_title] = excel_content_format bg_title
                 row_hsh[:file_s_num] = "#{in_feat_counter += 1}"
+                row_hsh[:feature_count] = in_feat_counter == 1 ? 1 : 0
                 row_hsh[:file_name] = file_path
 
                 # row_hsh[:examples] = "" # is nil by default

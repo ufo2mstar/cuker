@@ -24,7 +24,7 @@ module Cuker
     PRODUCERS[:simple_jira] = [JiraModel, JiraWriter]
     PRODUCERS[:monospaced_jira] = [JiraMonoModel, JiraWriter]
     PRODUCERS[:jira_excel] = [RubyXLModel, RubyXLWriter]
-    PRODUCERS[:feature_excel] = [SummaryXLModel, RubyXLWriter]
+    PRODUCERS[:feature_excel] = [SummaryXLModel, SummaryXLWriter]
 
     PRESETS = {}
     PRESETS[:jira_package] = [:simple_jira, :jira_excel]
@@ -36,7 +36,18 @@ module Cuker
     # desc "report PRESET_KEY [FEATURE_PATH [REPORT_PATH [REPORT_FILE_NAME [LOG_LEVEL]]]]",
     #      "reports parsed results into \nREPORT_PATH/REPORT_FILE_NAME \nfor all '*.feature' files in the given FEATURE_PATH\nSTDIO LOG_LEVEL adjustable\n"
 
-    def report preset_key, feat_path = "../", report_file_name = 'sample_report', report_path_input = ".", log_level = :info
+    def report preset_key,
+               feat_path = "../",
+               report_file_name = 'sample_report',
+               report_path_input = ".",
+               special_tags_list = [
+                   "@uat_done",
+                   "@cmo_done",
+                   "@tech_done",
+                   "@test_done",
+               ],
+               log_level = :info
+
       init_logger log_level
       output_files = []
       producers = PRESETS[preset_key]
@@ -47,13 +58,13 @@ module Cuker
 
       producers.each do |producer|
         report_path = File.join report_path_input, 'reports', LOG_TIME_TODAY
-        msg = "running '#{preset_key.to_s.upcase}' reporter @\n Feature Path: '#{feat_path}' \n Report Path => '#{report_path}' - '#{report_file_name}'\n"
+        msg = "running '#{preset_key.to_s.upcase}' reporter @ Feature Path: '#{feat_path}' Report Path => '#{report_path}' - '#{report_file_name}'\n"
 
         @log.info msg
         puts msg
         model, writer = PRODUCERS[producer]
 
-        preset_model = model.new ast_map
+        preset_model = model == SummaryXLModel ? model.new(ast_map, special_tags_list) : model.new(ast_map)
         preset_writer = writer.new
         grr = GherkinReporter.new preset_writer, preset_model, report_path, report_file_name
 

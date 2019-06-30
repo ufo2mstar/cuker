@@ -54,6 +54,7 @@ module Cuker
           "Title",
           special_tags,
           "Other Tags",
+          "Feature Title",
           "Feature",
           "Background",
           "Scen.no",
