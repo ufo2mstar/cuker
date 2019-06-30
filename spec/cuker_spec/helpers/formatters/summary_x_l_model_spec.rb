@@ -98,7 +98,7 @@ module Cuker
         # rxlm.special_tag_hsh = special_tags
         ordered_list, ignore_list, select_list = rxlm.send(:filter_special_tags, all_tags)
 
-        expect(ordered_list).to eq ["@s_tag1", "@s_tag3", "", "@feat_tag2"]
+        expect(ordered_list).to eq ["@s_tag1", "@s_tag3", nil, "@feat_tag2"]
 
         expect(ignore_list).to eq ["@feat_tag1", "@s_tag2", "@so_tag1", "@so_tag2"]
 

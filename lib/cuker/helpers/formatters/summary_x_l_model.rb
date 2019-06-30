@@ -1,6 +1,7 @@
 module Cuker
   class SummaryXLModel < RubyXLModel
 
+    EXCEL_BLANK = nil
 
     def initialize ast_map, tags_list
       init_logger
@@ -60,7 +61,7 @@ module Cuker
         return []
       end
 
-      feat_counter = 1
+      feat_counter = 0
       feature_title = []
       bg_title = []
 
@@ -72,6 +73,7 @@ module Cuker
 
         if ast[:type] == :GherkinDocument
           in_feature(ast) do |feat_tags_ary, feat_title, feat_item|
+            feat_counter += 1
             in_item(feat_item) do |tags_ary, type, item_title, content_ary, example_ary|
               row_hsh = {}
               feature_title = feat_title
@@ -83,7 +85,7 @@ module Cuker
                 # scen_title = [excel_title(type.to_s, item_title)] + content_ary
                 scen_title = item_title
 
-                row_hsh[:counter] = "#{feat_counter}"
+                row_hsh[:counter] = feat_counter
                 row_hsh[:s_type] = type == :Scenario ? "S" : "SO"
                 row_hsh[:s_title] = excel_content_format scen_title
 
@@ -93,7 +95,7 @@ module Cuker
                 row_hsh[:other_tags] = ignore_list.join ", "
                 row_hsh[:feature_title] = excel_content_format feature_title
                 row_hsh[:bg_title] = excel_content_format bg_title
-                row_hsh[:file_s_num] = "#{in_feat_counter += 1}"
+                row_hsh[:file_s_num] = in_feat_counter += 1
                 row_hsh[:feature_count] = in_feat_counter == 1 ? 1 : 0
                 row_hsh[:file_name] = file_path
 
@@ -115,7 +117,6 @@ module Cuker
               end
               # get_keys_ary(@order).each {|k| row_ary << excel_arg_hilight(row_hsh[k])}
             end
-            feat_counter += 1
             feature_title = []
             bg_title = []
           end
@@ -126,7 +127,12 @@ module Cuker
     end
 
     def example_count example_ary
-      example_ary.size
+      # [0] title
+      # [1] table = [[0] title [...] examples]
+      # [2] blank
+      sum = []
+      (1..example_ary.size).step(3).each {|i| sum << (example_ary[i].size - 1)}
+      sum.inject('+')
     end
 
   end

@@ -90,7 +90,7 @@ module Cuker
 
 
       it 'should feature_summary it' do
-        # feat_path = "spec/cuker_spec/testdata/sample/*"
+        feat_path = "spec/cuker_spec/testdata/good/*"
         special_tags = [
             "@uat_done",
             "@cmo_done",
@@ -107,8 +107,8 @@ module Cuker
         expect(res.size).to eq(1)
         res.each {|f| expect(f).to match(exp_name)}
 
-          # file_compare_test res.first, local_file_name
-          # res.each(&method(:demo_rename))
+        # file_compare_test res.first, local_file_name
+        res.each(&method(:demo_rename))
       end
     end
 

@@ -97,7 +97,8 @@ module Cuker
 
     TITLE_MAX_LEN = 60
 
-    EXCEL_BLANK = ''
+    # EXCEL_BLANK = ''
+    EXCEL_BLANK = nil
     EXCEL_TITLE_SEP = '|'
     EXCEL_ROW_SEP = '|'
     EXCEL_EMPTY_LINE = ' '
@@ -222,7 +223,7 @@ module Cuker
         children = feat[:children]
         children.each {|child| yield feat_tags, feat_title, child}
       else
-        @log.debug "No Features found in file @ #{@file_path}"
+        @log.warn "No Features found in file @ #{@file_path}"
       end
     end
 
