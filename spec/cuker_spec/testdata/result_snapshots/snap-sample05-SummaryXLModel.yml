@@ -1,5 +1,5 @@
 ---
-- - '2'
+- - 1
   - S
   - |-
     scen name abcde ab ab abcdef abc abcdef abcdefg abcde abcdefg abcd abcd abc
@@ -9,30 +9,38 @@
       scen desc line 3 abcd abcdefg ab abcdef abc abcdef abcdefg abcd  ab abcde  abc abcde
   - "@s_tag1"
   - "@s_tag3"
-  - ''
+  - 
   - "@feat_tag2"
   - "@feat_tag1, @s_tag2"
   - |-
     feat name ab abcde abcdefg abcdefg abc   abcde abcdef abcd ab abc abcd abcdef
     ab abcde abcde abcdef abcdefg abc abcd abcdefg abc ab  abcd abcdef
   - 1
-  - ''
-  - '1'
+  - |-
+    bg name abcdef abcdefg abcdef  abcde abcde abcd ab abc abcd ab abcdefg  abc
+    bg desc
+      bg desc ab abcdef  abc ab abc abcdefg  abcd abcdef abcdefg abcd abcde abcde
+      abcd abcdef abcdefg  abcde abc  abcdef abcdefg ab abcde abcd ab abc
+  - 1
   - spec/cuker_spec/testdata/sample/05_with_all.feature
-- - '3'
+- - 2
   - SO
   - |-
     scen outline name <title>   abcde abcdefg abc ab   abcd abcdefg abcdef abcd ab abcde abcdef abc
     scen outline desc abcde abcdef abcdefg abcdef ab abc abcde abcd  abcd ab abc abcdefg
   - "@s_tag1"
-  - ''
-  - ''
+  - 
+  - 
   - "@feat_tag2"
   - "@feat_tag1, @so_tag1"
   - |-
     feat name ab abcde abcdefg abcdefg abc   abcde abcdef abcd ab abc abcd abcdef
     ab abcde abcde abcdef abcdefg abc abcd abcdefg abc ab  abcd abcdef
   - 0
-  - ''
-  - '2'
+  - |-
+    bg name abcdef abcdefg abcdef  abcde abcde abcd ab abc abcd ab abcdefg  abc
+    bg desc
+      bg desc ab abcdef  abc ab abc abcdefg  abcd abcdef abcdefg abcd abcde abcde
+      abcd abcdef abcdefg  abcde abc  abcdef abcdefg ab abcde abcd ab abc
+  - 2
   - spec/cuker_spec/testdata/sample/05_with_all.feature

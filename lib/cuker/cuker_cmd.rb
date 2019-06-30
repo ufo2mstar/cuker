@@ -36,7 +36,7 @@ module Cuker
     # desc "report PRESET_KEY [FEATURE_PATH [REPORT_PATH [REPORT_FILE_NAME [LOG_LEVEL]]]]",
     #      "reports parsed results into \nREPORT_PATH/REPORT_FILE_NAME \nfor all '*.feature' files in the given FEATURE_PATH\nSTDIO LOG_LEVEL adjustable\n"
 
-    def report preset_key,
+    def report(preset_key,
                feat_path = "../",
                report_file_name = 'sample_report',
                report_path_input = ".",
@@ -47,6 +47,7 @@ module Cuker
                    "@test_done",
                ],
                log_level = :info
+    )
 
       init_logger log_level
       output_files = []
@@ -58,7 +59,7 @@ module Cuker
 
       producers.each do |producer|
         report_path = File.join report_path_input, 'reports', LOG_TIME_TODAY
-        msg = "producing '#{producer.to_s.upcase}' report\t @ Report Path => '#{report_path}' - '#{report_file_name}' \t for Feature Files @ '#{feat_path}'\n"
+        msg = "producing '#{producer.to_s.upcase}'\treport @ '#{report_path}' - '#{report_file_name}'\t for Feature Files @ '#{feat_path}'\n"
 
         @log.info msg
         puts msg

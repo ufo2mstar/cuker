@@ -90,17 +90,19 @@ module Cuker
 
 
       it 'should testsuite_summary it' do
-        # feat_path = "spec/cuker_spec/testdata/sample/*"
-        # special_tags = [
-        #     "@uat_done",
-        #     "@cmo_done",
-        #     "@tech_done",
-        #     "@test_done",
-        # ]
+        # feat_path = "spec/cuker_spec/testdata/*"
+        # todo: handle arbitrary tags later
+        special_tags = [
+            "@uat_done",
+            # "@cmo_done",
+            # "@tech_done",
+            "@test_done",
+        ]
 
         local_file_name = "testsuite_summary"
         cc = CukerCmd.new
         # res = cc.report :testsuite_summary, feat_path, local_file_name, ".", special_tags
+
         res = cc.report :testsuite_summary, feat_path, local_file_name
         exp_name = "^.*:.*reports.*#{LOG_TIME_TODAY}.*#{local_file_name}.xlsm"
         expect(res.class).to eq(Array)
@@ -108,7 +110,7 @@ module Cuker
         res.each {|f| expect(f).to match(exp_name)}
 
         # file_compare_test res.first, local_file_name
-        res.each(&method(:demo_rename))
+        # res.each(&method(:demo_rename))
       end
     end
 
