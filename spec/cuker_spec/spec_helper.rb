@@ -2,7 +2,7 @@ require 'rspec'
 require 'ap'
 require 'require_all'
 require 'yaml'
-require 'bindata'
+# require 'bindata'
 
 require_all 'lib/**/*.rb'
 

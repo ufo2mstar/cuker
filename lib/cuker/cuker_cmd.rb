@@ -59,9 +59,9 @@ module Cuker
 
       producers.each do |producer|
         report_path = File.join report_path_input, 'reports', LOG_TIME_TODAY
-        msg = "producing '#{producer.to_s.upcase}'\treport @ '#{report_path}' - '#{report_file_name}'\t for Feature Files @ '#{feat_path}'\n"
+        msg = "producing '#{producer.to_s.upcase}' report @ '#{report_path}' - '#{report_file_name}' for Feature Files @ '#{feat_path}'\n"
 
-        @log.info msg
+        # @log.info msg
         puts msg
         model, writer = PRODUCERS[producer]
 

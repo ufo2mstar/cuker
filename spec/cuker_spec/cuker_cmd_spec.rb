@@ -110,7 +110,7 @@ module Cuker
         res.each {|f| expect(f).to match(exp_name)}
 
         # file_compare_test res.first, local_file_name
-        # res.each(&method(:demo_rename))
+        res.each(&method(:demo_rename))
       end
     end
 

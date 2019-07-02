@@ -85,11 +85,11 @@ module Cuker
       worksheet.insert_row(row)
       ary.each do |val|
         case val.class.to_s
-        when "String", "Integer", /Nil/
+        when "String", "Integer", /Nil/, /Fixnum/
           worksheet.insert_cell(row, col, val)
         else
           @log.error "SummaryRubyXLFile auto stringification of unknown format: #{val.class} => '#{val}'"
-          worksheet.insert_cell(row, col, val.to_s)
+          worksheet.insert_cell(row, col, val)
           # worksheet.insert_cell(row, col, val.to_s)
         end
         col += 1

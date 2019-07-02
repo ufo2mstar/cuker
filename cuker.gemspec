@@ -39,24 +39,26 @@ Gem::Specification.new do |spec|
 
 
   # https://guides.rubygems.org/specification-reference/
+  spec.required_ruby_version = '~> 2.0'
+
 
   # Dev Deps
   spec.add_development_dependency "bundler", "~> 2.0"
   spec.add_development_dependency "rake", "~> 10.0"
-  # spec.add_development_dependency "rspec", "~> 3.0"
-  spec.add_development_dependency "awesome_print"
+  spec.add_development_dependency "rspec", "~> 3.0"
+  spec.add_development_dependency "awesome_print", "~> 1.8"
 
   # Runtime Deps
-  spec.add_runtime_dependency "require_all"
-  spec.add_runtime_dependency "logging"
+  spec.add_runtime_dependency "require_all", "~> 2"
+  spec.add_runtime_dependency "logging", "~> 2.2.2"
 
-  spec.add_runtime_dependency "gherkin", "~> 5.1"
+  spec.add_runtime_dependency "gherkin", "= 5.1"
 
-  spec.add_runtime_dependency "rubyXL"
-  # spec.add_runtime_dependency "table_print"
-  spec.add_runtime_dependency "text-table"
+  spec.add_runtime_dependency "rubyXL", "~> 3.4"
+  spec.add_runtime_dependency "text-table", "~> 1.2"
 
+  spec.add_runtime_dependency  "highline", "~> 2"
   # spec.add_runtime_dependency  "thor"
-  spec.add_runtime_dependency  "highline"
-  spec.add_runtime_dependency  "bindata"
+  # spec.add_runtime_dependency  "bindata"
+
 end
