@@ -1,5 +1,3 @@
-# require 'thor'
-
 require 'require_all'
 # require_all 'lib/cuker/**/*.rb'
 # require_all 'lib/cuker/*.rb'
@@ -9,13 +7,7 @@ require_rel '*.rb'
 
 
 module Cuker
-  # module GPHelper
-  #   def self.dash_print(ary)
-  #     # ary.each {|x| puts "  - '#{x}'"}
-  #   end
-  # end
 
-  # class CukerCmd < Thor
   class CukerCmd
     include LoggerSetup
 
@@ -31,10 +23,6 @@ module Cuker
     PRESETS[:jira_text] = [:simple_jira]
     PRESETS[:jira_excel] = [:jira_excel]
     PRESETS[:testsuite_summary] = [:summary_excel]
-
-
-    # desc "report PRESET_KEY [FEATURE_PATH [REPORT_PATH [REPORT_FILE_NAME [LOG_LEVEL]]]]",
-    #      "reports parsed results into \nREPORT_PATH/REPORT_FILE_NAME \nfor all '*.feature' files in the given FEATURE_PATH\nSTDIO LOG_LEVEL adjustable\n"
 
     def report(preset_key,
                feat_path = "../",
@@ -61,8 +49,8 @@ module Cuker
         report_path = File.join report_path_input, 'reports', LOG_TIME_TODAY
         msg = "producing '#{producer.to_s.upcase}' report @ '#{report_path}' - '#{report_file_name}' for Feature Files @ '#{feat_path}'\n"
 
-        # @log.info msg
-        puts msg
+        @log.info msg
+        # puts msg
         model, writer = PRODUCERS[producer]
 
         preset_model = model == SummaryXLModel ? model.new(ast_map, special_tags_list) : model.new(ast_map)
@@ -74,12 +62,5 @@ module Cuker
       output_files
     end
 
-    private
-
-    def init
-      # todo: init things if needed
-    end
   end
-
-  # GherkinParserCmd.start(ARGV)
 end
