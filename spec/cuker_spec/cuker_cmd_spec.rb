@@ -53,7 +53,7 @@ module Cuker
         local_file_name = "jira_package"
         cc = CukerCmd.new
         res = cc.report :jira_package, feat_path, local_file_name
-        exp_name = "^.*:.*reports.*#{LOG_TIME_TODAY}.*#{local_file_name}.*"
+        exp_name = ".*reports.*#{LOG_TIME_TODAY}.*#{local_file_name}.*"
         expect(res.class).to eq(Array)
         expect(res.size).to eq(2)
         res.each {|f| expect(f).to match(exp_name)}
@@ -64,7 +64,7 @@ module Cuker
         local_file_name = "jira_text"
         cc = CukerCmd.new
         res = cc.report :jira_text, feat_path, local_file_name
-        exp_name = "^.*:.*reports.*#{LOG_TIME_TODAY}.*#{local_file_name}.txt"
+        exp_name = "^.*reports.*#{LOG_TIME_TODAY}.*#{local_file_name}.txt"
         expect(res.class).to eq(Array)
         expect(res.size).to eq(1)
         res.each {|f| expect(f).to match(exp_name)}
@@ -79,7 +79,7 @@ module Cuker
         local_file_name = "jira_excel"
         cc = CukerCmd.new
         res = cc.report :jira_excel, feat_path, local_file_name
-        exp_name = "^.*:.*reports.*#{LOG_TIME_TODAY}.*#{local_file_name}.xls"
+        exp_name = "^.*reports.*#{LOG_TIME_TODAY}.*#{local_file_name}.xls"
         expect(res.class).to eq(Array)
         expect(res.size).to eq(1)
         res.each {|f| expect(f).to match(exp_name)}
@@ -104,7 +104,7 @@ module Cuker
         # res = cc.report :testsuite_summary, feat_path, local_file_name, ".", special_tags
 
         res = cc.report :testsuite_summary, feat_path, local_file_name
-        exp_name = "^.*:.*reports.*#{LOG_TIME_TODAY}.*#{local_file_name}.xlsm"
+        exp_name = "^.*reports.*#{LOG_TIME_TODAY}.*#{local_file_name}.xlsm"
         expect(res.class).to eq(Array)
         expect(res.size).to eq(1)
         res.each {|f| expect(f).to match(exp_name)}

@@ -8,7 +8,7 @@ describe FileHelper do
     it 'should get the dir glob on the given loc' do
       res = FileHelper.get_files path, target_pattern
       exp = ["./CHANGELOG.md", "./README.md"]
-      expect(res).to eq exp
+      expect(res.sort).to eq exp
     end
     it 'should ignore files with target regex patterns' do
       ignore_pattern = /me/i

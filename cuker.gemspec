@@ -58,6 +58,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "text-table", "~> 1.2"
 
   spec.add_runtime_dependency  "highline", "~> 2"
+  spec.add_runtime_dependency  "json", ">= 2.2.0"
   # spec.add_runtime_dependency  "thor"
   # spec.add_runtime_dependency  "bindata"
 
